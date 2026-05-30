@@ -46,9 +46,9 @@ class _StunningShimmerState extends State<StunningShimmer>
           shaderCallback: (bounds) {
             return LinearGradient(
               colors: [
-                Colors.white.withOpacity(0.05),
-                Colors.white.withOpacity(0.2),
-                Colors.white.withOpacity(0.05),
+                Colors.white.withValues(alpha:0.05),
+                Colors.white.withValues(alpha:0.2),
+                Colors.white.withValues(alpha:0.05),
               ],
               stops: const [0.1, 0.5, 0.9],
               // Sliding effect logic

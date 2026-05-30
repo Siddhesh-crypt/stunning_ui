@@ -58,9 +58,9 @@ class _StunningTiltCardState extends State<StunningTiltCard> {
             width: widget.width,
             height: widget.height,
             decoration: BoxDecoration(
-              color: theme?.surfaceGlass ?? Colors.white.withOpacity(0.1),
+              color: theme?.surfaceGlass ?? Colors.white.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(24.0),
-              border: Border.all(color: Colors.white.withOpacity(0.2)),
+              border: Border.all(color: Colors.white.withValues(alpha:0.2)),
               boxShadow: [if (theme != null) theme.glowingShadow],
             ),
             child: ClipRRect(
@@ -81,7 +81,7 @@ class _StunningTiltCardState extends State<StunningTiltCard> {
                             begin: Alignment(-_x, -_y),
                             end: Alignment(_x, _y),
                             colors: [
-                              Colors.white.withOpacity(0.3),
+                              Colors.white.withValues(alpha:0.3),
                               Colors.transparent,
                               Colors.transparent,
                             ],

@@ -38,15 +38,15 @@ class StunningBottomNav extends StatelessWidget {
           // YAHAN SE 'width' PROPERTY HATA DI GAYI HAI.
           // Ab ye apne baccho (children) ke hisaab se shrink-wrap hoga.
           decoration: BoxDecoration(
-            color: theme?.surfaceGlass ?? Colors.black.withOpacity(0.55),
+            color: theme?.surfaceGlass ?? Colors.black.withValues(alpha:0.55),
             borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
+            border: Border.all(color: Colors.white.withValues(alpha:0.15), width: 1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.4),
+                color: Colors.black.withValues(alpha:0.4),
                 blurRadius: 30,
                 offset: const Offset(0, 10),
-              )
+              ),
             ],
           ),
           child: ClipRRect(
@@ -92,7 +92,7 @@ class StunningBottomNav extends StatelessWidget {
                               shape: BoxShape.circle,
                               gradient: RadialGradient(
                                 colors: [
-                                  primaryColor.withOpacity(0.3),
+                                  primaryColor.withValues(alpha:0.3),
                                   Colors.transparent,
                                 ],
                                 stops: const [0.2, 1.0],
@@ -131,7 +131,9 @@ class StunningBottomNav extends StatelessWidget {
                                   scale: isSelected ? 1.2 : 1.0,
                                   child: Icon(
                                     items[index].icon,
-                                    color: isSelected ? primaryColor : Colors.white54,
+                                    color: isSelected
+                                        ? primaryColor
+                                        : Colors.white54,
                                     size: 26,
                                   ),
                                 ),

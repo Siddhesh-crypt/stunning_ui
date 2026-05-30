@@ -28,7 +28,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
         end: Alignment.bottomRight,
       ),
       glowingShadow: BoxShadow(
-        color: AppColors.primaryLight.withOpacity(0.3),
+        color: AppColors.primaryLight.withValues(alpha:0.3),
         blurRadius: 16,
         spreadRadius: 2,
         offset: const Offset(0, 8),
@@ -53,7 +53,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
         end: Alignment.bottomRight,
       ),
       glowingShadow: BoxShadow(
-        color: AppColors.primaryDark.withOpacity(0.4),
+        color: AppColors.primaryDark.withValues(alpha:0.4),
         blurRadius: 20,
         spreadRadius: 2,
         offset: const Offset(0, 8),

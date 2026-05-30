@@ -46,10 +46,12 @@ class _StunningTextFieldState extends State<StunningTextField> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
       decoration: BoxDecoration(
-        color: theme?.surfaceGlass ?? Colors.white.withOpacity(0.1),
+        color: theme?.surfaceGlass ?? Colors.white.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(
-          color: _isFocused ? (theme?.primaryBrand ?? Colors.blue) : Colors.transparent,
+          color: _isFocused
+              ? (theme?.primaryBrand ?? Colors.blue)
+              : Colors.transparent,
           width: 2,
         ),
         boxShadow: _isFocused && theme != null ? [theme.glowingShadow] : [],
@@ -61,9 +63,12 @@ class _StunningTextFieldState extends State<StunningTextField> {
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: widget.hintText,
-          hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+          hintStyle: TextStyle(color: Colors.white.withValues(alpha:0.5)),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
         ),
       ),
     );

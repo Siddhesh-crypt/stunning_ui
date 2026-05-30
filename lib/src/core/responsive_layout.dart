@@ -9,8 +9,9 @@ class StunningResponsiveCenter extends StatelessWidget {
   const StunningResponsiveCenter({
     super.key,
     required this.child,
-    this.maxDesktopWidth = 600, // TextFields aur Cards ke liye ideal desktop width
-    this.mobilePadding = 24.0,  // Mobile edge padding
+    this.maxDesktopWidth =
+        600, // TextFields aur Cards ke liye ideal desktop width
+    this.mobilePadding = 24.0, // Mobile edge padding
   });
 
   @override
