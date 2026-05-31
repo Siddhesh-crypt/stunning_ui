@@ -1,8 +1,12 @@
 // lib/src/components/feedback/stunning_shimmer.dart
 import 'package:flutter/material.dart';
 
+/// A GPU-accelerated skeleton loading wrapper that applies a sliding highlight effect.
 class StunningShimmer extends StatefulWidget {
+  /// The actual widget to display when loading is complete, or the layout to mask over.
   final Widget child;
+
+  /// Controls whether the shimmer animation is currently active.
   final bool isLoading;
 
   const StunningShimmer({
@@ -46,9 +50,9 @@ class _StunningShimmerState extends State<StunningShimmer>
           shaderCallback: (bounds) {
             return LinearGradient(
               colors: [
-                Colors.white.withValues(alpha:0.05),
-                Colors.white.withValues(alpha:0.2),
-                Colors.white.withValues(alpha:0.05),
+                Colors.white.withValues(alpha: 0.05),
+                Colors.white.withValues(alpha: 0.2),
+                Colors.white.withValues(alpha: 0.05),
               ],
               stops: const [0.1, 0.5, 0.9],
               // Sliding effect logic

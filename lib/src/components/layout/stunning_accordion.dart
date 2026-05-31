@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
 
+/// A glassmorphic accordion widget that smoothly expands and collapses.
 class StunningAccordion extends StatefulWidget {
+  /// The title text displayed on the collapsed state.
   final String title;
+
+  /// The widget to display when the accordion is expanded.
   final Widget content;
 
   const StunningAccordion({
@@ -27,9 +31,12 @@ class _StunningAccordionState extends State<StunningAccordion> {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: theme?.surfaceGlass ?? Colors.black.withValues(alpha:0.5),
+        color: theme?.surfaceGlass ?? Colors.black.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha:0.1), width: 1),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.1),
+          width: 1,
+        ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),

@@ -1,91 +1,169 @@
-// lib/src/components/buttons/stunning_button.dart
 import 'package:flutter/material.dart';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
 import 'dart:ui';
 
+/// Defines the visual style of the [StunningButton].
+enum StunningButtonVariant { primary, outline, ghost }
+
+/// A highly interactive, physics-based button with multiple variants and dynamic colors.
 class StunningButton extends StatefulWidget {
+  /// The text to display inside the button.
   final String text;
-  final VoidCallback onPressed;
-  final bool isGlass;
-  final bool isLoading; // Naya addition
+
+  /// The callback when the button is tapped. If null, the button is disabled.
+  final VoidCallback? onPressed;
+
+  /// Controls the loading state. Displays a spinner and disables taps if true.
+  final bool isLoading;
+
+  /// The visual style variant of the button. Defaults to primary.
+  final StunningButtonVariant variant;
+
+  /// Custom color for the button. If null, it falls back to the theme's primaryBrand.
+  final Color? color;
 
   const StunningButton({
     super.key,
     required this.text,
-    required this.onPressed,
-    this.isGlass = false,
+    this.onPressed,
     this.isLoading = false,
+    this.variant = StunningButtonVariant.primary,
+    this.color,
   });
 
   @override
   State<StunningButton> createState() => _StunningButtonState();
 }
 
-class _StunningButtonState extends State<StunningButton> {
-  bool _isPressed = false;
+class _StunningButtonState extends State<StunningButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.92,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTapDown(TapDownDetails details) {
+    if (widget.onPressed != null && !widget.isLoading) {
+      _controller.forward();
+    }
+  }
+
+  void _handleTapUp(TapUpDetails details) {
+    if (widget.onPressed != null && !widget.isLoading) {
+      _controller.reverse();
+      widget.onPressed!();
+    }
+  }
+
+  void _handleTapCancel() {
+    if (widget.onPressed != null && !widget.isLoading) {
+      _controller.reverse();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<StunningTheme>();
 
+    // Core Logic: Use custom color if provided, otherwise use theme, fallback to purple.
+    final baseColor =
+        widget.color ?? theme?.primaryBrand ?? Colors.purpleAccent;
+    final isDisabled = widget.onPressed == null;
+
+    // Logic to determine colors based on variant
+    Color backgroundColor;
+    Color borderColor;
+    Color textColor;
+    List<BoxShadow> shadows = [];
+
+    switch (widget.variant) {
+      case StunningButtonVariant.primary:
+        backgroundColor = baseColor.withValues(alpha: isDisabled ? 0.3 : 1.0);
+        borderColor = Colors.transparent;
+        textColor = Colors.white;
+        if (!isDisabled) {
+          shadows = [
+            BoxShadow(
+              color: baseColor.withValues(alpha: 0.4),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ];
+        }
+        break;
+      case StunningButtonVariant.outline:
+        backgroundColor = baseColor.withValues(alpha: 0.1);
+        borderColor = baseColor.withValues(alpha: isDisabled ? 0.3 : 0.8);
+        textColor = baseColor;
+        break;
+      case StunningButtonVariant.ghost:
+        backgroundColor = Colors.transparent;
+        borderColor = Colors.transparent;
+        textColor = baseColor.withValues(alpha: isDisabled ? 0.5 : 1.0);
+        break;
+    }
+
     return GestureDetector(
-      // Loading state me taps disable kar do
-      onTapDown: widget.isLoading
-          ? null
-          : (_) => setState(() => _isPressed = true),
-      onTapUp: widget.isLoading
-          ? null
-          : (_) {
-              setState(() => _isPressed = false);
-              widget.onPressed();
-            },
-      onTapCancel: () => setState(() => _isPressed = false),
-      child: AnimatedScale(
-        scale: _isPressed ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeOutCubic,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: _handleTapCancel,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(scale: _scaleAnimation.value, child: child);
+        },
+        child: Container(
+          height: 55,
           decoration: BoxDecoration(
-            gradient: widget.isGlass ? null : theme?.premiumGradient,
-            color: widget.isGlass ? theme?.surfaceGlass : null,
-            borderRadius: BorderRadius.circular(16.0),
-            boxShadow: (_isPressed || widget.isLoading)
-                ? []
-                : [if (theme != null) theme.glowingShadow],
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: borderColor, width: 1.5),
+            boxShadow: shadows,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.0),
+            borderRadius: BorderRadius.circular(16),
             child: BackdropFilter(
-              filter: widget.isGlass
-                  ? ImageFilter.blur(sigmaX: 10, sigmaY: 10)
-                  : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: widget.isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2.5,
-                          ),
-                        )
-                      : Text(
-                          widget.text,
-                          key: ValueKey(widget.text),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+              filter: ImageFilter.blur(
+                sigmaX: widget.variant == StunningButtonVariant.ghost ? 0 : 10,
+                sigmaY: widget.variant == StunningButtonVariant.ghost ? 0 : 10,
+              ),
+              child: Center(
+                child: widget.isLoading
+                    ? SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: textColor,
+                          strokeWidth: 2.5,
                         ),
-                ),
+                      )
+                    : Text(
+                        widget.text,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
               ),
             ),
           ),

@@ -13,7 +13,7 @@ Future<T?> showStunningModal<T>({
     context: context,
     barrierDismissible: true,
     barrierLabel: 'Dismiss',
-    barrierColor: Colors.black.withValues(alpha:0.3), // Background dimming
+    barrierColor: Colors.black.withValues(alpha: 0.3), // Background dimming
     transitionDuration: const Duration(milliseconds: 350),
     pageBuilder: (context, animation, secondaryAnimation) => const SizedBox(),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
@@ -34,11 +34,11 @@ Future<T?> showStunningModal<T>({
             opacity: animation,
             child: AlertDialog(
               backgroundColor:
-                  theme?.surfaceGlass ?? Colors.white.withValues(alpha:0.1),
+                  theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.1),
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24.0),
-                side: BorderSide(color: Colors.white.withValues(alpha:0.2)),
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
               ),
               shadowColor: theme?.glowingShadow.color,
               title: DefaultTextStyle(

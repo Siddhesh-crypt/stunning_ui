@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
 import 'dart:ui';
 
+/// A modern, glassmorphic segmented control with a sliding background highlight.
 class StunningSegmentedControl extends StatelessWidget {
+  /// The list of string labels for each segment.
   final List<String> options;
+
+  /// The index of the currently selected segment.
   final int selectedIndex;
+
+  /// Callback triggered when a new segment is tapped.
   final ValueChanged<int> onValueChanged;
 
   const StunningSegmentedControl({
@@ -23,9 +29,12 @@ class StunningSegmentedControl extends StatelessWidget {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: theme?.surfaceGlass ?? Colors.black.withValues(alpha:0.5),
+        color: theme?.surfaceGlass ?? Colors.black.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.white.withValues(alpha:0.1), width: 1),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.1),
+          width: 1,
+        ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
@@ -49,11 +58,11 @@ class StunningSegmentedControl extends StatelessWidget {
                       padding: const EdgeInsets.all(4.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: primaryColor.withValues(alpha:0.3),
+                          color: primaryColor.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: primaryColor.withValues(alpha:0.5),
+                              color: primaryColor.withValues(alpha: 0.5),
                               blurRadius: 10,
                             ),
                           ],

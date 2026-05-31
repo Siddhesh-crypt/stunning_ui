@@ -3,26 +3,63 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
 
+/// A utility class to display elastic, glassmorphic toast notifications from the top of the screen.
+/// A utility class to display elastic, glassmorphic toast notifications.
+/// A utility class to display elastic, glassmorphic toast notifications.
 class StunningToast {
+  /// Displays a temporary floating toast message on top of the current UI.
   static void show({
     required BuildContext context,
     required String message,
     required IconData icon,
     bool isError = false,
+    double? topOffset,
+    double? bottomOffset, // <-- Naya parameter add kiya
   }) {
     final overlay = Overlay.of(context);
-    late OverlayEntry overlayEntry;
+    late OverlayEntry entry;
 
-    overlayEntry = OverlayEntry(
-      builder: (context) => _ToastWidget(
-        message: message,
-        icon: icon,
-        isError: isError,
-        onDismissed: () => overlayEntry.remove(),
-      ),
+    entry = OverlayEntry(
+      builder: (context) {
+        // Smart Positioning Logic
+        double? finalTop = topOffset;
+        double? finalBottom = bottomOffset;
+
+        // Agar bottom offset diya hai, toh top ko null karna padega varna Toast stretch ho jayega
+        if (finalBottom != null) {
+          finalTop = null;
+        } else {
+          // Dart ka modern null-aware assignment operator
+          finalTop ??= MediaQuery.of(context).padding.top + 16;
+        }
+
+        return Positioned(
+          top: finalTop,
+          bottom: finalBottom,
+          left: 24,
+          right: 24,
+          child: Material(
+            color: Colors.transparent,
+            child: _ToastWidget(
+              message: message,
+              icon: icon,
+              isError: isError,
+              onDismiss: () {
+                entry.remove();
+              },
+            ),
+          ),
+        );
+      },
     );
 
-    overlay.insert(overlayEntry);
+    overlay.insert(entry);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (entry.mounted) {
+        entry.remove();
+      }
+    });
   }
 }
 
@@ -30,13 +67,13 @@ class _ToastWidget extends StatefulWidget {
   final String message;
   final IconData icon;
   final bool isError;
-  final VoidCallback onDismissed;
+  final VoidCallback onDismiss;
 
   const _ToastWidget({
     required this.message,
     required this.icon,
     required this.isError,
-    required this.onDismissed,
+    required this.onDismiss,
   });
 
   @override
@@ -66,7 +103,7 @@ class _ToastWidgetState extends State<_ToastWidget>
     // Auto dismiss after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        _controller.reverse().then((_) => widget.onDismissed());
+        _controller.reverse().then((_) => widget.onDismiss());
       }
     });
   }
@@ -106,15 +143,16 @@ class _ToastWidgetState extends State<_ToastWidget>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               decoration: BoxDecoration(
-                color: theme?.surfaceGlass ?? Colors.black.withValues(alpha:0.6),
+                color:
+                    theme?.surfaceGlass ?? Colors.black.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: accentColor.withValues(alpha:0.5),
+                  color: accentColor.withValues(alpha: 0.5),
                   width: 1.5,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: accentColor.withValues(alpha:0.2),
+                    color: accentColor.withValues(alpha: 0.2),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),

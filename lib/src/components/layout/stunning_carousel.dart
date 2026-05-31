@@ -1,8 +1,12 @@
 // lib/src/components/layout/stunning_carousel.dart
 import 'package:flutter/material.dart';
 
+/// A 3D depth-scaling carousel slider that highlights the center widget and shrinks side elements.
 class StunningCarousel extends StatefulWidget {
+  /// The list of widgets to display inside the carousel.
   final List<Widget> items;
+
+  /// The total height of the carousel container.
   final double height;
   final double viewportFraction;
 

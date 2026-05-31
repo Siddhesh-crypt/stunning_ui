@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
 
-// The Individual Menu Item
+/// An individual menu item for the [StunningSidebar].
 class StunningSidebarItem extends StatelessWidget {
+  /// The icon displayed next to the title.
   final IconData icon;
+
+  /// The text label for the menu item.
   final String title;
   final bool isActive;
   final VoidCallback onTap;
@@ -33,10 +36,14 @@ class StunningSidebarItem extends StatelessWidget {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: isActive ? primary.withValues(alpha:0.2) : Colors.transparent,
+            color: isActive
+                ? primary.withValues(alpha: 0.2)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isActive ? primary.withValues(alpha:0.5) : Colors.transparent,
+              color: isActive
+                  ? primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
               width: 1,
             ),
           ),
@@ -60,9 +67,12 @@ class StunningSidebarItem extends StatelessWidget {
   }
 }
 
-// The Main Sidebar Wrapper
+/// A glassmorphic drawer/sidebar with blurred backdrop effects and animated selection states.
 class StunningSidebar extends StatelessWidget {
+  /// The widget displayed at the top of the sidebar (e.g., user profile).
   final Widget header;
+
+  /// The list of interactive menu items.
   final List<StunningSidebarItem> items;
 
   const StunningSidebar({super.key, required this.header, required this.items});
@@ -78,9 +88,12 @@ class StunningSidebar extends StatelessWidget {
       width: 280, // Premium compact width
       child: Container(
         decoration: BoxDecoration(
-          color: theme?.surfaceGlass ?? Colors.black.withValues(alpha:0.5),
+          color: theme?.surfaceGlass ?? Colors.black.withValues(alpha: 0.5),
           border: Border(
-            right: BorderSide(color: Colors.white.withValues(alpha:0.15), width: 1),
+            right: BorderSide(
+              color: Colors.white.withValues(alpha: 0.15),
+              width: 1,
+            ),
           ),
         ),
         child: ClipRRect(
@@ -93,7 +106,7 @@ class StunningSidebar extends StatelessWidget {
                   // User Profile or Logo Area
                   Padding(padding: const EdgeInsets.all(24.0), child: header),
                   Divider(
-                    color: Colors.white.withValues(alpha:0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     thickness: 1,
                     height: 1,
                   ),
@@ -112,7 +125,7 @@ class StunningSidebar extends StatelessWidget {
 
                   // Footer Area (Optional Settings/Logout)
                   Divider(
-                    color: Colors.white.withValues(alpha:0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     thickness: 1,
                     height: 1,
                   ),

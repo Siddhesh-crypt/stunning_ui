@@ -28,17 +28,22 @@ class StunningSwitch extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: value
-              ? primary.withValues(alpha:0.3)
-              : Colors.white.withValues(alpha:0.1),
+              ? primary.withValues(alpha: 0.3)
+              : Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: value
-                ? primary.withValues(alpha:0.5)
-                : Colors.white.withValues(alpha:0.2),
+                ? primary.withValues(alpha: 0.5)
+                : Colors.white.withValues(alpha: 0.2),
             width: 1.5,
           ),
           boxShadow: value
-              ? [BoxShadow(color: primary.withValues(alpha:0.4), blurRadius: 12)]
+              ? [
+                  BoxShadow(
+                    color: primary.withValues(alpha: 0.4),
+                    blurRadius: 12,
+                  ),
+                ]
               : [],
         ),
         child: AnimatedAlign(

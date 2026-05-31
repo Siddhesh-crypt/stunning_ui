@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
 import 'dart:ui';
 
+/// A 3D interactive tilt card that responds to mouse hover on web/desktop and pan gestures on mobile.
 class StunningTiltCard extends StatefulWidget {
+  /// The child widget to be displayed inside the card.
   final double width;
+
+  /// The exact width of the tilt card.
   final double height;
+
+  /// The exact height of the tilt card.
   final Widget child;
 
   const StunningTiltCard({
@@ -58,9 +64,9 @@ class _StunningTiltCardState extends State<StunningTiltCard> {
             width: widget.width,
             height: widget.height,
             decoration: BoxDecoration(
-              color: theme?.surfaceGlass ?? Colors.white.withValues(alpha:0.1),
+              color: theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(24.0),
-              border: Border.all(color: Colors.white.withValues(alpha:0.2)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               boxShadow: [if (theme != null) theme.glowingShadow],
             ),
             child: ClipRRect(
@@ -81,7 +87,7 @@ class _StunningTiltCardState extends State<StunningTiltCard> {
                             begin: Alignment(-_x, -_y),
                             end: Alignment(_x, _y),
                             colors: [
-                              Colors.white.withValues(alpha:0.3),
+                              Colors.white.withValues(alpha: 0.3),
                               Colors.transparent,
                               Colors.transparent,
                             ],

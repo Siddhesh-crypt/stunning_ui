@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
+/// A custom Flutter [ThemeExtension] that manages the glowing neon colors and glassmorphic surface colors.
 class StunningTheme extends ThemeExtension<StunningTheme> {
+  /// The primary brand color used for glows, active states, and highlights.
   final Color primaryBrand;
+
+  /// The color used for translucent glassmorphic backgrounds.
   final Color surfaceGlass;
   final LinearGradient premiumGradient;
   final BoxShadow glowingShadow;
@@ -28,7 +32,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
         end: Alignment.bottomRight,
       ),
       glowingShadow: BoxShadow(
-        color: AppColors.primaryLight.withValues(alpha:0.3),
+        color: AppColors.primaryLight.withValues(alpha: 0.3),
         blurRadius: 16,
         spreadRadius: 2,
         offset: const Offset(0, 8),
@@ -53,7 +57,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
         end: Alignment.bottomRight,
       ),
       glowingShadow: BoxShadow(
-        color: AppColors.primaryDark.withValues(alpha:0.4),
+        color: AppColors.primaryDark.withValues(alpha: 0.4),
         blurRadius: 20,
         spreadRadius: 2,
         offset: const Offset(0, 8),

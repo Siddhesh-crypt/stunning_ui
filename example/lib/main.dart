@@ -122,12 +122,12 @@ class _ExampleDashboardState extends State<ExampleDashboard> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha:0.5),
+              color: Colors.black.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: color.withValues(alpha:0.3), width: 2),
+              border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
               boxShadow: [
                 BoxShadow(
-                  color: color.withValues(alpha:0.2),
+                  color: color.withValues(alpha: 0.2),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -324,9 +324,11 @@ class _SearchTabDemoState extends State<SearchTabDemo> {
                     margin: const EdgeInsets.only(bottom: 16),
                     height: 80,
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha:0.4),
+                      color: Colors.black.withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withValues(alpha:0.1)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.1),
+                      ),
                     ),
                     child: _isLoading
                         ? const SizedBox() // Blank container for shimmer to mask over
