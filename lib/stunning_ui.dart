@@ -16,6 +16,7 @@ export 'src/components/buttons/stunning_button.dart';
 export 'src/components/inputs/stunning_text_field.dart';
 export 'src/components/inputs/stunning_segmented_control.dart';
 export 'src/components/inputs/stunning_switch.dart';
+export 'src/components/inputs/stunning_dropdown.dart';
 
 // Feedback & Displays
 export 'src/components/cards/stunning_tilt_card.dart';
@@ -23,6 +24,7 @@ export 'src/components/modals/stunning_modal.dart';
 export 'src/components/lists/stunning_animated_list.dart';
 export 'src/components/feedback/stunning_toast.dart';
 export 'src/components/feedback/stunning_shimmer.dart';
+export 'src/components/feedback/stunning_skeleton.dart';
 
 // Data Display
 export 'src/components/data_display/stunning_data_table.dart';
