@@ -9,6 +9,7 @@ export 'src/components/layout/stunning_carousel.dart';
 // Navigation
 export 'src/components/navigation/stunning_bottom_nav.dart';
 export 'src/components/navigation/stunning_sidebar.dart';
+export 'src/components/navigation/stunning_app_bar.dart';
 
 // Inputs & Buttons
 export 'src/components/buttons/stunning_button.dart';
@@ -22,3 +23,6 @@ export 'src/components/modals/stunning_modal.dart';
 export 'src/components/lists/stunning_animated_list.dart';
 export 'src/components/feedback/stunning_toast.dart';
 export 'src/components/feedback/stunning_shimmer.dart';
+
+// Data Display
+export 'src/components/data_display/stunning_data_table.dart';

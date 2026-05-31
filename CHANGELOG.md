@@ -1,3 +1,8 @@
+## 1.1.0
+* Introduced Adaptive Theme Engine with `StunningUIStyle` (Enterprise, Minimal, Gaming).
+* Added `StunningDataTable` with smart status badges and floating/solid layouts.
+* Upgraded components to use dynamic physics and motion curves.
+
 ## 1.0.3
 * Added `topOffset` and `bottomOffset` to `StunningToast` for precise positioning.
 * Added `backgroundColor`, `margin`, and `indicatorWidth` customization to `StunningBottomNav`.

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
-import 'dart:ui';
 
 /// Defines the visual style of the [StunningButton].
 enum StunningButtonVariant { primary, outline, ghost }
@@ -35,136 +34,100 @@ class StunningButton extends StatefulWidget {
   State<StunningButton> createState() => _StunningButtonState();
 }
 
-class _StunningButtonState extends State<StunningButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
+class _StunningButtonState extends State<StunningButton> {
+  // Naye state variables jo hover aur press track karenge
+  bool _isHovered = false;
+  bool _isPressed = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.92,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _handleTapDown(TapDownDetails details) {
-    if (widget.onPressed != null && !widget.isLoading) {
-      _controller.forward();
+  // Helper method: Background color calculate karne ke liye
+  Color _getBackgroundColor(Color baseColor) {
+    switch (widget.variant) {
+      case StunningButtonVariant.primary:
+        return baseColor.withValues(alpha: _isHovered ? 0.8 : 1.0);
+      case StunningButtonVariant.outline:
+      case StunningButtonVariant.ghost:
+        return _isHovered
+            ? baseColor.withValues(alpha: 0.1)
+            : Colors.transparent;
     }
   }
 
-  void _handleTapUp(TapUpDetails details) {
-    if (widget.onPressed != null && !widget.isLoading) {
-      _controller.reverse();
-      widget.onPressed!();
+  // Helper method: Border calculate karne ke liye
+  BoxBorder? _getBorder(Color baseColor) {
+    if (widget.variant == StunningButtonVariant.outline) {
+      return Border.all(color: baseColor, width: 2);
     }
+    return null; // Primary aur Ghost me border nahi hota
   }
 
-  void _handleTapCancel() {
-    if (widget.onPressed != null && !widget.isLoading) {
-      _controller.reverse();
+  // Helper method: Text color calculate karne ke liye
+  Color _getTextColor(Color baseColor) {
+    if (widget.variant == StunningButtonVariant.primary) {
+      // Agar primary color light hai toh dark text, nahi toh white text
+      return baseColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
     }
+    return baseColor; // Outline aur Ghost me text color base color jaisa hota hai
   }
 
   @override
   Widget build(BuildContext context) {
+    // 1. Theme engine se current style read karo
     final theme = Theme.of(context).extension<StunningTheme>();
 
-    // Core Logic: Use custom color if provided, otherwise use theme, fallback to purple.
-    final baseColor =
-        widget.color ?? theme?.primaryBrand ?? Colors.purpleAccent;
-    final isDisabled = widget.onPressed == null;
+    // 2. Physics tokens extract karo
+    final duration = theme?.motionDuration ?? const Duration(milliseconds: 200);
+    final curve = theme?.motionCurve ?? Curves.easeInOut;
 
-    // Logic to determine colors based on variant
-    Color backgroundColor;
-    Color borderColor;
-    Color textColor;
-    List<BoxShadow> shadows = [];
+    // 3. Base color set karo (widget.color fix yahan hai)
+    final baseColor = widget.color ?? theme?.primaryBrand ?? Colors.blueAccent;
 
-    switch (widget.variant) {
-      case StunningButtonVariant.primary:
-        backgroundColor = baseColor.withValues(alpha: isDisabled ? 0.3 : 1.0);
-        borderColor = Colors.transparent;
-        textColor = Colors.white;
-        if (!isDisabled) {
-          shadows = [
-            BoxShadow(
-              color: baseColor.withValues(alpha: 0.4),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) => setState(() => _isPressed = false),
+        onTapCancel: () => setState(() => _isPressed = false),
+        onTap: widget.isLoading ? null : widget.onPressed,
+
+        // AnimatedScale naye physics engine (curve/duration) ke sath
+        child: AnimatedScale(
+          scale: _isPressed ? 0.95 : 1.0,
+          duration: duration,
+          curve: curve,
+          child: AnimatedContainer(
+            duration: duration,
+            curve: curve,
+            decoration: BoxDecoration(
+              color: _getBackgroundColor(baseColor),
+              borderRadius: BorderRadius.circular(12),
+              border: _getBorder(baseColor),
+              boxShadow: _isHovered && !_isPressed
+                  ? [
+                      theme?.glowingShadow ??
+                          const BoxShadow(color: Colors.transparent),
+                    ]
+                  : [],
             ),
-          ];
-        }
-        break;
-      case StunningButtonVariant.outline:
-        backgroundColor = baseColor.withValues(alpha: 0.1);
-        borderColor = baseColor.withValues(alpha: isDisabled ? 0.3 : 0.8);
-        textColor = baseColor;
-        break;
-      case StunningButtonVariant.ghost:
-        backgroundColor = Colors.transparent;
-        borderColor = Colors.transparent;
-        textColor = baseColor.withValues(alpha: isDisabled ? 0.5 : 1.0);
-        break;
-    }
-
-    return GestureDetector(
-      onTapDown: _handleTapDown,
-      onTapUp: _handleTapUp,
-      onTapCancel: _handleTapCancel,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedBuilder(
-        animation: _scaleAnimation,
-        builder: (context, child) {
-          return Transform.scale(scale: _scaleAnimation.value, child: child);
-        },
-        child: Container(
-          height: 55,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: borderColor, width: 1.5),
-            boxShadow: shadows,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: widget.variant == StunningButtonVariant.ghost ? 0 : 10,
-                sigmaY: widget.variant == StunningButtonVariant.ghost ? 0 : 10,
-              ),
-              child: Center(
-                child: widget.isLoading
-                    ? SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                          color: textColor,
-                          strokeWidth: 2.5,
-                        ),
-                      )
-                    : Text(
-                        widget.text,
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
-                        ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Center(
+              child: widget.isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
-              ),
+                    )
+                  : Text(
+                      widget.text,
+                      style: TextStyle(
+                        color: _getTextColor(baseColor),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
             ),
           ),
         ),

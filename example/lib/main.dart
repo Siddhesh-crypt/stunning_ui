@@ -20,11 +20,29 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark, // Ab ye humesha dark theme hi dikhayega
       // Light theme configuration rakh sakte ho in case future me refine karna ho,
       // par active sirf dark theme hi rahegi.
-      theme: ThemeData.light().copyWith(
-        extensions: <ThemeExtension<dynamic>>[StunningTheme.light()],
+      theme: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+        extensions: <ThemeExtension<dynamic>>[
+          StunningTheme.generate(
+            seedColor: Colors.purpleAccent, // Tera brand color
+            brightness: Brightness.light,
+            style: StunningUIStyle
+                .gaming, // Yahan 'enterprise' daloge toh blurs hat jayenge!
+          ),
+        ],
       ),
-      darkTheme: ThemeData.dark().copyWith(
-        extensions: <ThemeExtension<dynamic>>[StunningTheme.dark()],
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0F0F1A),
+        extensions: <ThemeExtension<dynamic>>[
+          StunningTheme.generate(
+            seedColor: Colors.cyanAccent, // Dark mode me cyan try karte hain
+            brightness: Brightness.dark,
+            style:
+                StunningUIStyle.gaming, // Yahan bhi style change kar sakte ho
+          ),
+        ],
       ),
       home: const ExampleDashboard(),
     );
