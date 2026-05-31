@@ -2,6 +2,8 @@ name: stunning_ui
 description: "A production-ready, highly interactive, and glassmorphic UI toolkit for Flutter."
 version: 1.1.1
 homepage: https://github.com/Siddhesh-crypt/stunning_ui
+repository: https://github.com/Siddhesh-crypt/stunning_ui
+issue_tracker: https://github.com/Siddhesh-crypt/stunning_ui/issues
 
 environment:
   sdk: ^3.10.8

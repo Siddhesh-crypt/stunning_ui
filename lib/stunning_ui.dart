@@ -17,6 +17,7 @@ export 'src/components/inputs/stunning_text_field.dart';
 export 'src/components/inputs/stunning_segmented_control.dart';
 export 'src/components/inputs/stunning_switch.dart';
 export 'src/components/inputs/stunning_dropdown.dart';
+export 'src/components/inputs/stunning_tabs.dart';
 
 // Feedback & Displays
 export 'src/components/cards/stunning_tilt_card.dart';
@@ -28,3 +29,4 @@ export 'src/components/feedback/stunning_skeleton.dart';
 
 // Data Display
 export 'src/components/data_display/stunning_data_table.dart';
+export 'src/components/data_display/stunning_bar_chart.dart';

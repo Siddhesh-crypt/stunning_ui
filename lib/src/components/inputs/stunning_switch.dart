@@ -1,8 +1,8 @@
-// lib/src/components/inputs/stunning_switch.dart
 import 'package:flutter/material.dart';
 import 'package:stunning_ui/src/theme/stunning_theme.dart';
 
-class StunningSwitch extends StatelessWidget {
+/// A highly interactive, theme-aware toggle switch.
+class StunningSwitch extends StatefulWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
 
@@ -13,52 +13,76 @@ class StunningSwitch extends StatelessWidget {
   });
 
   @override
+  State<StunningSwitch> createState() => _StunningSwitchState();
+}
+
+class _StunningSwitchState extends State<StunningSwitch> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<StunningTheme>();
-    final primary = theme?.primaryBrand ?? Colors.purpleAccent;
+    final duration = theme?.motionDuration ?? const Duration(milliseconds: 200);
+    final curve = theme?.motionCurve ?? Curves.easeInOut;
+
+    final brandColor = theme?.primaryBrand ?? Colors.blueAccent;
+    final surfaceColor = theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.1);
+
+    // --- THE MAGIC FIX ---
+    final activeShadow = theme?.glowingShadow ?? const BoxShadow(color: Colors.transparent);
+    // Inactive shadow with exact same geometry but transparent color
+    final inactiveShadow = BoxShadow(
+      color: Colors.transparent,
+      blurRadius: activeShadow.blurRadius,
+      spreadRadius: activeShadow.spreadRadius,
+      offset: activeShadow.offset,
+    );
+
+    final trackColor = widget.value ? brandColor : surfaceColor;
+    final thumbAlignment = widget.value ? Alignment.centerRight : Alignment.centerLeft;
 
     return GestureDetector(
-      onTap: () => onChanged(!value),
-      behavior: HitTestBehavior.opaque,
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onChanged(!widget.value);
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic,
+        duration: duration,
+        curve: curve,
         width: 56,
         height: 32,
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: value
-              ? primary.withValues(alpha: 0.3)
-              : Colors.white.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(20),
+          color: trackColor,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: value
-                ? primary.withValues(alpha: 0.5)
-                : Colors.white.withValues(alpha: 0.2),
-            width: 1.5,
+            color: widget.value ? brandColor : Colors.white.withValues(alpha: 0.1),
+            width: 1,
           ),
-          boxShadow: value
-              ? [
-                  BoxShadow(
-                    color: primary.withValues(alpha: 0.4),
-                    blurRadius: 12,
-                  ),
-                ]
-              : [],
+          // Always provide a shadow, just switch the colors
+          boxShadow: [widget.value ? activeShadow : inactiveShadow],
         ),
         child: AnimatedAlign(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOutBack,
-          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            width: 22,
+          duration: duration,
+          curve: curve,
+          alignment: thumbAlignment,
+          child: AnimatedContainer(
+            duration: duration,
+            curve: curve,
+            width: _isPressed ? 28 : 22,
             height: 22,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: value ? primary : Colors.white54,
-              boxShadow: value
-                  ? [BoxShadow(color: primary, blurRadius: 8, spreadRadius: 1)]
-                  : [],
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 4,
+                  spreadRadius: 1,
+                )
+              ],
             ),
           ),
         ),

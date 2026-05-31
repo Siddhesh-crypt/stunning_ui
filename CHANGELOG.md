@@ -1,7 +1,12 @@
+## 1.2.0
+* **New Components:** Added `StunningModal`, `StunningDropdown`, `StunningToast`, `StunningSkeleton`, `StunningSwitch`, `StunningTabs`, and `StunningBarChart`.
+* **Enterprise Ready:** Optimized the framework for Dark SaaS and dense data dashboards.
+* **Bug Fixes:** Resolved RenderFlex overflow bugs in animated switches and fixed Glass Bleed readability issues in transparent toasts.
+* **UX Improvements:** Upgraded physics-based animations (bouncy curves and scale transitions) for all interactive inputs.
+
 ## 1.1.0
-* Introduced Adaptive Theme Engine with `StunningUIStyle` (Enterprise, Minimal, Gaming).
-* Added `StunningDataTable` with smart status badges and floating/solid layouts.
-* Upgraded components to use dynamic physics and motion curves.
+* **Adaptive Theme Engine:** Introduced `StunningTheme` and `StunningUIStyle` (Enterprise, Minimal, Gaming) for global styling.
+* **Components:** Added `StunningDataTable` with smart status badge detection and floating/solid layout options.
 
 ## 1.0.3
 * Added `topOffset` and `bottomOffset` to `StunningToast` for precise positioning.

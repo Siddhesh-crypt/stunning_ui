@@ -26,20 +26,19 @@ class StunningToast {
     entry = OverlayEntry(
       builder: (context) {
         final theme = Theme.of(context).extension<StunningTheme>();
-        final brandColor =
-            overrideColor ?? theme?.primaryBrand ?? Colors.blueAccent;
+        final brandColor = overrideColor ?? theme?.primaryBrand ?? Colors.blueAccent;
         final blur = theme?.glassBlurSigma ?? 10.0;
         final glow = theme?.glowIntensity ?? 0.5;
 
         return Positioned(
-          bottom: bottomOffset, // Ab ye Top ki jagah Bottom se position hoga
+          bottom: bottomOffset,
           left: 20.0,
           right: 20.0,
           child: SafeArea(
             child: Material(
               color: Colors.transparent,
               child: TweenAnimationBuilder<double>(
-                // Changed to 100.0 so it slides UP from the bottom
+                // Slides UP from the bottom
                 tween: Tween(begin: 100.0, end: 0.0),
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeOutBack, // Bouncy pop-up effect
@@ -60,7 +59,8 @@ class StunningToast {
                           vertical: 14,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
+                          // THE FIX: Deep solid slate background instead of transparent white
+                          color: const Color(0xFF0F172A).withValues(alpha: 0.95),
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
                             color: brandColor.withValues(alpha: 0.5),
@@ -68,14 +68,14 @@ class StunningToast {
                           ),
                           boxShadow: glow > 0
                               ? [
-                                  BoxShadow(
-                                    color: brandColor.withValues(
-                                      alpha: 0.3 * glow,
-                                    ),
-                                    blurRadius: 20 * glow,
-                                    spreadRadius: 2 * glow,
-                                  ),
-                                ]
+                            BoxShadow(
+                              color: brandColor.withValues(
+                                alpha: 0.3 * glow,
+                              ),
+                              blurRadius: 20 * glow,
+                              spreadRadius: 2 * glow,
+                            ),
+                          ]
                               : [],
                         ),
                         child: Row(
@@ -85,12 +85,16 @@ class StunningToast {
                               Icon(icon, color: brandColor, size: 20),
                               const SizedBox(width: 12),
                             ],
-                            Text(
-                              message,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                            // Flexible wrapper to prevent RenderFlex overflow on long texts
+                            Flexible(
+                              child: Text(
+                                message,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
