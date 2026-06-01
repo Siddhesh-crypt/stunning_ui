@@ -32,13 +32,15 @@ class StunningSpring {
 
   /// Converts this token into a physics [SpringDescription] for use with
   /// [AnimationController.animateWith] / [SpringSimulation].
-  SpringDescription toSpring() =>
-      SpringDescription.withDurationAndBounce(duration: duration, bounce: bounce);
+  SpringDescription toSpring() => SpringDescription.withDurationAndBounce(
+    duration: duration,
+    bounce: bounce,
+  );
 
   static StunningSpring lerp(StunningSpring a, StunningSpring b, double t) {
     return StunningSpring(
-      durationMs: (lerpDouble(a.durationMs, b.durationMs, t) ?? a.durationMs)
-          .round(),
+      durationMs:
+          (lerpDouble(a.durationMs, b.durationMs, t) ?? a.durationMs).round(),
       bounce: lerpDouble(a.bounce, b.bounce, t) ?? a.bounce,
     );
   }
@@ -106,13 +108,15 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
   Color get iconColor => textPrimary.withValues(alpha: 0.8);
 
   /// Default border colour, scaled by [borderOpacity].
-  Color get borderColor =>
-      (colorScheme?.outline ?? textPrimary)
-          .withValues(alpha: borderOpacity > 0 ? borderOpacity : 0.12);
+  Color get borderColor => (colorScheme?.outline ?? textPrimary).withValues(
+    alpha: borderOpacity > 0 ? borderOpacity : 0.12,
+  );
 
   /// Returns a readable foreground (black/white) for any [background].
   Color onColor(Color background) =>
-      background.computeLuminance() > 0.5 ? const Color(0xFF101014) : Colors.white;
+      background.computeLuminance() > 0.5
+          ? const Color(0xFF101014)
+          : Colors.white;
 
   // --- Accessibility resolvers (honor OS settings) ---
 
@@ -181,14 +185,16 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
     final Color bgHint;
     if (isDark) {
       bgHint = Colors.black;
-      surface = style == StunningUIStyle.enterprise
-          ? const Color(0xFF121212)
-          : seedColor.withValues(alpha: 0.15);
+      surface =
+          style == StunningUIStyle.enterprise
+              ? const Color(0xFF121212)
+              : seedColor.withValues(alpha: 0.15);
     } else {
       bgHint = Colors.white;
-      surface = style == StunningUIStyle.enterprise
-          ? const Color(0xFFF5F5F5)
-          : seedColor.withValues(alpha: 0.05);
+      surface =
+          style == StunningUIStyle.enterprise
+              ? const Color(0xFFF5F5F5)
+              : seedColor.withValues(alpha: 0.05);
     }
 
     // --- Material & physics engine per style ---
@@ -259,50 +265,57 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
   factory StunningTheme.gaming({
     Color seedColor = const Color(0xFF22D3EE),
     Brightness brightness = Brightness.dark,
-  }) =>
-      StunningTheme.generate(
-          seedColor: seedColor, brightness: brightness, style: StunningUIStyle.gaming);
+  }) => StunningTheme.generate(
+    seedColor: seedColor,
+    brightness: brightness,
+    style: StunningUIStyle.gaming,
+  );
 
   /// Flat, fast, high-contrast SaaS. Defaults to dark.
   factory StunningTheme.enterprise({
     Color seedColor = const Color(0xFF3B82F6),
     Brightness brightness = Brightness.dark,
-  }) =>
-      StunningTheme.generate(
-          seedColor: seedColor,
-          brightness: brightness,
-          style: StunningUIStyle.enterprise);
+  }) => StunningTheme.generate(
+    seedColor: seedColor,
+    brightness: brightness,
+    style: StunningUIStyle.enterprise,
+  );
 
   /// Soft frost, subtle motion. Defaults to light.
   factory StunningTheme.minimal({
     Color seedColor = const Color(0xFF8B5CF6),
     Brightness brightness = Brightness.light,
-  }) =>
-      StunningTheme.generate(
-          seedColor: seedColor,
-          brightness: brightness,
-          style: StunningUIStyle.minimal);
+  }) => StunningTheme.generate(
+    seedColor: seedColor,
+    brightness: brightness,
+    style: StunningUIStyle.minimal,
+  );
 
   /// A sensible light theme in one line.
   factory StunningTheme.light({
     Color seedColor = const Color(0xFF6C5CE7),
     StunningUIStyle style = StunningUIStyle.minimal,
-  }) =>
-      StunningTheme.generate(
-          seedColor: seedColor, brightness: Brightness.light, style: style);
+  }) => StunningTheme.generate(
+    seedColor: seedColor,
+    brightness: Brightness.light,
+    style: style,
+  );
 
   /// A sensible dark theme in one line.
   factory StunningTheme.dark({
     Color seedColor = const Color(0xFF22D3EE),
     StunningUIStyle style = StunningUIStyle.gaming,
-  }) =>
-      StunningTheme.generate(
-          seedColor: seedColor, brightness: Brightness.dark, style: style);
+  }) => StunningTheme.generate(
+    seedColor: seedColor,
+    brightness: Brightness.dark,
+    style: style,
+  );
 
   /// Build a Material [ThemeData] with this engine wired in — the one-line
   /// setup: `MaterialApp(theme: StunningTheme.dark().toThemeData())`.
   ThemeData toThemeData() {
-    final scheme = colorScheme ??
+    final scheme =
+        colorScheme ??
         ColorScheme.fromSeed(seedColor: primaryBrand, brightness: brightness);
     return ThemeData(
       useMaterial3: true,
@@ -359,15 +372,21 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
           lerpDouble(borderOpacity, other.borderOpacity, t) ?? borderOpacity,
       // Duration interpolates smoothly even though Curve cannot.
       motionDuration: Duration(
-          milliseconds: (lerpDouble(motionDuration.inMilliseconds,
-                      other.motionDuration.inMilliseconds, t) ??
-                  motionDuration.inMilliseconds)
-              .round()),
+        milliseconds:
+            (lerpDouble(
+                      motionDuration.inMilliseconds,
+                      other.motionDuration.inMilliseconds,
+                      t,
+                    ) ??
+                    motionDuration.inMilliseconds)
+                .round(),
+      ),
       motionCurve: t < 0.5 ? motionCurve : other.motionCurve,
       colorScheme: ColorScheme.lerp(
-          colorScheme ?? other.colorScheme ?? const ColorScheme.dark(),
-          other.colorScheme ?? colorScheme ?? const ColorScheme.dark(),
-          t),
+        colorScheme ?? other.colorScheme ?? const ColorScheme.dark(),
+        other.colorScheme ?? colorScheme ?? const ColorScheme.dark(),
+        t,
+      ),
       spring: StunningSpring.lerp(spring, other.spring, t),
       style: t < 0.5 ? style : other.style,
       brightness: t < 0.5 ? brightness : other.brightness,

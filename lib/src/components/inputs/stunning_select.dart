@@ -117,8 +117,8 @@ class _StunningSelectState<T> extends State<StunningSelect<T>> {
       link: _link,
       child: OverlayPortal(
         controller: _portal,
-        overlayChildBuilder: (overlayContext) =>
-            _buildOverlay(overlayContext, st),
+        overlayChildBuilder:
+            (overlayContext) => _buildOverlay(overlayContext, st),
         child: Opacity(
           opacity: enabled ? 1.0 : 0.38,
           child: StunningTappable(
@@ -128,17 +128,15 @@ class _StunningSelectState<T> extends State<StunningSelect<T>> {
             child: AnimatedContainer(
               duration: duration,
               curve: curve,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18,
-                vertical: 14,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
               decoration: BoxDecoration(
                 color: st.surfaceGlass,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: _isOpen
-                      ? st.primaryBrand.withValues(alpha: 0.5)
-                      : st.borderColor,
+                  color:
+                      _isOpen
+                          ? st.primaryBrand.withValues(alpha: 0.5)
+                          : st.borderColor,
                   width: 1.0,
                 ),
               ),
@@ -266,9 +264,10 @@ class _MenuList<T> extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? st.primaryBrand.withValues(alpha: 0.12)
-                  : Colors.transparent,
+              color:
+                  isSelected
+                      ? st.primaryBrand.withValues(alpha: 0.12)
+                      : Colors.transparent,
               border: Border(
                 left: BorderSide(
                   color: isSelected ? st.primaryBrand : Colors.transparent,

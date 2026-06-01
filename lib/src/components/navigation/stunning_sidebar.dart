@@ -38,14 +38,14 @@ class StunningSidebarItem extends StatelessWidget {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: isActive
-                ? primary.withValues(alpha: 0.2)
-                : Colors.transparent,
+            color:
+                isActive ? primary.withValues(alpha: 0.2) : Colors.transparent,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isActive
-                  ? primary.withValues(alpha: 0.5)
-                  : Colors.transparent,
+              color:
+                  isActive
+                      ? primary.withValues(alpha: 0.5)
+                      : Colors.transparent,
               width: 1,
             ),
           ),
@@ -91,12 +91,7 @@ class StunningSidebar extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: st.surfaceGlass,
-          border: Border(
-            right: BorderSide(
-              color: st.borderColor,
-              width: 1,
-            ),
-          ),
+          border: Border(right: BorderSide(color: st.borderColor, width: 1)),
         ),
         child: ClipRRect(
           child: BackdropFilter(
@@ -110,11 +105,7 @@ class StunningSidebar extends StatelessWidget {
                 children: [
                   // User Profile or Logo Area
                   Padding(padding: const EdgeInsets.all(24.0), child: header),
-                  Divider(
-                    color: st.borderColor,
-                    thickness: 1,
-                    height: 1,
-                  ),
+                  Divider(color: st.borderColor, thickness: 1, height: 1),
 
                   // Menu Items
                   Expanded(
@@ -129,11 +120,7 @@ class StunningSidebar extends StatelessWidget {
                   ),
 
                   // Footer Area (Optional Settings/Logout)
-                  Divider(
-                    color: st.borderColor,
-                    thickness: 1,
-                    height: 1,
-                  ),
+                  Divider(color: st.borderColor, thickness: 1, height: 1),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: StunningSidebarItem(

@@ -68,29 +68,37 @@ class StunningButton extends StatelessWidget {
     this.size = StunningButtonSize.medium,
     this.color,
     this.semanticLabel,
-  }) : assert(text != null || icon != null || child != null,
-            'Provide text, icon, or child');
+  }) : assert(
+         text != null || icon != null || child != null,
+         'Provide text, icon, or child',
+       );
 
   EdgeInsets get _padding => switch (size) {
-        StunningButtonSize.small =>
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        StunningButtonSize.medium =>
-          const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        StunningButtonSize.large =>
-          const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-      };
+    StunningButtonSize.small => const EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: 10,
+    ),
+    StunningButtonSize.medium => const EdgeInsets.symmetric(
+      horizontal: 24,
+      vertical: 16,
+    ),
+    StunningButtonSize.large => const EdgeInsets.symmetric(
+      horizontal: 32,
+      vertical: 20,
+    ),
+  };
 
   double get _fontSize => switch (size) {
-        StunningButtonSize.small => 14,
-        StunningButtonSize.medium => 16,
-        StunningButtonSize.large => 18,
-      };
+    StunningButtonSize.small => 14,
+    StunningButtonSize.medium => 16,
+    StunningButtonSize.large => 18,
+  };
 
   double get _iconSize => switch (size) {
-        StunningButtonSize.small => 16,
-        StunningButtonSize.medium => 18,
-        StunningButtonSize.large => 22,
-      };
+    StunningButtonSize.small => 16,
+    StunningButtonSize.medium => 18,
+    StunningButtonSize.large => 22,
+  };
 
   bool get _isFilled =>
       variant == StunningButtonVariant.primary ||
@@ -117,9 +125,10 @@ class StunningButton extends StatelessWidget {
     }
   }
 
-  BoxBorder? _border(Color base) => variant == StunningButtonVariant.outline
-      ? Border.all(color: base, width: 2)
-      : null;
+  BoxBorder? _border(Color base) =>
+      variant == StunningButtonVariant.outline
+          ? Border.all(color: base, width: 2)
+          : null;
 
   Color _foreground(StunningTheme st, Color base) =>
       _isFilled ? st.onColor(base) : base;
@@ -155,9 +164,10 @@ class StunningButton extends StatelessWidget {
                 color: _backgroundColor(base, hovered),
                 borderRadius: BorderRadius.circular(12),
                 border: _border(base),
-                boxShadow: hovered && !pressed && enabled && _isFilled
-                    ? <BoxShadow>[st.glowingShadow]
-                    : const <BoxShadow>[],
+                boxShadow:
+                    hovered && !pressed && enabled && _isFilled
+                        ? <BoxShadow>[st.glowingShadow]
+                        : const <BoxShadow>[],
               ),
               padding: _padding,
               child: Center(child: _content(fg)),
@@ -180,14 +190,19 @@ class StunningButton extends StatelessWidget {
       );
     }
     if (child != null) return child!;
-    final label = text != null
-        ? Text(
-            text!,
-            style: TextStyle(
-                color: fg, fontSize: _fontSize, fontWeight: FontWeight.bold),
-          )
-        : null;
-    final leading = icon != null ? Icon(icon, size: _iconSize, color: fg) : null;
+    final label =
+        text != null
+            ? Text(
+              text!,
+              style: TextStyle(
+                color: fg,
+                fontSize: _fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+            : null;
+    final leading =
+        icon != null ? Icon(icon, size: _iconSize, color: fg) : null;
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,

@@ -162,17 +162,18 @@ class StunningDialog extends StatelessWidget {
     final st = StunningTheme.of(context);
     final accent = _resolveAccent(st);
 
-    final body = content ??
+    final body =
+        content ??
         (message != null
             ? Text(
-                message!,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: st.textSecondary,
-                  fontSize: 15,
-                  height: 1.5,
-                ),
-              )
+              message!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: st.textSecondary,
+                fontSize: 15,
+                height: 1.5,
+              ),
+            )
             : null);
 
     final hasActions = primaryAction != null || secondaryAction != null;
@@ -256,15 +257,16 @@ class _IconBadge extends StatelessWidget {
         shape: BoxShape.circle,
         color: core,
         border: Border.all(color: accent, width: 2),
-        boxShadow: glow > 0
-            ? <BoxShadow>[
-                BoxShadow(
-                  color: accent.withValues(alpha: 0.4 * glow),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                ),
-              ]
-            : const <BoxShadow>[],
+        boxShadow:
+            glow > 0
+                ? <BoxShadow>[
+                  BoxShadow(
+                    color: accent.withValues(alpha: 0.4 * glow),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                  ),
+                ]
+                : const <BoxShadow>[],
       ),
       child: Icon(icon, color: accent, size: 32),
     );
@@ -294,22 +296,24 @@ Future<T?> showStunningDialog<T>({
   return showGeneralDialog<T>(
     context: context,
     barrierDismissible: barrierDismissible,
-    barrierLabel: barrierDismissible
-        ? MaterialLocalizations.of(context).modalBarrierDismissLabel
-        : null,
+    barrierLabel:
+        barrierDismissible
+            ? MaterialLocalizations.of(context).modalBarrierDismissLabel
+            : null,
     barrierColor: Colors.black.withValues(alpha: 0.7),
     transitionDuration: st.motion(context),
-    pageBuilder: (context, _, _) => SafeArea(
-      child: StunningDialog(
-        icon: icon,
-        title: title,
-        message: message,
-        content: content,
-        primaryAction: primaryAction,
-        secondaryAction: secondaryAction,
-        accentColor: accentColor,
-      ),
-    ),
+    pageBuilder:
+        (context, _, _) => SafeArea(
+          child: StunningDialog(
+            icon: icon,
+            title: title,
+            message: message,
+            content: content,
+            primaryAction: primaryAction,
+            secondaryAction: secondaryAction,
+            accentColor: accentColor,
+          ),
+        ),
     transitionBuilder: (context, anim, secAnim, child) {
       final st = StunningTheme.of(context);
       final curved = CurvedAnimation(parent: anim, curve: st.motionCurve);

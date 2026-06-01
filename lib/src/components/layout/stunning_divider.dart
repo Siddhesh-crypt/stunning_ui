@@ -61,10 +61,7 @@ class StunningDivider extends StatelessWidget {
     return Semantics(
       child: Padding(
         padding: EdgeInsets.only(top: indent, bottom: endIndent),
-        child: SizedBox(
-          width: thickness,
-          child: ColoredBox(color: lineColor),
-        ),
+        child: SizedBox(width: thickness, child: ColoredBox(color: lineColor)),
       ),
     );
   }

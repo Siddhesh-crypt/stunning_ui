@@ -37,12 +37,36 @@ class GlassStyle {
 }
 
 const List<GlassStyle> kStyles = <GlassStyle>[
-  GlassStyle('Enterprise', 'flat · no glass · save GPU',
-      refraction: 3, blur: 1, glow: 0.03, tint: Color(0xFF94A3B8), tintAmount: 0.03, radius: 14),
-  GlassStyle('Minimal', 'soft frost · subtle glow',
-      refraction: 16, blur: 6, glow: 0.18, tint: Color(0xFF8B5CF6), tintAmount: 0.07, radius: 24),
-  GlassStyle('Gaming', 'thick lens · neon glow',
-      refraction: 32, blur: 11, glow: 0.85, tint: Color(0xFF22D3EE), tintAmount: 0.12, radius: 30),
+  GlassStyle(
+    'Enterprise',
+    'flat · no glass · save GPU',
+    refraction: 3,
+    blur: 1,
+    glow: 0.03,
+    tint: Color(0xFF94A3B8),
+    tintAmount: 0.03,
+    radius: 14,
+  ),
+  GlassStyle(
+    'Minimal',
+    'soft frost · subtle glow',
+    refraction: 16,
+    blur: 6,
+    glow: 0.18,
+    tint: Color(0xFF8B5CF6),
+    tintAmount: 0.07,
+    radius: 24,
+  ),
+  GlassStyle(
+    'Gaming',
+    'thick lens · neon glow',
+    refraction: 32,
+    blur: 11,
+    glow: 0.85,
+    tint: Color(0xFF22D3EE),
+    tintAmount: 0.12,
+    radius: 30,
+  ),
 ];
 
 class GlassPocApp extends StatelessWidget {
@@ -101,46 +125,48 @@ class _GlassPocScreenState extends State<GlassPocScreen>
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text('Shader load failed:\n$_error',
-                    style: const TextStyle(color: Colors.redAccent)),
+                child: Text(
+                  'Shader load failed:\n$_error',
+                  style: const TextStyle(color: Colors.redAccent),
+                ),
               ),
             )
           : _program == null
-              ? const Center(child: CircularProgressIndicator())
-              : Column(
-                  children: [
-                    const SizedBox(height: 18),
-                    const Text(
-                      'stunning_ui · .glass() refraction — same shader, theme-driven styles',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        letterSpacing: 0.8,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'grid lines bend through the glass = real index-of-refraction lensing',
-                      style: TextStyle(color: Colors.white54, fontSize: 12),
-                    ),
-                    const SizedBox(height: 14),
-                    Expanded(
-                      child: Row(
-                        children: <Widget>[
-                          for (final style in kStyles)
-                            Expanded(
-                              child: _GlassColumn(
-                                program: _program!,
-                                time: _t,
-                                style: style,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                const SizedBox(height: 18),
+                const Text(
+                  'stunning_ui · .glass() refraction — same shader, theme-driven styles',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    letterSpacing: 0.8,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
+                const SizedBox(height: 4),
+                const Text(
+                  'grid lines bend through the glass = real index-of-refraction lensing',
+                  style: TextStyle(color: Colors.white54, fontSize: 12),
+                ),
+                const SizedBox(height: 14),
+                Expanded(
+                  child: Row(
+                    children: <Widget>[
+                      for (final style in kStyles)
+                        Expanded(
+                          child: _GlassColumn(
+                            program: _program!,
+                            time: _t,
+                            style: style,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
@@ -193,7 +219,11 @@ class _GlassColumn extends StatelessWidget {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              Icon(Icons.bolt_rounded, color: style.tint, size: 22),
+                              Icon(
+                                Icons.bolt_rounded,
+                                color: style.tint,
+                                size: 22,
+                              ),
                               const SizedBox(width: 6),
                               Text(
                                 style.name,
@@ -209,7 +239,9 @@ class _GlassColumn extends StatelessWidget {
                           Text(
                             style.blurb,
                             style: const TextStyle(
-                                color: Colors.white70, fontSize: 13),
+                              color: Colors.white70,
+                              fontSize: 13,
+                            ),
                           ),
                         ],
                       ),
@@ -224,12 +256,15 @@ class _GlassColumn extends StatelessWidget {
                   child: Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 6),
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: style.tint.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                            color: style.tint.withValues(alpha: 0.8)),
+                          color: style.tint.withValues(alpha: 0.8),
+                        ),
                       ),
                       child: Text(
                         'StunningUIStyle.${style.name.toLowerCase()}',

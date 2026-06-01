@@ -43,10 +43,7 @@ class StunningAppBar extends StatelessWidget implements PreferredSizeWidget {
           decoration: BoxDecoration(
             color: surfaceColor,
             border: Border(
-              bottom: BorderSide(
-                color: st.borderColor,
-                width: 1.5,
-              ),
+              bottom: BorderSide(color: st.borderColor, width: 1.5),
             ),
           ),
           child: SafeArea(
@@ -56,9 +53,13 @@ class StunningAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: NavigationToolbar(
                 leading: leading,
                 middle: title,
-                trailing: actions != null
-                    ? Row(mainAxisSize: MainAxisSize.min, children: actions!)
-                    : null,
+                trailing:
+                    actions != null
+                        ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: actions!,
+                        )
+                        : null,
                 centerMiddle: centerTitle,
               ),
             ),

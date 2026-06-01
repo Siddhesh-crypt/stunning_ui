@@ -79,12 +79,14 @@ class StunningTabs extends StatelessWidget {
                               child: AnimatedDefaultTextStyle(
                                 duration: duration,
                                 style: TextStyle(
-                                  color: isActive
-                                      ? st.textPrimary
-                                      : st.textSecondary,
-                                  fontWeight: isActive
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
+                                  color:
+                                      isActive
+                                          ? st.textPrimary
+                                          : st.textSecondary,
+                                  fontWeight:
+                                      isActive
+                                          ? FontWeight.bold
+                                          : FontWeight.w500,
                                   fontSize: 14,
                                 ),
                                 child: Text(tabs[index]),

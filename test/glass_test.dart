@@ -23,40 +23,42 @@ Widget _host(Widget child, {bool highContrast = false}) {
 }
 
 void main() {
-  testWidgets('GlassSurface blurs by default and renders its child',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(_host(
-      const GlassSurface(child: Text('inside')),
-    ));
+  testWidgets('GlassSurface blurs by default and renders its child', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(_host(const GlassSurface(child: Text('inside'))));
     await tester.pumpAndSettle();
     expect(find.text('inside'), findsOneWidget);
     // On non-Impeller backends (test env) it uses a BackdropFilter blur.
     expect(find.byType(BackdropFilter), findsOneWidget);
   });
 
-  testWidgets('GlassSurface falls back to a solid surface under reduce-transparency',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(_host(
-      const GlassSurface(child: Text('inside')),
-      highContrast: true,
-    ));
-    await tester.pumpAndSettle();
-    expect(find.text('inside'), findsOneWidget);
-    expect(find.byType(BackdropFilter), findsNothing);
-  });
+  testWidgets(
+    'GlassSurface falls back to a solid surface under reduce-transparency',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _host(const GlassSurface(child: Text('inside')), highContrast: true),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('inside'), findsOneWidget);
+      expect(find.byType(BackdropFilter), findsNothing);
+    },
+  );
 
-  testWidgets('.glass() composes in the .stunning() chain',
-      (WidgetTester tester) async {
+  testWidgets('.glass() composes in the .stunning() chain', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(_host(const Text('chain').stunning().glass()));
     await tester.pumpAndSettle();
     expect(find.text('chain'), findsOneWidget);
   });
 
-  testWidgets('StunningGlassScope provides a BackdropGroup',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(_host(
-      const StunningGlassScope(child: GlassSurface(child: Text('x'))),
-    ));
+  testWidgets('StunningGlassScope provides a BackdropGroup', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      _host(const StunningGlassScope(child: GlassSurface(child: Text('x')))),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(BackdropGroup), findsOneWidget);
   });

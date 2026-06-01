@@ -3,41 +3,44 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stunning_ui/stunning_ui.dart';
 
 Widget _host(Widget child) => MaterialApp(
-      theme: StunningTheme.dark().toThemeData(),
-      home: Scaffold(body: Center(child: child)),
-    );
+  theme: StunningTheme.dark().toThemeData(),
+  home: Scaffold(body: Center(child: child)),
+);
 
 void main() {
-  testWidgets('StunningButton exposes an accessible, labeled, 48dp tap target',
-      (WidgetTester tester) async {
-    final handle = tester.ensureSemantics();
-    var tapped = false;
+  testWidgets(
+    'StunningButton exposes an accessible, labeled, 48dp tap target',
+    (WidgetTester tester) async {
+      final handle = tester.ensureSemantics();
+      var tapped = false;
 
-    await tester.pumpWidget(
-      _host(StunningButton(text: 'Submit', onPressed: () => tapped = true)),
-    );
+      await tester.pumpWidget(
+        _host(StunningButton(text: 'Submit', onPressed: () => tapped = true)),
+      );
 
-    // Screen-reader label + button role are present and enabled.
-    expect(find.bySemanticsLabel('Submit'), findsOneWidget);
-    expect(
-      tester.getSemantics(find.bySemanticsLabel('Submit')),
-      isSemantics(isButton: true, hasEnabledState: true, isEnabled: true),
-    );
+      // Screen-reader label + button role are present and enabled.
+      expect(find.bySemanticsLabel('Submit'), findsOneWidget);
+      expect(
+        tester.getSemantics(find.bySemanticsLabel('Submit')),
+        isSemantics(isButton: true, hasEnabledState: true, isEnabled: true),
+      );
 
-    // Meets minimum tap-target size and every tappable node has a label.
-    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
-    await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
-    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      // Meets minimum tap-target size and every tappable node has a label.
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-    // Activates on tap.
-    await tester.tap(find.text('Submit'));
-    expect(tapped, isTrue);
+      // Activates on tap.
+      await tester.tap(find.text('Submit'));
+      expect(tapped, isTrue);
 
-    handle.dispose();
-  });
+      handle.dispose();
+    },
+  );
 
-  testWidgets('A null onPressed renders a disabled (not enabled) button',
-      (WidgetTester tester) async {
+  testWidgets('A null onPressed renders a disabled (not enabled) button', (
+    WidgetTester tester,
+  ) async {
     final handle = tester.ensureSemantics();
 
     await tester.pumpWidget(const _DisabledHost());
@@ -50,8 +53,9 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('Components honor reduce-motion (durations collapse to zero)',
-      (WidgetTester tester) async {
+  testWidgets('Components honor reduce-motion (durations collapse to zero)', (
+    WidgetTester tester,
+  ) async {
     final theme = StunningTheme.gaming();
     expect(theme.motionDuration.inMilliseconds, greaterThan(0));
 
@@ -69,19 +73,23 @@ void main() {
     expect(probed.resolved, Duration.zero);
   });
 
-  testWidgets('StunningSwitch exposes toggle semantics and a 48dp target',
-      (WidgetTester tester) async {
+  testWidgets('StunningSwitch exposes toggle semantics and a 48dp target', (
+    WidgetTester tester,
+  ) async {
     final handle = tester.ensureSemantics();
     var value = true;
 
-    await tester.pumpWidget(_host(
-      StatefulBuilder(
-        builder: (context, setState) => StunningSwitch(
-          value: value,
-          onChanged: (v) => setState(() => value = v),
+    await tester.pumpWidget(
+      _host(
+        StatefulBuilder(
+          builder:
+              (context, setState) => StunningSwitch(
+                value: value,
+                onChanged: (v) => setState(() => value = v),
+              ),
         ),
       ),
-    ));
+    );
 
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
     expect(
@@ -96,21 +104,24 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('StunningTabs marks the selected tab and activates on tap',
-      (WidgetTester tester) async {
+  testWidgets('StunningTabs marks the selected tab and activates on tap', (
+    WidgetTester tester,
+  ) async {
     final handle = tester.ensureSemantics();
     int? picked;
 
-    await tester.pumpWidget(_host(
-      SizedBox(
-        width: 320,
-        child: StunningTabs(
-          tabs: const <String>['Overview', 'Activity', 'Settings'],
-          selectedIndex: 1,
-          onChanged: (i) => picked = i,
+    await tester.pumpWidget(
+      _host(
+        SizedBox(
+          width: 320,
+          child: StunningTabs(
+            tabs: const <String>['Overview', 'Activity', 'Settings'],
+            selectedIndex: 1,
+            onChanged: (i) => picked = i,
+          ),
         ),
       ),
-    ));
+    );
 
     expect(
       tester.getSemantics(find.bySemanticsLabel('Activity')),

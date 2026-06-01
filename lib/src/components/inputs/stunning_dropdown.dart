@@ -83,9 +83,8 @@ class _StunningDropdownState extends State<StunningDropdown> {
                       if (widget.prefixIcon != null) ...[
                         Icon(
                           widget.prefixIcon,
-                          color: widget.value != null
-                              ? brandColor
-                              : st.iconColor,
+                          color:
+                              widget.value != null ? brandColor : st.iconColor,
                         ),
                         const SizedBox(width: 12),
                       ],
@@ -93,13 +92,15 @@ class _StunningDropdownState extends State<StunningDropdown> {
                         child: Text(
                           widget.value ?? widget.hintText,
                           style: TextStyle(
-                            color: widget.value != null
-                                ? st.textPrimary
-                                : st.hintColor,
+                            color:
+                                widget.value != null
+                                    ? st.textPrimary
+                                    : st.hintColor,
                             fontSize: 16,
-                            fontWeight: widget.value != null
-                                ? FontWeight.w600
-                                : FontWeight.normal,
+                            fontWeight:
+                                widget.value != null
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
                           ),
                         ),
                       ),
@@ -121,82 +122,90 @@ class _StunningDropdownState extends State<StunningDropdown> {
                 duration: duration,
                 curve: curve,
                 alignment: Alignment.topCenter,
-                child: _isOpen
-                    ? Column(
-                        children: [
-                          Divider(
-                            color: st.borderColor,
-                            height: 1,
-                          ),
-                          Container(
-                            constraints: const BoxConstraints(maxHeight: 220),
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              child: Column(
-                                children: widget.items.map((item) {
-                                  final isSelected = widget.value == item;
-                                  return StunningTappable(
-                                    onPressed: () => _selectItem(item),
-                                    selected: isSelected,
-                                    minTargetSize: 0,
-                                    borderRadius: BorderRadius.zero,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 16,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        // A subtle left border highlight for the selected item
-                                        border: isSelected
-                                            ? Border(
-                                                left: BorderSide(
-                                                  color: brandColor,
-                                                  width: 3,
+                child:
+                    _isOpen
+                        ? Column(
+                          children: [
+                            Divider(color: st.borderColor, height: 1),
+                            Container(
+                              constraints: const BoxConstraints(maxHeight: 220),
+                              child: SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Column(
+                                  children:
+                                      widget.items.map((item) {
+                                        final isSelected = widget.value == item;
+                                        return StunningTappable(
+                                          onPressed: () => _selectItem(item),
+                                          selected: isSelected,
+                                          minTargetSize: 0,
+                                          borderRadius: BorderRadius.zero,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                              vertical: 16,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              // A subtle left border highlight for the selected item
+                                              border:
+                                                  isSelected
+                                                      ? Border(
+                                                        left: BorderSide(
+                                                          color: brandColor,
+                                                          width: 3,
+                                                        ),
+                                                      )
+                                                      : const Border(
+                                                        left: BorderSide(
+                                                          color:
+                                                              Colors
+                                                                  .transparent,
+                                                          width: 3,
+                                                        ),
+                                                      ),
+                                              color:
+                                                  isSelected
+                                                      ? brandColor.withValues(
+                                                        alpha: 0.05,
+                                                      )
+                                                      : Colors.transparent,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    item,
+                                                    style: TextStyle(
+                                                      color:
+                                                          isSelected
+                                                              ? st.textPrimary
+                                                              : st.textSecondary,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          isSelected
+                                                              ? FontWeight.bold
+                                                              : FontWeight
+                                                                  .normal,
+                                                    ),
+                                                  ),
                                                 ),
-                                              )
-                                            : const Border(
-                                                left: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 3,
-                                                ),
-                                              ),
-                                        color: isSelected
-                                            ? brandColor.withValues(alpha: 0.05)
-                                            : Colors.transparent,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              item,
-                                              style: TextStyle(
-                                                color: isSelected
-                                                    ? st.textPrimary
-                                                    : st.textSecondary,
-                                                fontSize: 15,
-                                                fontWeight: isSelected
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal,
-                                              ),
+                                                if (isSelected)
+                                                  Icon(
+                                                    Icons.check_circle_rounded,
+                                                    color: brandColor,
+                                                    size: 20,
+                                                  ),
+                                              ],
                                             ),
                                           ),
-                                          if (isSelected)
-                                            Icon(
-                                              Icons.check_circle_rounded,
-                                              color: brandColor,
-                                              size: 20,
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
+                                        );
+                                      }).toList(),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
+                          ],
+                        )
+                        : const SizedBox.shrink(),
               ),
             ],
           ),

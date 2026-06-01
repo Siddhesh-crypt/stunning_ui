@@ -28,8 +28,9 @@ void main() {
     expect(s.damping, greaterThan(0));
   });
 
-  testWidgets('springIn starts hidden and settles fully visible',
-      (WidgetTester tester) async {
+  testWidgets('springIn starts hidden and settles fully visible', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(_host(const Text('hi').stunning().springIn()));
 
     // First frame: still animating in (not yet fully opaque).
@@ -42,8 +43,9 @@ void main() {
     expect(_minOpacity(tester), 1.0);
   });
 
-  testWidgets('springIn honors reduce-motion (instant, no animation)',
-      (WidgetTester tester) async {
+  testWidgets('springIn honors reduce-motion (instant, no animation)', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       _host(const Text('hi').stunning().springIn(), reduceMotion: true),
     );
@@ -52,23 +54,29 @@ void main() {
     expect(_minOpacity(tester), 1.0);
   });
 
-  testWidgets('glow and tilt compose without error and render the child',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(_host(
-      const SizedBox(width: 120, height: 80, child: Text('card'))
-          .stunning()
-          .glow()
-          .tilt()
-          .springIn(),
-    ));
+  testWidgets('glow and tilt compose without error and render the child', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      _host(
+        const SizedBox(
+          width: 120,
+          height: 80,
+          child: Text('card'),
+        ).stunning().glow().tilt().springIn(),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.text('card'), findsOneWidget);
   });
 
   test('stunningStagger wraps every child as a Stunning effect', () {
     final List<Widget> staggered =
-        <Widget>[const Text('a'), const Text('b'), const Text('c')]
-            .stunningStagger();
+        <Widget>[
+          const Text('a'),
+          const Text('b'),
+          const Text('c'),
+        ].stunningStagger();
     expect(staggered.length, 3);
     expect(staggered.every((w) => w is Stunning), isTrue);
   });

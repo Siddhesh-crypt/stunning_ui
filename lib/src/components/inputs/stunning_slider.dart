@@ -130,18 +130,21 @@ class _StunningSliderState extends State<StunningSlider> {
     final showGlow = enabled && (_dragging);
     // Same geometry, transparent colour, so the shadow can animate in/out
     // without a layout jump.
-    final thumbShadow = showGlow
-        ? glow
-        : BoxShadow(
-            color: Colors.transparent,
-            blurRadius: glow.blurRadius,
-            spreadRadius: glow.spreadRadius,
-            offset: glow.offset,
-          );
+    final thumbShadow =
+        showGlow
+            ? glow
+            : BoxShadow(
+              color: Colors.transparent,
+              blurRadius: glow.blurRadius,
+              spreadRadius: glow.spreadRadius,
+              offset: glow.offset,
+            );
 
     final roundedValue = _normalize(widget.value);
     String fmtValue(double v) =>
-        (widget.divisions != null) ? v.toStringAsFixed(0) : v.toStringAsFixed(2);
+        (widget.divisions != null)
+            ? v.toStringAsFixed(0)
+            : v.toStringAsFixed(2);
     final valueLabel = fmtValue(roundedValue);
 
     return Semantics(
@@ -160,14 +163,18 @@ class _StunningSliderState extends State<StunningSlider> {
         mouseCursor:
             enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
         shortcuts: const <ShortcutActivator, Intent>{
-          SingleActivator(LogicalKeyboardKey.arrowRight):
-              _AdjustIntent(forward: true),
-          SingleActivator(LogicalKeyboardKey.arrowUp):
-              _AdjustIntent(forward: true),
-          SingleActivator(LogicalKeyboardKey.arrowLeft):
-              _AdjustIntent(forward: false),
-          SingleActivator(LogicalKeyboardKey.arrowDown):
-              _AdjustIntent(forward: false),
+          SingleActivator(LogicalKeyboardKey.arrowRight): _AdjustIntent(
+            forward: true,
+          ),
+          SingleActivator(LogicalKeyboardKey.arrowUp): _AdjustIntent(
+            forward: true,
+          ),
+          SingleActivator(LogicalKeyboardKey.arrowLeft): _AdjustIntent(
+            forward: false,
+          ),
+          SingleActivator(LogicalKeyboardKey.arrowDown): _AdjustIntent(
+            forward: false,
+          ),
         },
         actions: <Type, Action<Intent>>{
           _AdjustIntent: CallbackAction<_AdjustIntent>(
@@ -181,9 +188,8 @@ class _StunningSliderState extends State<StunningSlider> {
           opacity: opacity,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final width = constraints.maxWidth.isFinite
-                  ? constraints.maxWidth
-                  : 200.0;
+              final width =
+                  constraints.maxWidth.isFinite ? constraints.maxWidth : 200.0;
               // The thumb centre travels between these two x positions so it
               // never overflows the track edges.
               final usableWidth = (width - 2 * _thumbRadius).clamp(0.0, width);
@@ -194,24 +200,20 @@ class _StunningSliderState extends State<StunningSlider> {
 
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTapDown: enabled
-                    ? (d) => handleDx(d.localPosition.dx)
-                    : null,
-                onHorizontalDragStart: enabled
-                    ? (d) {
-                        setState(() => _dragging = true);
-                        handleDx(d.localPosition.dx);
-                      }
-                    : null,
-                onHorizontalDragUpdate: enabled
-                    ? (d) => handleDx(d.localPosition.dx)
-                    : null,
-                onHorizontalDragEnd: enabled
-                    ? (_) => setState(() => _dragging = false)
-                    : null,
-                onHorizontalDragCancel: enabled
-                    ? () => setState(() => _dragging = false)
-                    : null,
+                onTapDown: enabled ? (d) => handleDx(d.localPosition.dx) : null,
+                onHorizontalDragStart:
+                    enabled
+                        ? (d) {
+                          setState(() => _dragging = true);
+                          handleDx(d.localPosition.dx);
+                        }
+                        : null,
+                onHorizontalDragUpdate:
+                    enabled ? (d) => handleDx(d.localPosition.dx) : null,
+                onHorizontalDragEnd:
+                    enabled ? (_) => setState(() => _dragging = false) : null,
+                onHorizontalDragCancel:
+                    enabled ? () => setState(() => _dragging = false) : null,
                 child: SizedBox(
                   height: _minTargetSize,
                   width: width,
@@ -225,8 +227,9 @@ class _StunningSliderState extends State<StunningSlider> {
                           height: _trackHeight,
                           decoration: BoxDecoration(
                             color: inactive,
-                            borderRadius:
-                                BorderRadius.circular(_trackHeight / 2),
+                            borderRadius: BorderRadius.circular(
+                              _trackHeight / 2,
+                            ),
                           ),
                         ),
                       ),
@@ -240,8 +243,9 @@ class _StunningSliderState extends State<StunningSlider> {
                           width: _thumbRadius + usableWidth * _fraction,
                           decoration: BoxDecoration(
                             color: active,
-                            borderRadius:
-                                BorderRadius.circular(_trackHeight / 2),
+                            borderRadius: BorderRadius.circular(
+                              _trackHeight / 2,
+                            ),
                           ),
                         ),
                       ),
@@ -262,7 +266,8 @@ class _StunningSliderState extends State<StunningSlider> {
                               color: active,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: st.onColor(active)
+                                color: st
+                                    .onColor(active)
                                     .withValues(alpha: 0.9),
                                 width: 2,
                               ),

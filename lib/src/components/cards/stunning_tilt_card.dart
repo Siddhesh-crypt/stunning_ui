@@ -48,9 +48,9 @@ class _StunningTiltCardState extends State<StunningTiltCard> {
   }
 
   void _reset() => setState(() {
-        _x = 0;
-        _y = 0;
-      });
+    _x = 0;
+    _y = 0;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +71,11 @@ class _StunningTiltCardState extends State<StunningTiltCard> {
         child: AnimatedContainer(
           duration: st.motion(context),
           curve: Curves.easeOut,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.001) // perspective
-            ..rotateX(rotateX)
-            ..rotateY(rotateY),
+          transform:
+              Matrix4.identity()
+                ..setEntry(3, 2, 0.001) // perspective
+                ..rotateX(rotateX)
+                ..rotateY(rotateY),
           transformAlignment: FractionalOffset.center,
           child: SizedBox(
             width: widget.width,

@@ -1,0 +1,272 @@
+{
+  "name": "stunning_ui",
+  "description": "A glassmorphic, physics-driven Flutter UI toolkit. One seed colour + style derives a full theme; accessible by default; chainable .stunning() effects.",
+  "generatedBy": "tool/build_registry.dart",
+  "componentCount": 44,
+  "components": [
+    {
+      "name": "StunningAccordion",
+      "category": "layout",
+      "file": "src/components/layout/stunning_accordion.dart",
+      "description": "A glassmorphic accordion widget that smoothly expands and collapses."
+    },
+    {
+      "name": "StunningAnimatedListItem",
+      "category": "lists",
+      "file": "src/components/lists/stunning_animated_list.dart",
+      "description": ""
+    },
+    {
+      "name": "StunningAppBar",
+      "category": "navigation",
+      "file": "src/components/navigation/stunning_app_bar.dart",
+      "description": "A glassmorphic top app bar that integrates perfectly with the Stunning UI ecosystem."
+    },
+    {
+      "name": "StunningAvatar",
+      "category": "data_display",
+      "file": "src/components/data_display/stunning_avatar.dart",
+      "description": "A circular avatar that renders, in order of precedence, an [image], then text [initials], then an [icon], and finally a default person glyph."
+    },
+    {
+      "name": "StunningBadge",
+      "category": "data_display",
+      "file": "src/components/data_display/stunning_badge.dart",
+      "description": "A small count / status pill, optionally anchored to a [child]."
+    },
+    {
+      "name": "StunningBarChart",
+      "category": "data_display",
+      "file": "src/components/data_display/stunning_bar_chart.dart",
+      "description": "A premium, animated bar chart designed for Enterprise and SaaS dashboards."
+    },
+    {
+      "name": "StunningBottomNav",
+      "category": "navigation",
+      "file": "src/components/navigation/stunning_bottom_nav.dart",
+      "description": "A highly interactive, floating bottom navigation bar with elastic physics and neon glow."
+    },
+    {
+      "name": "StunningButton",
+      "category": "buttons",
+      "file": "src/components/buttons/stunning_button.dart",
+      "description": "A highly interactive, physics-based button."
+    },
+    {
+      "name": "StunningButtonSize",
+      "category": "buttons",
+      "file": "src/components/buttons/stunning_button.dart",
+      "description": "Size scale for [StunningButton]."
+    },
+    {
+      "name": "StunningButtonVariant",
+      "category": "buttons",
+      "file": "src/components/buttons/stunning_button.dart",
+      "description": "Defines the visual style of the [StunningButton]."
+    },
+    {
+      "name": "StunningCarousel",
+      "category": "layout",
+      "file": "src/components/layout/stunning_carousel.dart",
+      "description": "A 3D depth-scaling carousel slider that highlights the center widget and shrinks side elements."
+    },
+    {
+      "name": "StunningCheckbox",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_checkbox.dart",
+      "description": "A physics-y, glowing checkbox built on [StunningTappable]."
+    },
+    {
+      "name": "StunningDataTable",
+      "category": "data_display",
+      "file": "src/components/data_display/stunning_data_table.dart",
+      "description": "A revolutionary, highly customizable data table."
+    },
+    {
+      "name": "StunningDialog",
+      "category": "feedback",
+      "file": "src/components/feedback/stunning_dialog.dart",
+      "description": "A centred, glassmorphic dialog panel: an optional accent-tinted [icon], a [title], an optional [message] (or arbitrary [content]), and an actions row."
+    },
+    {
+      "name": "StunningDivider",
+      "category": "layout",
+      "file": "src/components/layout/stunning_divider.dart",
+      "description": "A thin, theme-aware divider line."
+    },
+    {
+      "name": "StunningDropdown",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_dropdown.dart",
+      "description": ""
+    },
+    {
+      "name": "StunningEffectTier",
+      "category": "core",
+      "file": "src/core/glass_surface.dart",
+      "description": "Rendering tier for glass effects."
+    },
+    {
+      "name": "StunningGlassScope",
+      "category": "core",
+      "file": "src/core/glass_surface.dart",
+      "description": "Coalesces every descendant [GlassSurface] into a single backdrop blur pass (via [BackdropGroup])."
+    },
+    {
+      "name": "StunningModal",
+      "category": "modals",
+      "file": "src/components/modals/stunning_modal.dart",
+      "description": ""
+    },
+    {
+      "name": "StunningNavItem",
+      "category": "navigation",
+      "file": "src/components/navigation/stunning_bottom_nav.dart",
+      "description": "Represents an individual item inside the [StunningBottomNav]."
+    },
+    {
+      "name": "StunningPagination",
+      "category": "navigation",
+      "file": "src/components/navigation/stunning_pagination.dart",
+      "description": "A compact, theme-aware page navigation control."
+    },
+    {
+      "name": "StunningProgressBar",
+      "category": "feedback",
+      "file": "src/components/feedback/stunning_progress.dart",
+      "description": "A theme-aware linear progress indicator."
+    },
+    {
+      "name": "StunningProgressRing",
+      "category": "feedback",
+      "file": "src/components/feedback/stunning_progress.dart",
+      "description": "A theme-aware circular progress indicator."
+    },
+    {
+      "name": "StunningRadio",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_radio.dart",
+      "description": "A generic, theme-aware single-choice radio button — the Stunning analogue of Material's `Radio<T>`."
+    },
+    {
+      "name": "StunningResponsiveCenter",
+      "category": "core",
+      "file": "src/core/responsive_layout.dart",
+      "description": ""
+    },
+    {
+      "name": "StunningSegmentedControl",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_segmented_control.dart",
+      "description": "A modern, glassmorphic segmented control with a sliding background highlight."
+    },
+    {
+      "name": "StunningSelect",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_select.dart",
+      "description": "A generic, overlay-based dropdown/select that floats its menu in an [OverlayPortal] instead of expanding inline."
+    },
+    {
+      "name": "StunningShimmer",
+      "category": "feedback",
+      "file": "src/components/feedback/stunning_shimmer.dart",
+      "description": "A GPU-accelerated skeleton loading wrapper that applies a sliding highlight effect."
+    },
+    {
+      "name": "StunningSidebar",
+      "category": "navigation",
+      "file": "src/components/navigation/stunning_sidebar.dart",
+      "description": "A glassmorphic drawer/sidebar with blurred backdrop effects and animated selection states."
+    },
+    {
+      "name": "StunningSidebarItem",
+      "category": "navigation",
+      "file": "src/components/navigation/stunning_sidebar.dart",
+      "description": "An individual menu item for the [StunningSidebar]."
+    },
+    {
+      "name": "StunningSkeleton",
+      "category": "feedback",
+      "file": "src/components/feedback/stunning_skeleton.dart",
+      "description": "A premium skeleton loader with a continuous glass shimmer effect."
+    },
+    {
+      "name": "StunningSlider",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_slider.dart",
+      "description": "A draggable value slider with a theme-aware, glowing thumb."
+    },
+    {
+      "name": "StunningSpring",
+      "category": "theme",
+      "file": "src/theme/stunning_theme.dart",
+      "description": "A motion \"spring\" token (duration + bounce) derived from the active style."
+    },
+    {
+      "name": "StunningSwitch",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_switch.dart",
+      "description": "A highly interactive, theme-aware toggle switch."
+    },
+    {
+      "name": "StunningTableStyle",
+      "category": "data_display",
+      "file": "src/components/data_display/stunning_data_table.dart",
+      "description": "Defines the visual layout of the data table."
+    },
+    {
+      "name": "StunningTabs",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_tabs.dart",
+      "description": "A segmented control where a glowing pill slides behind the active tab."
+    },
+    {
+      "name": "StunningTappable",
+      "category": "core",
+      "file": "src/core/stunning_tappable.dart",
+      "description": "The shared interaction primitive for every tappable Stunning component."
+    },
+    {
+      "name": "StunningTextField",
+      "category": "inputs",
+      "file": "src/components/inputs/stunning_text_field.dart",
+      "description": "A highly interactive, theme-aware text field with focus animations."
+    },
+    {
+      "name": "StunningTheme",
+      "category": "theme",
+      "file": "src/theme/stunning_theme.dart",
+      "description": "The central design engine."
+    },
+    {
+      "name": "StunningTiltCard",
+      "category": "cards",
+      "file": "src/components/cards/stunning_tilt_card.dart",
+      "description": "A 3D interactive glass card that tilts toward the pointer on web/desktop (hover) AND toward the finger on mobile (pan), springing back to flat on release."
+    },
+    {
+      "name": "StunningToast",
+      "category": "feedback",
+      "file": "src/components/feedback/stunning_toast.dart",
+      "description": "A premium, floating toast notification that slides up from the bottom."
+    },
+    {
+      "name": "StunningTooltip",
+      "category": "feedback",
+      "file": "src/components/feedback/stunning_tooltip.dart",
+      "description": "A theme-styled tooltip that wraps any [child] and reveals a short [message] on long-press (touch) or hover (pointer)."
+    },
+    {
+      "name": "StunningUI",
+      "category": "core",
+      "file": "src/core/glass_surface.dart",
+      "description": "Package-level glass helpers."
+    },
+    {
+      "name": "StunningUIStyle",
+      "category": "theme",
+      "file": "src/theme/stunning_theme.dart",
+      "description": "Defines the core DNA of how the UI behaves and looks."
+    }
+  ]
+}

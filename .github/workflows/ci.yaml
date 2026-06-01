@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: format · analyze · test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          # Package minimum is Flutter 3.41 (ImageFilter.shader + BackdropGroup);
+          # CI runs the latest stable, which must stay green.
+
+      - run: flutter --version
+      - run: flutter pub get
+
+      # Code style, static analysis, and the full test suite
+      # (the registry drift test runs here too).
+      - run: dart format --output=none --set-exit-if-changed .
+      - run: flutter analyze
+      - run: flutter test

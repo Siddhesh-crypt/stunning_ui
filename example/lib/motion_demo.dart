@@ -18,7 +18,9 @@ class MotionDemoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: StunningTheme.dark(seedColor: const Color(0xFF22D3EE)).toThemeData(),
+      theme: StunningTheme.dark(
+        seedColor: const Color(0xFF22D3EE),
+      ).toThemeData(),
       home: const MotionDemoScreen(),
     );
   }
@@ -27,12 +29,29 @@ class MotionDemoApp extends StatelessWidget {
 class MotionDemoScreen extends StatelessWidget {
   const MotionDemoScreen({super.key});
 
-  static const List<(IconData, String, String)> _items = <(IconData, String, String)>[
-    (Icons.bolt_rounded, 'Spring physics', 'Velocity-preserving, interruptible'),
-    (Icons.layers_rounded, 'Theme-driven', 'Springs come from the active style'),
-    (Icons.accessibility_new_rounded, 'Reduce-motion', 'Collapses to instant when asked'),
-    (Icons.auto_awesome_rounded, 'One-liner', 'widget.stunning().glow().springIn()'),
-  ];
+  static const List<(IconData, String, String)> _items =
+      <(IconData, String, String)>[
+        (
+          Icons.bolt_rounded,
+          'Spring physics',
+          'Velocity-preserving, interruptible',
+        ),
+        (
+          Icons.layers_rounded,
+          'Theme-driven',
+          'Springs come from the active style',
+        ),
+        (
+          Icons.accessibility_new_rounded,
+          'Reduce-motion',
+          'Collapses to instant when asked',
+        ),
+        (
+          Icons.auto_awesome_rounded,
+          'One-liner',
+          'widget.stunning().glow().springIn()',
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +107,10 @@ class MotionDemoScreen extends StatelessWidget {
           ],
         ),
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: st.primaryBrand.withValues(alpha: 0.5), width: 1.5),
+        border: Border.all(
+          color: st.primaryBrand.withValues(alpha: 0.5),
+          width: 1.5,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,12 +118,19 @@ class MotionDemoScreen extends StatelessWidget {
         children: <Widget>[
           Icon(Icons.auto_awesome_rounded, color: st.primaryBrand, size: 34),
           const SizedBox(height: 14),
-          Text('.stunning() motion',
-              style: TextStyle(
-                  color: st.textPrimary, fontSize: 24, fontWeight: FontWeight.bold)),
+          Text(
+            '.stunning() motion',
+            style: TextStyle(
+              color: st.textPrimary,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 6),
-          Text('Hover me — I tilt and spring back.',
-              style: TextStyle(color: st.textSecondary, fontSize: 14)),
+          Text(
+            'Hover me — I tilt and spring back.',
+            style: TextStyle(color: st.textSecondary, fontSize: 14),
+          ),
         ],
       ),
     );
@@ -130,14 +159,19 @@ class MotionDemoScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(item.$2,
-                    style: TextStyle(
-                        color: st.textPrimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600)),
+                Text(
+                  item.$2,
+                  style: TextStyle(
+                    color: st.textPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(item.$3,
-                    style: TextStyle(color: st.textSecondary, fontSize: 13)),
+                Text(
+                  item.$3,
+                  style: TextStyle(color: st.textSecondary, fontSize: 13),
+                ),
               ],
             ),
           ),

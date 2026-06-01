@@ -1,6 +1,6 @@
 name: stunning_ui
 description: "A production-ready, highly interactive, and glassmorphic UI toolkit for Flutter."
-version: 1.7.0
+version: 1.8.0
 homepage: https://github.com/Siddhesh-crypt/stunning_ui
 repository: https://github.com/Siddhesh-crypt/stunning_ui
 issue_tracker: https://github.com/Siddhesh-crypt/stunning_ui/issues
@@ -11,6 +11,12 @@ topics:
   - design-system
   - glassmorphism
   - theme
+
+# CLI: `dart run stunning_ui:doctor` / `:init` (or globally after
+# `dart pub global activate stunning_ui`).
+executables:
+  stunning_ui_doctor: doctor
+  stunning_ui_init: init
 
 environment:
   sdk: ^3.7.0

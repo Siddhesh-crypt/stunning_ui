@@ -32,12 +32,13 @@ class StunningModal extends StatelessWidget {
         alpha: 0.7,
       ), // Deep focus background
       transitionDuration: st.motion(context),
-      pageBuilder: (context, _, _) => StunningModal(
-        title: title,
-        message: message,
-        actionButton: actionButton,
-        secondaryButton: secondaryButton,
-      ),
+      pageBuilder:
+          (context, _, _) => StunningModal(
+            title: title,
+            message: message,
+            actionButton: actionButton,
+            secondaryButton: secondaryButton,
+          ),
       transitionBuilder: (context, anim, secAnim, child) {
         final st = StunningTheme.of(context);
         final curve = st.motionCurve;
@@ -75,13 +76,9 @@ class StunningModal extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: st.surfaceGlass, // TRUE ultra-clear glass
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: st.borderColor,
-                      width: 1,
-                    ),
-                    boxShadow: activeShadow.blurRadius > 0
-                        ? [activeShadow]
-                        : [],
+                    border: Border.all(color: st.borderColor, width: 1),
+                    boxShadow:
+                        activeShadow.blurRadius > 0 ? [activeShadow] : [],
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

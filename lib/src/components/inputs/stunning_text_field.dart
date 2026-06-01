@@ -89,16 +89,14 @@ class _StunningTextFieldState extends State<StunningTextField> {
             cursorColor: brandColor,
             decoration: InputDecoration(
               hintText: widget.hintText,
-              hintStyle: TextStyle(
-                color: st.hintColor,
-                fontSize: 15,
-              ),
-              prefixIcon: widget.prefixIcon != null
-                  ? Icon(
-                      widget.prefixIcon,
-                      color: _isFocused ? brandColor : st.iconColor,
-                    )
-                  : null,
+              hintStyle: TextStyle(color: st.hintColor, fontSize: 15),
+              prefixIcon:
+                  widget.prefixIcon != null
+                      ? Icon(
+                        widget.prefixIcon,
+                        color: _isFocused ? brandColor : st.iconColor,
+                      )
+                      : null,
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20,

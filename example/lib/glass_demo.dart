@@ -17,7 +17,9 @@ class GlassDemoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: StunningTheme.dark(seedColor: const Color(0xFF22D3EE)).toThemeData(),
+      theme: StunningTheme.dark(
+        seedColor: const Color(0xFF22D3EE),
+      ).toThemeData(),
       home: const GlassDemoScreen(),
     );
   }
@@ -50,18 +52,28 @@ class GlassDemoScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Icon(Icons.diamond_rounded, color: st.primaryBrand, size: 32),
+                          Icon(
+                            Icons.diamond_rounded,
+                            color: st.primaryBrand,
+                            size: 32,
+                          ),
                           const SizedBox(height: 14),
-                          Text('GlassSurface',
-                              style: TextStyle(
-                                  color: st.textPrimary,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold)),
+                          Text(
+                            'GlassSurface',
+                            style: TextStyle(
+                              color: st.textPrimary,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           const SizedBox(height: 6),
                           Text(
                             'Refraction on Impeller · blur on web · '
                             'solid under reduce-transparency.',
-                            style: TextStyle(color: st.textSecondary, fontSize: 14),
+                            style: TextStyle(
+                              color: st.textSecondary,
+                              fontSize: 14,
+                            ),
                           ),
                         ],
                       ),
@@ -75,10 +87,15 @@ class GlassDemoScreen extends StatelessWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Icon(Icons.speed_rounded, color: st.primaryBrand),
+                                Icon(
+                                  Icons.speed_rounded,
+                                  color: st.primaryBrand,
+                                ),
                                 const SizedBox(height: 8),
-                                Text('Coalesced',
-                                    style: TextStyle(color: st.textPrimary)),
+                                Text(
+                                  'Coalesced',
+                                  style: TextStyle(color: st.textPrimary),
+                                ),
                               ],
                             ),
                           ),
@@ -90,10 +107,15 @@ class GlassDemoScreen extends StatelessWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Icon(Icons.bolt_rounded, color: st.primaryBrand),
+                                Icon(
+                                  Icons.bolt_rounded,
+                                  color: st.primaryBrand,
+                                ),
                                 const SizedBox(height: 8),
-                                Text('Themed',
-                                    style: TextStyle(color: st.textPrimary)),
+                                Text(
+                                  'Themed',
+                                  style: TextStyle(color: st.textPrimary),
+                                ),
                               ],
                             ),
                           ),
@@ -120,7 +142,11 @@ class _Backdrop extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[Color(0xFF1E1B4B), Color(0xFF0E7490), Color(0xFF312E81)],
+          colors: <Color>[
+            Color(0xFF1E1B4B),
+            Color(0xFF0E7490),
+            Color(0xFF312E81),
+          ],
         ),
       ),
       child: Stack(
@@ -135,7 +161,13 @@ class _Backdrop extends StatelessWidget {
 }
 
 class _Blob extends StatelessWidget {
-  const _Blob({this.left, this.top, this.right, this.bottom, required this.color});
+  const _Blob({
+    this.left,
+    this.top,
+    this.right,
+    this.bottom,
+    required this.color,
+  });
   final double? left, top, right, bottom;
   final Color color;
   @override
@@ -151,7 +183,8 @@ class _Blob extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: RadialGradient(
-              colors: <Color>[color, color.withValues(alpha: 0.0)]),
+            colors: <Color>[color, color.withValues(alpha: 0.0)],
+          ),
         ),
       ),
     );

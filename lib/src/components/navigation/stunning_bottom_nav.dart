@@ -72,10 +72,7 @@ class StunningBottomNav extends StatelessWidget {
               decoration: BoxDecoration(
                 color: surfaceColor,
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: st.borderColor,
-                  width: 1,
-                ),
+                border: Border.all(color: st.borderColor, width: 1),
               ),
               child: Stack(
                 children: [
@@ -132,9 +129,7 @@ class StunningBottomNav extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: Icon(
                                 items[index].icon,
-                                color: isSelected
-                                    ? accentColor
-                                    : st.iconColor,
+                                color: isSelected ? accentColor : st.iconColor,
                                 size: isSelected ? 28 : 24,
                               ),
                             ),

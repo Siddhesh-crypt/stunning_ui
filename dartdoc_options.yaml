@@ -1,0 +1,16 @@
+dartdoc:
+  # Link every API doc entry back to its source on GitHub.
+  linkToSource:
+    root: '.'
+    uriTemplate: 'https://github.com/Siddhesh-crypt/stunning_ui/blob/main/%f%#L%l%'
+  # Order categories nicely once components carry {@category ...} tags.
+  categoryOrder:
+    - Theme
+    - Buttons
+    - Inputs
+    - Layout
+    - Navigation
+    - Feedback
+    - Data Display
+    - Core
+  showUndocumentedCategories: true

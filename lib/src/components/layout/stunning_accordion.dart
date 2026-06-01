@@ -35,10 +35,7 @@ class _StunningAccordionState extends State<StunningAccordion> {
       decoration: BoxDecoration(
         color: st.surfaceGlass,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: st.borderColor,
-          width: 1,
-        ),
+        border: Border.all(color: st.borderColor, width: 1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
@@ -86,16 +83,17 @@ class _StunningAccordionState extends State<StunningAccordion> {
                 duration: animDuration,
                 curve: Curves.easeOutCubic,
                 alignment: Alignment.topCenter,
-                child: _isExpanded
-                    ? Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          bottom: 16,
-                        ),
-                        child: widget.content,
-                      )
-                    : const SizedBox.shrink(),
+                child:
+                    _isExpanded
+                        ? Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            bottom: 16,
+                          ),
+                          child: widget.content,
+                        )
+                        : const SizedBox.shrink(),
               ),
             ],
           ),

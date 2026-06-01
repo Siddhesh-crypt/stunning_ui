@@ -52,10 +52,7 @@ class _StunningSkeletonState extends State<StunningSkeleton>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           color: surfaceColor,
-          border: Border.all(
-            color: st.borderColor,
-            width: 1,
-          ),
+          border: Border.all(color: st.borderColor, width: 1),
         ),
       );
     }
@@ -82,10 +79,7 @@ class _StunningSkeletonState extends State<StunningSkeleton>
               ],
               transform: _SlidingGradientTransform(_controller.value),
             ),
-            border: Border.all(
-              color: st.borderColor,
-              width: 1,
-            ),
+            border: Border.all(color: st.borderColor, width: 1),
           ),
         );
       },

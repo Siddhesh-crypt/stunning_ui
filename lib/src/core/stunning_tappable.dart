@@ -4,8 +4,8 @@ import '../theme/stunning_theme.dart';
 /// Builds a child from the current interaction [states] (hovered / pressed /
 /// disabled / selected). Lets a component drive its own visuals while
 /// [StunningTappable] owns accessibility, keyboard and focus.
-typedef StunningTappableBuilder = Widget Function(
-    BuildContext context, Set<WidgetState> states);
+typedef StunningTappableBuilder =
+    Widget Function(BuildContext context, Set<WidgetState> states);
 
 /// The shared interaction primitive for every tappable Stunning component.
 ///
@@ -55,8 +55,10 @@ class StunningTappable extends StatefulWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
     this.child,
     this.builder,
-  }) : assert(child != null || builder != null,
-            'Provide either a child or a builder');
+  }) : assert(
+         child != null || builder != null,
+         'Provide either a child or a builder',
+       );
 
   bool get enabled => onPressed != null;
 
@@ -91,7 +93,9 @@ class _StunningTappableState extends State<StunningTappable> {
     };
 
     Widget content =
-        widget.builder != null ? widget.builder!(context, states) : widget.child!;
+        widget.builder != null
+            ? widget.builder!(context, states)
+            : widget.child!;
 
     if (widget.showFocusRing) {
       content = Stack(
@@ -150,7 +154,8 @@ class _StunningTappableState extends State<StunningTappable> {
     return MergeSemantics(
       child: Semantics(
         enabled: enabled,
-        button: widget.button && widget.toggled == null && widget.selected == null,
+        button:
+            widget.button && widget.toggled == null && widget.selected == null,
         toggled: widget.toggled,
         selected: widget.selected,
         label: widget.semanticLabel,

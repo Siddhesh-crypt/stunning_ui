@@ -105,7 +105,9 @@ class _GlassSurfaceState extends State<GlassSurface> {
 
   StunningEffectTier _resolveTier(BuildContext context) {
     if (widget.tier != null) return widget.tier!;
-    if (StunningTheme.reduceTransparency(context)) return StunningEffectTier.off;
+    if (StunningTheme.reduceTransparency(context)) {
+      return StunningEffectTier.off;
+    }
     return StunningEffectTier.full;
   }
 
@@ -115,18 +117,17 @@ class _GlassSurfaceState extends State<GlassSurface> {
     final tier = _resolveTier(context);
     final radius = BorderRadius.circular(widget.borderRadius);
     final tint = widget.tint ?? st.primaryBrand;
-    final blur = tier == StunningEffectTier.off
-        ? 0.0
-        : (widget.blur ?? st.glassBlurSigma);
+    final blur =
+        tier == StunningEffectTier.off
+            ? 0.0
+            : (widget.blur ?? st.glassBlurSigma);
 
     final content = Padding(
       padding: widget.padding,
       child: widget.child ?? const SizedBox.shrink(),
     );
 
-    final border = widget.border
-        ? Border.all(color: st.borderColor)
-        : null;
+    final border = widget.border ? Border.all(color: st.borderColor) : null;
 
     // Solid fallback: reduce-transparency, `off` tier, or zero blur (enterprise).
     if (blur <= 0) {
@@ -136,14 +137,18 @@ class _GlassSurfaceState extends State<GlassSurface> {
           borderRadius: radius,
           child: DecoratedBox(
             decoration: BoxDecoration(
-                color: solid, borderRadius: radius, border: border),
+              color: solid,
+              borderRadius: radius,
+              border: border,
+            ),
             child: content,
           ),
         ),
       );
     }
 
-    final useRefraction = widget.refract &&
+    final useRefraction =
+        widget.refract &&
         tier == StunningEffectTier.full &&
         ui.ImageFilter.isShaderFilterSupported &&
         StunningUI.glassProgram != null;
@@ -174,7 +179,10 @@ class _GlassSurfaceState extends State<GlassSurface> {
           filter: filter,
           child: DecoratedBox(
             decoration: BoxDecoration(
-                color: fill, borderRadius: radius, border: border),
+              color: fill,
+              borderRadius: radius,
+              border: border,
+            ),
             child: content,
           ),
         ),

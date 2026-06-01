@@ -89,11 +89,11 @@ class StunningRadio<T> extends StatelessWidget {
                   _selected && st.glowIntensity > 0
                       ? st.glowingShadow
                       : BoxShadow(
-                          color: Colors.transparent,
-                          blurRadius: st.glowingShadow.blurRadius,
-                          spreadRadius: st.glowingShadow.spreadRadius,
-                          offset: st.glowingShadow.offset,
-                        ),
+                        color: Colors.transparent,
+                        blurRadius: st.glowingShadow.blurRadius,
+                        spreadRadius: st.glowingShadow.spreadRadius,
+                        offset: st.glowingShadow.offset,
+                      ),
                 ],
               ),
               alignment: Alignment.center,

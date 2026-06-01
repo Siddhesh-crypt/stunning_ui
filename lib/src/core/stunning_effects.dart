@@ -26,10 +26,10 @@ extension StunningStaggerX on List<Widget> {
     return <Widget>[
       for (int i = 0; i < length; i++)
         this[i].stunning().springIn(
-              delay: interval * i,
-              fromScale: fromScale,
-              fromOffset: fromOffset,
-            ),
+          delay: interval * i,
+          fromScale: fromScale,
+          fromOffset: fromOffset,
+        ),
     ];
   }
 }
@@ -48,10 +48,13 @@ class Stunning extends StatelessWidget {
   final List<_Effect> _effects;
 
   const Stunning({super.key, required this.child})
-      : _effects = const <_Effect>[];
+    : _effects = const <_Effect>[];
 
-  const Stunning._({super.key, required this.child, required List<_Effect> effects})
-      : _effects = effects;
+  const Stunning._({
+    super.key,
+    required this.child,
+    required List<_Effect> effects,
+  }) : _effects = effects;
 
   Stunning _add(_Effect e) =>
       Stunning._(key: key, effects: <_Effect>[..._effects, e], child: child);
@@ -61,8 +64,9 @@ class Stunning extends StatelessWidget {
     double fromScale = 0.85,
     Offset fromOffset = Offset.zero,
     Duration delay = Duration.zero,
-  }) =>
-      _add(_SpringInEffect(fromScale: fromScale, fromOffset: fromOffset, delay: delay));
+  }) => _add(
+    _SpringInEffect(fromScale: fromScale, fromOffset: fromOffset, delay: delay),
+  );
 
   /// Adds the theme's brand glow. Set [pulse] for a gentle breathing glow.
   Stunning glow({
@@ -71,9 +75,15 @@ class Stunning extends StatelessWidget {
     bool pulse = false,
     Color? color,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(16)),
-  }) =>
-      _add(_GlowEffect(
-          blur: blur, spread: spread, pulse: pulse, color: color, borderRadius: borderRadius));
+  }) => _add(
+    _GlowEffect(
+      blur: blur,
+      spread: spread,
+      pulse: pulse,
+      color: color,
+      borderRadius: borderRadius,
+    ),
+  );
 
   /// Interactive 3D tilt that follows the pointer and springs back on exit.
   Stunning tilt({double max = 0.12}) => _add(_TiltEffect(maxTilt: max));
@@ -87,14 +97,16 @@ class Stunning extends StatelessWidget {
     Color? tint,
     double tintAmount = 0.08,
     bool border = true,
-  }) =>
-      _add(_GlassEffect(
-          blur: blur,
-          radius: radius,
-          refract: refract,
-          tint: tint,
-          tintAmount: tintAmount,
-          border: border));
+  }) => _add(
+    _GlassEffect(
+      blur: blur,
+      radius: radius,
+      refract: refract,
+      tint: tint,
+      tintAmount: tintAmount,
+      border: border,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +126,18 @@ class _SpringInEffect extends _Effect {
   final double fromScale;
   final Offset fromOffset;
   final Duration delay;
-  const _SpringInEffect(
-      {required this.fromScale, required this.fromOffset, required this.delay});
+  const _SpringInEffect({
+    required this.fromScale,
+    required this.fromOffset,
+    required this.delay,
+  });
   @override
   Widget wrap(Widget child) => _SpringIn(
-      fromScale: fromScale, fromOffset: fromOffset, delay: delay, child: child);
+    fromScale: fromScale,
+    fromOffset: fromOffset,
+    delay: delay,
+    child: child,
+  );
 }
 
 class _SpringIn extends StatefulWidget {
@@ -126,18 +145,21 @@ class _SpringIn extends StatefulWidget {
   final double fromScale;
   final Offset fromOffset;
   final Duration delay;
-  const _SpringIn(
-      {required this.child,
-      required this.fromScale,
-      required this.fromOffset,
-      required this.delay});
+  const _SpringIn({
+    required this.child,
+    required this.fromScale,
+    required this.fromOffset,
+    required this.delay,
+  });
   @override
   State<_SpringIn> createState() => _SpringInState();
 }
 
 class _SpringInState extends State<_SpringIn>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController.unbounded(vsync: this);
+  late final AnimationController _c = AnimationController.unbounded(
+    vsync: this,
+  );
   bool _started = false;
 
   @override
@@ -150,8 +172,12 @@ class _SpringInState extends State<_SpringIn>
       return;
     }
     final sim = SpringSimulation(
-        StunningTheme.of(context).spring.toSpring(), 0, 1, 0,
-        snapToEnd: true);
+      StunningTheme.of(context).spring.toSpring(),
+      0,
+      1,
+      0,
+      snapToEnd: true,
+    );
     if (widget.delay == Duration.zero) {
       _c.animateWith(sim);
     } else {
@@ -199,20 +225,22 @@ class _GlowEffect extends _Effect {
   final bool pulse;
   final Color? color;
   final BorderRadius borderRadius;
-  const _GlowEffect(
-      {required this.blur,
-      required this.spread,
-      required this.pulse,
-      required this.color,
-      required this.borderRadius});
+  const _GlowEffect({
+    required this.blur,
+    required this.spread,
+    required this.pulse,
+    required this.color,
+    required this.borderRadius,
+  });
   @override
   Widget wrap(Widget child) => _Glow(
-      blur: blur,
-      spread: spread,
-      pulse: pulse,
-      color: color,
-      borderRadius: borderRadius,
-      child: child);
+    blur: blur,
+    spread: spread,
+    pulse: pulse,
+    color: color,
+    borderRadius: borderRadius,
+    child: child,
+  );
 }
 
 class _Glow extends StatefulWidget {
@@ -222,20 +250,23 @@ class _Glow extends StatefulWidget {
   final bool pulse;
   final Color? color;
   final BorderRadius borderRadius;
-  const _Glow(
-      {required this.child,
-      required this.blur,
-      required this.spread,
-      required this.pulse,
-      required this.color,
-      required this.borderRadius});
+  const _Glow({
+    required this.child,
+    required this.blur,
+    required this.spread,
+    required this.pulse,
+    required this.color,
+    required this.borderRadius,
+  });
   @override
   State<_Glow> createState() => _GlowState();
 }
 
 class _GlowState extends State<_Glow> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 1600));
+    vsync: this,
+    duration: const Duration(milliseconds: 1600),
+  );
 
   @override
   void didChangeDependencies() {
@@ -310,14 +341,14 @@ class _GlassEffect extends _Effect {
   });
   @override
   Widget wrap(Widget child) => GlassSurface(
-        blur: blur,
-        borderRadius: radius,
-        refract: refract,
-        tint: tint,
-        tintAmount: tintAmount,
-        border: border,
-        child: child,
-      );
+    blur: blur,
+    borderRadius: radius,
+    refract: refract,
+    tint: tint,
+    tintAmount: tintAmount,
+    border: border,
+    child: child,
+  );
 }
 
 class _Tilt extends StatefulWidget {
@@ -340,13 +371,12 @@ class _TiltState extends State<_Tilt> with SingleTickerProviderStateMixin {
     super.initState();
     // Created eagerly (not lazily) so dispose never has to construct a ticker
     // while the widget tree is being finalized.
-    _return = AnimationController.unbounded(vsync: this)
-      ..addListener(() {
-        setState(() {
-          _rotation =
-              Offset.lerp(_from, Offset.zero, _return.value.clamp(0.0, 1.0))!;
-        });
+    _return = AnimationController.unbounded(vsync: this)..addListener(() {
+      setState(() {
+        _rotation =
+            Offset.lerp(_from, Offset.zero, _return.value.clamp(0.0, 1.0))!;
       });
+    });
   }
 
   void _onHover(Offset local, Size size) {
@@ -367,9 +397,15 @@ class _TiltState extends State<_Tilt> with SingleTickerProviderStateMixin {
     _from = _rotation;
     _return
       ..value = 0
-      ..animateWith(SpringSimulation(
-          StunningTheme.of(context).spring.toSpring(), 0, 1, 0,
-          snapToEnd: true));
+      ..animateWith(
+        SpringSimulation(
+          StunningTheme.of(context).spring.toSpring(),
+          0,
+          1,
+          0,
+          snapToEnd: true,
+        ),
+      );
   }
 
   @override
@@ -388,10 +424,11 @@ class _TiltState extends State<_Tilt> with SingleTickerProviderStateMixin {
           onExit: (_) => _springBack(),
           child: Transform(
             alignment: Alignment.center,
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.0015) // perspective
-              ..rotateX(_rotation.dx)
-              ..rotateY(_rotation.dy),
+            transform:
+                Matrix4.identity()
+                  ..setEntry(3, 2, 0.0015) // perspective
+                  ..rotateX(_rotation.dx)
+                  ..rotateY(_rotation.dy),
             child: widget.child,
           ),
         );

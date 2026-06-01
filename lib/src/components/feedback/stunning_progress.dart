@@ -85,17 +85,17 @@ class _StunningProgressBarState extends State<StunningProgressBar>
     // Constant-geometry glow: same blur/spread/offset always, only the colour
     // toggles to transparent when glow is disabled (gotcha #1).
     final glowShadow = BoxShadow(
-      color: glow > 0
-          ? activeColor.withValues(alpha: 0.5 * glow)
-          : Colors.transparent,
+      color:
+          glow > 0
+              ? activeColor.withValues(alpha: 0.5 * glow)
+              : Colors.transparent,
       blurRadius: 12 * (glow > 0 ? glow : 1),
       spreadRadius: 1 * (glow > 0 ? glow : 1),
     );
 
     final reduceMotion = StunningTheme.reduceMotion(context);
-    final pct = _indeterminate
-        ? null
-        : (widget.value!.clamp(0.0, 1.0) * 100).round();
+    final pct =
+        _indeterminate ? null : (widget.value!.clamp(0.0, 1.0) * 100).round();
 
     return Semantics(
       label: 'progress',
@@ -268,20 +268,19 @@ class _StunningProgressRingState extends State<StunningProgressRing>
     final glow = st.glowIntensity;
     final reduceMotion = StunningTheme.reduceMotion(context);
 
-    final pct = _indeterminate
-        ? null
-        : (widget.value!.clamp(0.0, 1.0) * 100).round();
+    final pct =
+        _indeterminate ? null : (widget.value!.clamp(0.0, 1.0) * 100).round();
 
     Widget paint(double sweep, double rotation) => CustomPaint(
-          painter: _RingPainter(
-            sweep: sweep,
-            rotation: rotation,
-            strokeWidth: widget.strokeWidth,
-            activeColor: activeColor,
-            trackColor: track,
-            glowIntensity: glow,
-          ),
-        );
+      painter: _RingPainter(
+        sweep: sweep,
+        rotation: rotation,
+        strokeWidth: widget.strokeWidth,
+        activeColor: activeColor,
+        trackColor: track,
+        glowIntensity: glow,
+      ),
+    );
 
     Widget body;
     if (!_indeterminate) {
@@ -302,21 +301,16 @@ class _StunningProgressRingState extends State<StunningProgressRing>
       // Continuous rotation of a fixed-length arc.
       body = AnimatedBuilder(
         animation: _controller,
-        builder: (context, _) => paint(
-          0.25 * 2 * math.pi,
-          _controller.value * 2 * math.pi,
-        ),
+        builder:
+            (context, _) =>
+                paint(0.25 * 2 * math.pi, _controller.value * 2 * math.pi),
       );
     }
 
     return Semantics(
       label: 'progress',
       value: pct != null ? '$pct%' : null,
-      child: SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: body,
-      ),
+      child: SizedBox(width: widget.size, height: widget.size, child: body),
     );
   }
 }
@@ -349,11 +343,12 @@ class _RingPainter extends CustomPainter {
     if (radius <= 0) return;
     final rect = Rect.fromCircle(center: center, radius: radius);
 
-    final trackPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round
-      ..color = trackColor;
+    final trackPaint =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth
+          ..strokeCap = StrokeCap.round
+          ..color = trackColor;
     canvas.drawCircle(center, radius, trackPaint);
 
     if (sweep <= 0) return;
@@ -361,20 +356,22 @@ class _RingPainter extends CustomPainter {
     // Constant-geometry glow: a soft underlay drawn only when glow is enabled.
     // Its blur sigma is fixed, never driven by an animated/overshoot value.
     if (glowIntensity > 0) {
-      final glowPaint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeCap = StrokeCap.round
-        ..color = activeColor.withValues(alpha: 0.5 * glowIntensity)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
+      final glowPaint =
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = strokeWidth
+            ..strokeCap = StrokeCap.round
+            ..color = activeColor.withValues(alpha: 0.5 * glowIntensity)
+            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
       canvas.drawArc(rect, rotation, sweep, false, glowPaint);
     }
 
-    final arcPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round
-      ..color = activeColor;
+    final arcPaint =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth
+          ..strokeCap = StrokeCap.round
+          ..color = activeColor;
     canvas.drawArc(rect, rotation, sweep, false, arcPaint);
   }
 

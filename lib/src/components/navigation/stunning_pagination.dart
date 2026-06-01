@@ -70,17 +70,17 @@ class StunningPagination extends StatelessWidget {
 
     final pages = _visiblePages();
     final showLeadingEllipsis = pages.isNotEmpty && pages.first > 0;
-    final showTrailingEllipsis =
-        pages.isNotEmpty && pages.last < pageCount - 1;
+    final showTrailingEllipsis = pages.isNotEmpty && pages.last < pageCount - 1;
 
     final children = <Widget>[
       _ArrowButton(
         icon: Icons.chevron_left,
         semanticLabel: 'Previous page',
         // Disabled at the first page (or when the whole control is disabled).
-        onPressed: _enabled && currentPage > 0
-            ? () => onPageChanged!(currentPage - 1)
-            : null,
+        onPressed:
+            _enabled && currentPage > 0
+                ? () => onPageChanged!(currentPage - 1)
+                : null,
       ),
       const SizedBox(width: 4),
       if (showLeadingEllipsis) const _Ellipsis(),
@@ -88,8 +88,7 @@ class StunningPagination extends StatelessWidget {
         _PageButton(
           page: page,
           isCurrent: page == currentPage,
-          onPressed:
-              _enabled ? () => onPageChanged!(page) : null,
+          onPressed: _enabled ? () => onPageChanged!(page) : null,
         ),
         const SizedBox(width: 4),
       ],
@@ -98,16 +97,14 @@ class StunningPagination extends StatelessWidget {
         icon: Icons.chevron_right,
         semanticLabel: 'Next page',
         // Disabled at the last page (or when the whole control is disabled).
-        onPressed: _enabled && currentPage < pageCount - 1
-            ? () => onPageChanged!(currentPage + 1)
-            : null,
+        onPressed:
+            _enabled && currentPage < pageCount - 1
+                ? () => onPageChanged!(currentPage + 1)
+                : null,
       ),
     ];
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: children,
-    );
+    return Row(mainAxisSize: MainAxisSize.min, children: children);
   }
 }
 

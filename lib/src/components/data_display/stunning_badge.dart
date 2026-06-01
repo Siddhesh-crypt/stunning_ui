@@ -60,9 +60,10 @@ class StunningBadge extends StatelessWidget {
 
     // Anchored: stack the child with the badge floating at the top-right.
     final dot = label == null;
-    final badge = dot
-        ? _Dot(fill: fill, st: st)
-        : _Pill(label: label, fill: fill, st: st);
+    final badge =
+        dot
+            ? _Dot(fill: fill, st: st)
+            : _Pill(label: label, fill: fill, st: st);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -78,7 +79,10 @@ class StunningBadge extends StatelessWidget {
               // Scale in when shown, out when hidden. Geometry only — no shadow
               // tween toward zero, so an overshoot motionCurve can't drive a
               // negative blur radius.
-              tween: Tween<double>(begin: show ? 1.0 : 0.0, end: show ? 1.0 : 0.0),
+              tween: Tween<double>(
+                begin: show ? 1.0 : 0.0,
+                end: show ? 1.0 : 0.0,
+              ),
               duration: st.motion(context),
               curve: st.motionCurve,
               builder: (context, value, animChild) {
@@ -118,7 +122,10 @@ class _Dot extends StatelessWidget {
         border: Border.all(color: st.backgroundHint, width: 2),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: glow > 0 ? fill.withValues(alpha: 0.5 * glow) : Colors.transparent,
+            color:
+                glow > 0
+                    ? fill.withValues(alpha: 0.5 * glow)
+                    : Colors.transparent,
             blurRadius: 8,
             spreadRadius: 1,
           ),
@@ -150,7 +157,10 @@ class _Pill extends StatelessWidget {
         border: Border.all(color: st.borderColor),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: glow > 0 ? fill.withValues(alpha: 0.5 * glow) : Colors.transparent,
+            color:
+                glow > 0
+                    ? fill.withValues(alpha: 0.5 * glow)
+                    : Colors.transparent,
             blurRadius: 10,
             spreadRadius: 1,
           ),

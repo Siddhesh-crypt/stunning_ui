@@ -41,33 +41,30 @@ class StunningDataTable extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         decoration: BoxDecoration(
           color: st.primaryBrand.withValues(alpha: isFloating ? 0.1 : 0.05),
-          borderRadius: isFloating
-              ? BorderRadius.circular(30)
-              : BorderRadius.zero,
-          border: isFloating
-              ? null
-              : Border(
-                  bottom: BorderSide(
-                    color: st.borderColor,
-                  ),
-                ),
+          borderRadius:
+              isFloating ? BorderRadius.circular(30) : BorderRadius.zero,
+          border:
+              isFloating
+                  ? null
+                  : Border(bottom: BorderSide(color: st.borderColor)),
         ),
         child: Row(
-          children: columns
-              .map(
-                (col) => Expanded(
-                  child: Text(
-                    col.toUpperCase(),
-                    style: TextStyle(
-                      color: st.primaryBrand.withValues(alpha: 0.8),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.5,
+          children:
+              columns
+                  .map(
+                    (col) => Expanded(
+                      child: Text(
+                        col.toUpperCase(),
+                        style: TextStyle(
+                          color: st.primaryBrand.withValues(alpha: 0.8),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              )
-              .toList(),
+                  )
+                  .toList(),
         ),
       );
     }
@@ -115,10 +112,7 @@ class StunningDataTable extends StatelessWidget {
             decoration: BoxDecoration(
               color: surfaceColor,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: st.borderColor,
-                width: 1,
-              ),
+              border: Border.all(color: st.borderColor, width: 1),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,17 +152,9 @@ class _StunningDataRowState extends State<_StunningDataRow> {
     if (widget.enableSmartBadges) {
       final lower = text.toLowerCase();
       if (lower == 'success' || lower == 'completed') {
-        return _StatusBadge(
-          text: text,
-          color: Colors.greenAccent,
-          theme: st,
-        );
+        return _StatusBadge(text: text, color: Colors.greenAccent, theme: st);
       } else if (lower == 'pending' || lower == 'processing') {
-        return _StatusBadge(
-          text: text,
-          color: Colors.orangeAccent,
-          theme: st,
-        );
+        return _StatusBadge(text: text, color: Colors.orangeAccent, theme: st);
       } else if (lower == 'failed' || lower == 'error') {
         return _StatusBadge(text: text, color: Colors.redAccent, theme: st);
       }
@@ -198,36 +184,38 @@ class _StunningDataRowState extends State<_StunningDataRow> {
       curve: curve,
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
       decoration: BoxDecoration(
-        color: _isHovered
-            ? st.primaryBrand.withValues(
-                alpha: widget.isFloating ? 0.15 : 0.05,
-              )
-            : (widget.isFloating ? surfaceColor : Colors.transparent),
+        color:
+            _isHovered
+                ? st.primaryBrand.withValues(
+                  alpha: widget.isFloating ? 0.15 : 0.05,
+                )
+                : (widget.isFloating ? surfaceColor : Colors.transparent),
         borderRadius: widget.isFloating ? BorderRadius.circular(16) : null,
-        border: widget.isFloating
-            ? Border.all(
-                color: _isHovered
-                    ? st.primaryBrand.withValues(
-                        alpha: 0.5,
-                      )
-                    : st.borderColor,
-                width: 1.5,
-              )
-            : Border(
-                bottom: widget.isLast
-                    ? BorderSide.none
-                    : BorderSide(color: st.borderColor),
-              ),
-        boxShadow: widget.isFloating && _isHovered && !_isPressed
-            ? [
-                st.glowingShadow,
-              ]
-            : [],
+        border:
+            widget.isFloating
+                ? Border.all(
+                  color:
+                      _isHovered
+                          ? st.primaryBrand.withValues(alpha: 0.5)
+                          : st.borderColor,
+                  width: 1.5,
+                )
+                : Border(
+                  bottom:
+                      widget.isLast
+                          ? BorderSide.none
+                          : BorderSide(color: st.borderColor),
+                ),
+        boxShadow:
+            widget.isFloating && _isHovered && !_isPressed
+                ? [st.glowingShadow]
+                : [],
       ),
       child: Row(
-        children: widget.rowData
-            .map((cell) => Expanded(child: _buildCell(cell, st)))
-            .toList(),
+        children:
+            widget.rowData
+                .map((cell) => Expanded(child: _buildCell(cell, st)))
+                .toList(),
       ),
     );
 
@@ -239,20 +227,21 @@ class _StunningDataRowState extends State<_StunningDataRow> {
         onTapUp: (_) => setState(() => _isPressed = false),
         onTapCancel: () => setState(() => _isPressed = false),
 
-        child: widget.isFloating
-            ? AnimatedScale(
-                scale: _isPressed ? 0.96 : (_isHovered ? 1.02 : 1.0),
-                duration: duration,
-                curve: curve,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                    child: rowContent,
+        child:
+            widget.isFloating
+                ? AnimatedScale(
+                  scale: _isPressed ? 0.96 : (_isHovered ? 1.02 : 1.0),
+                  duration: duration,
+                  curve: curve,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                      child: rowContent,
+                    ),
                   ),
-                ),
-              )
-            : rowContent, // No scale/blur for individual rows in solid mode
+                )
+                : rowContent, // No scale/blur for individual rows in solid mode
       ),
     );
   }
@@ -277,15 +266,16 @@ class _StatusBadge extends StatelessWidget {
           color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: color.withValues(alpha: 0.5), width: 1),
-          boxShadow: glow > 0
-              ? [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.3 * glow),
-                    blurRadius: 10 * glow,
-                    spreadRadius: 1 * glow,
-                  ),
-                ]
-              : [],
+          boxShadow:
+              glow > 0
+                  ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.3 * glow),
+                      blurRadius: 10 * glow,
+                      spreadRadius: 1 * glow,
+                    ),
+                  ]
+                  : [],
         ),
         child: Text(
           text,

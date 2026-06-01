@@ -18,7 +18,7 @@ Add this to your package's `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  stunning_ui: ^1.7.0
+  stunning_ui: ^1.8.0
 ```
 
 Then run `flutter pub get`.

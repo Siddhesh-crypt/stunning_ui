@@ -24,8 +24,9 @@ class GalleryApp extends StatelessWidget {
               child: _ThemedSide(
                 label: 'LIGHT · minimal',
                 theme: StunningTheme.light(
-                    seedColor: const Color(0xFF6C5CE7),
-                    style: StunningUIStyle.minimal),
+                  seedColor: const Color(0xFF6C5CE7),
+                  style: StunningUIStyle.minimal,
+                ),
               ),
             ),
             const VerticalDivider(width: 1, color: Colors.white24),
@@ -33,8 +34,9 @@ class GalleryApp extends StatelessWidget {
               child: _ThemedSide(
                 label: 'DARK · gaming',
                 theme: StunningTheme.dark(
-                    seedColor: const Color(0xFF22D3EE),
-                    style: StunningUIStyle.gaming),
+                  seedColor: const Color(0xFF22D3EE),
+                  style: StunningUIStyle.gaming,
+                ),
               ),
             ),
           ],
@@ -89,39 +91,52 @@ class _ThemedSideState extends State<_ThemedSide> {
                   Row(
                     children: const <Widget>[
                       Expanded(
-                          child: StunningButton(
-                              text: 'Primary', onPressed: _noop)),
+                        child: StunningButton(
+                          text: 'Primary',
+                          onPressed: _noop,
+                        ),
+                      ),
                       SizedBox(width: 10),
                       Expanded(
-                          child: StunningButton(
-                              text: 'Outline',
-                              onPressed: _noop,
-                              variant: StunningButtonVariant.outline)),
+                        child: StunningButton(
+                          text: 'Outline',
+                          onPressed: _noop,
+                          variant: StunningButtonVariant.outline,
+                        ),
+                      ),
                       SizedBox(width: 10),
                       Expanded(
-                          child: StunningButton(
-                              text: 'Ghost',
-                              onPressed: _noop,
-                              variant: StunningButtonVariant.ghost)),
+                        child: StunningButton(
+                          text: 'Ghost',
+                          onPressed: _noop,
+                          variant: StunningButtonVariant.ghost,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
 
                   // Text field.
                   const StunningTextField(
-                      hintText: 'Search…', prefixIcon: Icons.search),
+                    hintText: 'Search…',
+                    prefixIcon: Icons.search,
+                  ),
                   const SizedBox(height: 16),
 
                   // Switch row.
                   Row(
                     children: <Widget>[
                       StunningSwitch(
-                          value: _switch,
-                          onChanged: (v) => setState(() => _switch = v)),
+                        value: _switch,
+                        onChanged: (v) => setState(() => _switch = v),
+                      ),
                       const SizedBox(width: 12),
-                      Text('Enable notifications',
-                          style: TextStyle(
-                              color: StunningTheme.of(context).textSecondary)),
+                      Text(
+                        'Enable notifications',
+                        style: TextStyle(
+                          color: StunningTheme.of(context).textSecondary,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),

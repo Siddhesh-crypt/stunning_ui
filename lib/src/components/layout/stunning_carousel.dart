@@ -64,9 +64,13 @@ class _StunningCarouselState extends State<StunningCarousel> {
 
           // Cards side me jate hi shrink honge (0.8 scale) aur fade honge (0.5 opacity)
           double scale =
-              reduceMotion ? 1.0 : 1.0 - (difference.abs() * 0.2).clamp(0.0, 0.2);
+              reduceMotion
+                  ? 1.0
+                  : 1.0 - (difference.abs() * 0.2).clamp(0.0, 0.2);
           double opacity =
-              reduceMotion ? 1.0 : 1.0 - (difference.abs() * 0.5).clamp(0.0, 0.5);
+              reduceMotion
+                  ? 1.0
+                  : 1.0 - (difference.abs() * 0.5).clamp(0.0, 0.5);
 
           return Transform.scale(
             scale: scale,

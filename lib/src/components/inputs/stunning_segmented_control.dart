@@ -33,10 +33,7 @@ class StunningSegmentedControl extends StatelessWidget {
       decoration: BoxDecoration(
         color: st.surfaceGlass,
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(
-          color: st.borderColor,
-          width: 1,
-        ),
+        border: Border.all(color: st.borderColor, width: 1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
@@ -91,12 +88,14 @@ class StunningSegmentedControl extends StatelessWidget {
                             child: AnimatedDefaultTextStyle(
                               duration: duration,
                               style: TextStyle(
-                                color: isSelected
-                                    ? st.onColor(primaryColor)
-                                    : st.textSecondary,
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
+                                color:
+                                    isSelected
+                                        ? st.onColor(primaryColor)
+                                        : st.textSecondary,
+                                fontWeight:
+                                    isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
                                 fontSize: 15,
                               ),
                               child: Text(options[index]),

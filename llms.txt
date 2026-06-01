@@ -1,0 +1,34 @@
+# stunning_ui
+
+A glassmorphic, physics-driven Flutter UI toolkit. One seed colour + style derives a full theme; accessible by default; chainable .stunning() effects.
+
+## Setup (one line)
+```dart
+MaterialApp(theme: StunningTheme.dark(seedColor: Colors.cyanAccent).toThemeData(), home: ...)
+```
+Styles: StunningUIStyle.enterprise | minimal | gaming. Read the theme anywhere with StunningTheme.of(context).
+
+## Chainable effects
+```dart
+widget.stunning().glow().tilt().springIn().glass()
+Column(children: cards.stunningStagger())
+```
+
+## Components (44)
+- **buttons**: StunningButton, StunningButtonSize, StunningButtonVariant
+- **cards**: StunningTiltCard
+- **core**: StunningEffectTier, StunningGlassScope, StunningResponsiveCenter, StunningTappable, StunningUI
+- **data_display**: StunningAvatar, StunningBadge, StunningBarChart, StunningDataTable, StunningTableStyle
+- **feedback**: StunningDialog, StunningProgressBar, StunningProgressRing, StunningShimmer, StunningSkeleton, StunningToast, StunningTooltip
+- **inputs**: StunningCheckbox, StunningDropdown, StunningRadio, StunningSegmentedControl, StunningSelect, StunningSlider, StunningSwitch, StunningTabs, StunningTextField
+- **layout**: StunningAccordion, StunningCarousel, StunningDivider
+- **lists**: StunningAnimatedListItem
+- **modals**: StunningModal
+- **navigation**: StunningAppBar, StunningBottomNav, StunningNavItem, StunningPagination, StunningSidebar, StunningSidebarItem
+- **theme**: StunningSpring, StunningTheme, StunningUIStyle
+
+## Conventions for correct code
+- Colours come from the theme (StunningTheme.of(context): textPrimary, textSecondary, hintColor, iconColor, borderColor, primaryBrand, onColor(bg)). Do not hardcode Colors.white/black — the kit must work in light AND dark.
+- Animation durations use StunningTheme.of(context).motion(context) so reduce-motion is honoured.
+- Pass onChanged/onPressed: null to disable a control.
+- Glass: use GlassSurface or .glass(); wrap a screen in StunningGlassScope to coalesce blur. Requires Flutter >= 3.41.

@@ -38,7 +38,8 @@ class _StunningSwitchState extends State<StunningSwitch> {
     );
 
     final trackColor = widget.value ? brandColor : surfaceColor;
-    final thumbAlignment = widget.value ? Alignment.centerRight : Alignment.centerLeft;
+    final thumbAlignment =
+        widget.value ? Alignment.centerRight : Alignment.centerLeft;
 
     return StunningTappable(
       onPressed: () => widget.onChanged(!widget.value),
@@ -79,7 +80,7 @@ class _StunningSwitchState extends State<StunningSwitch> {
                     color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 4,
                     spreadRadius: 1,
-                  )
+                  ),
                 ],
               ),
             ),

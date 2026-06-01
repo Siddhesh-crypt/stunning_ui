@@ -78,9 +78,10 @@ class StunningAvatar extends StatelessWidget {
     final decoration = BoxDecoration(
       color: image == null ? bg : null,
       shape: BoxShape.circle,
-      image: image != null
-          ? DecorationImage(image: image!, fit: BoxFit.cover)
-          : null,
+      image:
+          image != null
+              ? DecorationImage(image: image!, fit: BoxFit.cover)
+              : null,
       // Thin theme-driven ring so the avatar reads on any surface.
       border: Border.all(color: st.borderColor, width: 1),
     );
