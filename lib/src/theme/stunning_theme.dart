@@ -107,8 +107,9 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
   BoxShadow get glowingShadow {
     if (glowIntensity <= 0) return const BoxShadow(color: Colors.transparent);
     return BoxShadow(
-      color: (palette?.glowColor ?? primaryBrand)
-          .withValues(alpha: 0.5 * glowIntensity),
+      color: (palette?.glowColor ?? primaryBrand).withValues(
+        alpha: 0.5 * glowIntensity,
+      ),
       blurRadius: 30 * glowIntensity,
       spreadRadius: 2 * glowIntensity,
     );
@@ -427,9 +428,10 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
       spring: StunningSpring.lerp(spring, other.spring, t),
       style: t < 0.5 ? style : other.style,
       brightness: t < 0.5 ? brightness : other.brightness,
-      palette: (palette != null && other.palette != null)
-          ? StunningPalette.lerp(palette!, other.palette!, t)
-          : (t < 0.5 ? palette : other.palette),
+      palette:
+          (palette != null && other.palette != null)
+              ? StunningPalette.lerp(palette!, other.palette!, t)
+              : (t < 0.5 ? palette : other.palette),
     );
   }
 

@@ -22,8 +22,11 @@ void main() {
       final p = StunningPalette.fromSeed(seed);
       expect(p.primary, seed);
       for (final role in StunningRole.values) {
-        expect(p.ramp(role).length, kStunningRampStops.length,
-            reason: '$role ramp must have 11 stops');
+        expect(
+          p.ramp(role).length,
+          kStunningRampStops.length,
+          reason: '$role ramp must have 11 stops',
+        );
       }
       expect(p.gradients.brand.length, 2);
       expect(p.gradients.mesh.length, 3);
@@ -33,9 +36,11 @@ void main() {
       final p = StunningPalette.fromSeed(const Color(0xFF22D3EE));
       final ramp = p.ramp(StunningRole.primary);
       for (var i = 0; i < ramp.length - 1; i++) {
-        expect(ramp[i].computeLuminance(),
-            greaterThanOrEqualTo(ramp[i + 1].computeLuminance() - 0.001),
-            reason: 'stop $i should be >= next in luminance');
+        expect(
+          ramp[i].computeLuminance(),
+          greaterThanOrEqualTo(ramp[i + 1].computeLuminance() - 0.001),
+          reason: 'stop $i should be >= next in luminance',
+        );
       }
     });
   });
@@ -46,8 +51,11 @@ void main() {
         for (final b in Brightness.values) {
           final p = StunningPalette.fromSeed(seed, brightness: b);
           p.contrastReport().forEach((pair, ratio) {
-            expect(ratio, greaterThanOrEqualTo(4.49),
-                reason: '$pair on seed $seed/$b was $ratio');
+            expect(
+              ratio,
+              greaterThanOrEqualTo(4.49),
+              reason: '$pair on seed $seed/$b was $ratio',
+            );
           });
         }
       }
@@ -62,8 +70,8 @@ void main() {
         const Color(0xFF6C5CE7),
       ]) {
         final fg = p.on(bg);
-        final ratio = (fg.computeLuminance() + 0.05) /
-                (bg.computeLuminance() + 0.05);
+        final ratio =
+            (fg.computeLuminance() + 0.05) / (bg.computeLuminance() + 0.05);
         final r = ratio < 1 ? 1 / ratio : ratio;
         expect(r, greaterThanOrEqualTo(4.4), reason: 'on($bg) only hit $r');
       }
@@ -72,15 +80,21 @@ void main() {
 
   group('StunningPalette · harmony auto-pick', () {
     test('vibrant seed → complementary, calm → analogous, grey → mono', () {
-      expect(StunningPalette.fromSeed(const Color(0xFF22D3EE)).resolvedHarmony,
-          StunningHarmony.complementary);
-      expect(StunningPalette.fromSeed(const Color(0xFF808080)).resolvedHarmony,
-          StunningHarmony.monochromatic);
+      expect(
+        StunningPalette.fromSeed(const Color(0xFF22D3EE)).resolvedHarmony,
+        StunningHarmony.complementary,
+      );
+      expect(
+        StunningPalette.fromSeed(const Color(0xFF808080)).resolvedHarmony,
+        StunningHarmony.monochromatic,
+      );
     });
 
     test('explicit harmony overrides auto', () {
-      final p = StunningPalette.fromSeed(const Color(0xFF6C5CE7),
-          harmony: StunningHarmony.triadic);
+      final p = StunningPalette.fromSeed(
+        const Color(0xFF6C5CE7),
+        harmony: StunningHarmony.triadic,
+      );
       expect(p.resolvedHarmony, StunningHarmony.triadic);
     });
 
@@ -97,10 +111,16 @@ void main() {
     test('error reads red, success reads green across seeds', () {
       for (final seed in _seeds) {
         final s = StunningPalette.fromSeed(seed).semantics;
-        expect(_r(s.error.color), greaterThan(_b(s.error.color)),
-            reason: 'error must stay red for seed $seed');
-        expect(_g(s.success.color), greaterThan(_b(s.success.color)),
-            reason: 'success must stay green for seed $seed');
+        expect(
+          _r(s.error.color),
+          greaterThan(_b(s.error.color)),
+          reason: 'error must stay red for seed $seed',
+        );
+        expect(
+          _g(s.success.color),
+          greaterThan(_b(s.success.color)),
+          reason: 'success must stay green for seed $seed',
+        );
       }
     });
   });
@@ -109,7 +129,9 @@ void main() {
     test('generate(single seed) is backward compatible + adds a palette', () {
       const seed = Color(0xFF6C5CE7);
       final t = StunningTheme.generate(
-          seedColor: seed, brightness: Brightness.dark);
+        seedColor: seed,
+        brightness: Brightness.dark,
+      );
       expect(t.primaryBrand, seed);
       expect(t.palette, isNotNull);
       expect(t.semantics, isNotNull);
@@ -117,7 +139,9 @@ void main() {
 
     test('scheme adopts the harmonised secondary/tertiary', () {
       final t = StunningTheme.generate(
-          seedColor: const Color(0xFF6C5CE7), brightness: Brightness.light);
+        seedColor: const Color(0xFF6C5CE7),
+        brightness: Brightness.light,
+      );
       expect(t.colorScheme!.secondary, t.palette!.secondary);
       expect(t.colorScheme!.tertiary, t.palette!.tertiary);
     });
@@ -148,7 +172,10 @@ void main() {
       for (final style in StunningUIStyle.values) {
         for (final b in Brightness.values) {
           final t = StunningTheme.generate(
-              seedColor: const Color(0xFF6C5CE7), brightness: b, style: style);
+            seedColor: const Color(0xFF6C5CE7),
+            brightness: b,
+            style: style,
+          );
           final code = t.toShareCode();
           expect(code, startsWith('st1_'));
           final back = StunningTheme.fromShareCode(code)!;
@@ -169,28 +196,34 @@ void main() {
   group('Widgets · accent + morph', () {
     testWidgets('StunningAccent recolours a subtree', (tester) async {
       late Color seen;
-      await tester.pumpWidget(MaterialApp(
-        theme: StunningTheme.light(seedColor: const Color(0xFF6C5CE7))
-            .toThemeData(),
-        home: StunningAccent(
-          seedColor: const Color(0xFFFF7A00),
-          child: Builder(builder: (context) {
-            seen = StunningTheme.of(context).primaryBrand;
-            return const SizedBox();
-          }),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme:
+              StunningTheme.light(
+                seedColor: const Color(0xFF6C5CE7),
+              ).toThemeData(),
+          home: StunningAccent(
+            seedColor: const Color(0xFFFF7A00),
+            child: Builder(
+              builder: (context) {
+                seen = StunningTheme.of(context).primaryBrand;
+                return const SizedBox();
+              },
+            ),
+          ),
         ),
-      ));
+      );
       expect(seen, const Color(0xFFFF7A00));
     });
 
     testWidgets('StunningAnimatedTheme morphs between themes', (tester) async {
       Widget tree(StunningTheme t) => MaterialApp(
-            home: StunningAnimatedTheme(
-              theme: t,
-              duration: const Duration(milliseconds: 300),
-              child: const SizedBox(),
-            ),
-          );
+        home: StunningAnimatedTheme(
+          theme: t,
+          duration: const Duration(milliseconds: 300),
+          child: const SizedBox(),
+        ),
+      );
       await tester.pumpWidget(tree(StunningTheme.light()));
       await tester.pumpWidget(tree(StunningTheme.dark()));
       await tester.pump(const Duration(milliseconds: 150));

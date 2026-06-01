@@ -46,7 +46,17 @@ enum StunningRole {
 
 /// The eleven Tailwind ramp stops, in order.
 const List<int> kStunningRampStops = <int>[
-  50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
+  50,
+  100,
+  200,
+  300,
+  400,
+  500,
+  600,
+  700,
+  800,
+  900,
+  950,
 ];
 
 /// Perceptual tone (≈ L*) targets for each ramp stop. Because HCT tone maps
@@ -54,7 +64,17 @@ const List<int> kStunningRampStops = <int>[
 /// a ramp whose steps are perceptually even by construction — no muddy
 /// midtones, no manual HSL nudging.
 const List<double> _kRampTones = <double>[
-  98, 95, 90, 80, 68, 56, 46, 38, 30, 23, 15,
+  98,
+  95,
+  90,
+  80,
+  68,
+  56,
+  46,
+  38,
+  30,
+  23,
+  15,
 ];
 
 /// One brand-tuned semantic colour (success / warning / error / info) with an
@@ -85,7 +105,11 @@ class StunningSemantic {
   });
 
   /// Element-wise interpolation (used by theme morphing).
-  static StunningSemantic lerp(StunningSemantic a, StunningSemantic b, double t) {
+  static StunningSemantic lerp(
+    StunningSemantic a,
+    StunningSemantic b,
+    double t,
+  ) {
     return StunningSemantic(
       color: Color.lerp(a.color, b.color, t)!,
       on: Color.lerp(a.on, b.on, t)!,
@@ -236,25 +260,30 @@ class StunningPalette {
   Color on(Color background, {double ratio = 4.5}) {
     final bg = Hct.fromInt(background.toARGB32());
     final t = bg.tone;
-    final lighter = Contrast.lighter(tone: t, ratio: ratio); // -1 if unreachable
+    final lighter = Contrast.lighter(
+      tone: t,
+      ratio: ratio,
+    ); // -1 if unreachable
     final darker = Contrast.darker(tone: t, ratio: ratio);
 
     double tone;
     if (lighter < 0 && darker < 0) {
       // Mid-tone background where neither direction reaches the ratio: pick the
       // extreme with the higher achieved contrast (never silently fail).
-      tone = Contrast.ratioOfTones(100, t) >= Contrast.ratioOfTones(0, t)
-          ? 100
-          : 0;
+      tone =
+          Contrast.ratioOfTones(100, t) >= Contrast.ratioOfTones(0, t)
+              ? 100
+              : 0;
     } else if (lighter < 0) {
       tone = darker;
     } else if (darker < 0) {
       tone = lighter;
     } else {
       // Both reachable — take the one with more headroom.
-      tone = Contrast.ratioOfTones(lighter, t) >= Contrast.ratioOfTones(darker, t)
-          ? lighter
-          : darker;
+      tone =
+          Contrast.ratioOfTones(lighter, t) >= Contrast.ratioOfTones(darker, t)
+              ? lighter
+              : darker;
     }
     final chroma = math.min(bg.chroma, 16.0);
     return Color(Hct.from(bg.hue, chroma, tone).toInt());
@@ -319,18 +348,23 @@ class StunningPalette {
     final seed = Hct.fromInt(primary.toARGB32());
     final resolved = _resolveHarmony(harmony, seed.chroma);
 
-    final Hct? provided = secondary == null
-        ? null
-        : Hct.fromInt(Blend.harmonize(secondary.toARGB32(), primary.toARGB32()));
+    final Hct? provided =
+        secondary == null
+            ? null
+            : Hct.fromInt(
+              Blend.harmonize(secondary.toARGB32(), primary.toARGB32()),
+            );
 
     final (Hct secHct, Hct terHct) = _deriveAccents(seed, resolved, provided);
 
     // Role colours at M3-appropriate brand tones (vivid but on-scheme).
     final double roleTone = isDark ? 80 : 40;
-    final Color secondaryColor =
-        Color(Hct.from(secHct.hue, secHct.chroma, roleTone).toInt());
-    final Color tertiaryColor =
-        Color(Hct.from(terHct.hue, terHct.chroma, roleTone).toInt());
+    final Color secondaryColor = Color(
+      Hct.from(secHct.hue, secHct.chroma, roleTone).toInt(),
+    );
+    final Color tertiaryColor = Color(
+      Hct.from(terHct.hue, terHct.chroma, roleTone).toInt(),
+    );
 
     // --- Ramps (perceptually even, gamut-mapped automatically). ---
     final ramps = <StunningRole, List<Color>>{
@@ -338,26 +372,32 @@ class StunningPalette {
       StunningRole.secondary: _rampFor(secHct.hue, secHct.chroma),
       StunningRole.tertiary: _rampFor(terHct.hue, terHct.chroma),
       // Brand-tinted neutrals: tiny chroma so greys feel warmed, not coloured.
-      StunningRole.neutral:
-          _rampFor(seed.hue, math.min(seed.chroma * 0.12, 6)),
-      StunningRole.neutralVariant:
-          _rampFor(seed.hue, math.min(seed.chroma * 0.20, 10)),
+      StunningRole.neutral: _rampFor(seed.hue, math.min(seed.chroma * 0.12, 6)),
+      StunningRole.neutralVariant: _rampFor(
+        seed.hue,
+        math.min(seed.chroma * 0.20, 10),
+      ),
     };
 
-    final neutralPal = TonalPalette.of(seed.hue, math.min(seed.chroma * 0.12, 6));
+    final neutralPal = TonalPalette.of(
+      seed.hue,
+      math.min(seed.chroma * 0.12, 6),
+    );
     final surface = Color(neutralPal.get(isDark ? 12 : 98));
     final background = Color(neutralPal.get(isDark ? 6 : 100));
 
     // Build a partial palette so on()/ramps are usable while deriving the rest.
-    Color onOf(Color bg, {double ratio = 4.5}) =>
-        _onColor(bg, ratio: ratio);
+    Color onOf(Color bg, {double ratio = 4.5}) => _onColor(bg, ratio: ratio);
 
-    final primaryContainer =
-        Color(TonalPalette.of(seed.hue, seed.chroma).get(isDark ? 30 : 90));
-    final secondaryContainer =
-        Color(TonalPalette.of(secHct.hue, secHct.chroma).get(isDark ? 30 : 90));
-    final tertiaryContainer =
-        Color(TonalPalette.of(terHct.hue, terHct.chroma).get(isDark ? 30 : 90));
+    final primaryContainer = Color(
+      TonalPalette.of(seed.hue, seed.chroma).get(isDark ? 30 : 90),
+    );
+    final secondaryContainer = Color(
+      TonalPalette.of(secHct.hue, secHct.chroma).get(isDark ? 30 : 90),
+    );
+    final tertiaryContainer = Color(
+      TonalPalette.of(terHct.hue, terHct.chroma).get(isDark ? 30 : 90),
+    );
 
     // --- Semantic colours, hue-tuned toward the brand. ---
     final double seedHue = seed.hue;
@@ -368,8 +408,11 @@ class StunningPalette {
       double bandLo,
       double bandHi,
     ) {
-      double hue = _rotateToward(canonicalHue, seedHue, maxShift)
-          .clamp(bandLo, bandHi);
+      double hue = _rotateToward(
+        canonicalHue,
+        seedHue,
+        maxShift,
+      ).clamp(bandLo, bandHi);
       // Escape the dark yellow-green "bile" zone.
       final fixed = DislikeAnalyzer.fixIfDisliked(
         Hct.from(hue, semChroma, isDark ? 70 : 48),
@@ -411,13 +454,18 @@ class StunningPalette {
 
     // --- Glass + glow. ---
     final glassPal = TonalPalette.of(seed.hue, math.min(seed.chroma * 0.3, 16));
-    final glassTint = Color(glassPal.get(isDark ? 30 : 92))
-        .withValues(alpha: isDark ? 0.14 : 0.55);
-    final glassBorderTint = Color(glassPal.get(isDark ? 55 : 80))
-        .withValues(alpha: isDark ? 0.30 : 0.50);
+    final glassTint = Color(
+      glassPal.get(isDark ? 30 : 92),
+    ).withValues(alpha: isDark ? 0.14 : 0.55);
+    final glassBorderTint = Color(
+      glassPal.get(isDark ? 55 : 80),
+    ).withValues(alpha: isDark ? 0.30 : 0.50);
     final glowColor = Color(
-      Hct.from(seed.hue, math.min(seed.chroma * 1.15, 100), isDark ? 72 : 64)
-          .toInt(),
+      Hct.from(
+        seed.hue,
+        math.min(seed.chroma * 1.15, 100),
+        isDark ? 72 : 64,
+      ).toInt(),
     );
 
     return StunningPalette._(
@@ -478,8 +526,16 @@ class StunningPalette {
       surface: Color.lerp(a.surface, b.surface, t)!,
       background: Color.lerp(a.background, b.background, t)!,
       semantics: StunningSemantics(
-        success: StunningSemantic.lerp(a.semantics.success, b.semantics.success, t),
-        warning: StunningSemantic.lerp(a.semantics.warning, b.semantics.warning, t),
+        success: StunningSemantic.lerp(
+          a.semantics.success,
+          b.semantics.success,
+          t,
+        ),
+        warning: StunningSemantic.lerp(
+          a.semantics.warning,
+          b.semantics.warning,
+          t,
+        ),
         error: StunningSemantic.lerp(a.semantics.error, b.semantics.error, t),
         info: StunningSemantic.lerp(a.semantics.info, b.semantics.info, t),
       ),
@@ -567,17 +623,19 @@ class StunningPalette {
     final darker = Contrast.darker(tone: t, ratio: ratio);
     double tone;
     if (lighter < 0 && darker < 0) {
-      tone = Contrast.ratioOfTones(100, t) >= Contrast.ratioOfTones(0, t)
-          ? 100
-          : 0;
+      tone =
+          Contrast.ratioOfTones(100, t) >= Contrast.ratioOfTones(0, t)
+              ? 100
+              : 0;
     } else if (lighter < 0) {
       tone = darker;
     } else if (darker < 0) {
       tone = lighter;
     } else {
-      tone = Contrast.ratioOfTones(lighter, t) >= Contrast.ratioOfTones(darker, t)
-          ? lighter
-          : darker;
+      tone =
+          Contrast.ratioOfTones(lighter, t) >= Contrast.ratioOfTones(darker, t)
+              ? lighter
+              : darker;
     }
     final chroma = math.min(bg.chroma, 16.0);
     return Color(Hct.from(bg.hue, chroma, tone).toInt());

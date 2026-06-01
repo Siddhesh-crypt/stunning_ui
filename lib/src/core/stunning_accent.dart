@@ -100,11 +100,13 @@ class _StunningAnimatedThemeState
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _tween = visitor(
-      _tween,
-      widget.theme,
-      (dynamic value) => _StunningThemeTween(begin: value),
-    ) as _StunningThemeTween?;
+    _tween =
+        visitor(
+              _tween,
+              widget.theme,
+              (dynamic value) => _StunningThemeTween(begin: value),
+            )
+            as _StunningThemeTween?;
   }
 
   @override
