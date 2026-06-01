@@ -12,6 +12,14 @@ Stop building boring flat screens. Stunning UI brings production-ready **Glassmo
 * **Holographic Modals & Toasts:** Floating dialogs and bottom-sliding toasts with solid cores to prevent glass-bleed.
 * **Zero Dependencies:** Built entirely on Flutter's native Canvas, BackdropFilter, and animation engines.
 
+## 📸 Gallery
+
+| One engine, light **and** dark | Liquid-glass refraction |
+| :---: | :---: |
+| ![Components in light and dark](doc/screenshots/showcase-light-dark.jpeg) | ![Glass refraction](doc/screenshots/glass-refraction.png) |
+| **Chainable `.stunning()` motion** | **Browsable Widgetbook catalogue** |
+| ![Motion effects](doc/screenshots/motion.jpeg) | ![Widgetbook gallery](doc/screenshots/widgetbook.jpeg) |
+
 ## 🚀 Installation
 
 Add this to your package's `pubspec.yaml`:

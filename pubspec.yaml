@@ -12,6 +12,16 @@ topics:
   - glassmorphism
   - theme
 
+screenshots:
+  - description: "Components in light and dark, derived from one seed colour"
+    path: doc/screenshots/showcase-light-dark.jpeg
+  - description: "Liquid-glass refraction surface"
+    path: doc/screenshots/glass-refraction.png
+  - description: "Chainable .stunning() motion effects"
+    path: doc/screenshots/motion.jpeg
+  - description: "Browsable Widgetbook component catalogue"
+    path: doc/screenshots/widgetbook.jpeg
+
 # CLI: `dart run stunning_ui:doctor` / `:init` (or globally after
 # `dart pub global activate stunning_ui`).
 executables:

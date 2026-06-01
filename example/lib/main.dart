@@ -1,368 +1,283 @@
-import 'dart:ui';
-
+// Stunning UI — example showcase.
+//
+// A single screen that demonstrates the kit across light and dark (toggle in
+// the app bar). For a browsable, per-component catalogue see widgetbook.dart;
+// for focused demos see motion_demo.dart, glass_demo.dart and glass_poc.dart.
 import 'package:flutter/material.dart';
 import 'package:stunning_ui/stunning_ui.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() => runApp(const StunningExampleApp());
+
+class StunningExampleApp extends StatefulWidget {
+  const StunningExampleApp({super.key});
+  @override
+  State<StunningExampleApp> createState() => _StunningExampleAppState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class _StunningExampleAppState extends State<StunningExampleApp> {
+  ThemeMode _mode = ThemeMode.dark;
+
+  void _toggle() => setState(
+    () => _mode = _mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,
+  );
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Stunning UI Suite',
+      title: 'Stunning UI',
       debugShowCheckedModeBanner: false,
-
-      // Is line ko change kiya gaya hai:
-      themeMode: ThemeMode.dark, // Ab ye humesha dark theme hi dikhayega
-      // Light theme configuration rakh sakte ho in case future me refine karna ho,
-      // par active sirf dark theme hi rahegi.
-      theme: ThemeData(
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-        extensions: <ThemeExtension<dynamic>>[
-          StunningTheme.generate(
-            seedColor: Colors.purpleAccent, // Tera brand color
-            brightness: Brightness.light,
-            style: StunningUIStyle
-                .gaming, // Yahan 'enterprise' daloge toh blurs hat jayenge!
-          ),
-        ],
+      themeMode: _mode,
+      theme: StunningTheme.light(
+        seedColor: const Color(0xFF6C5CE7),
+        style: StunningUIStyle.minimal,
+      ).toThemeData(),
+      darkTheme: StunningTheme.dark(
+        seedColor: Colors.cyanAccent,
+        style: StunningUIStyle.gaming,
+      ).toThemeData(),
+      home: ShowcasePage(
+        isDark: _mode == ThemeMode.dark,
+        onToggleBrightness: _toggle,
       ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0F0F1A),
-        extensions: <ThemeExtension<dynamic>>[
-          StunningTheme.generate(
-            seedColor: Colors.cyanAccent, // Dark mode me cyan try karte hain
-            brightness: Brightness.dark,
-            style:
-                StunningUIStyle.gaming, // Yahan bhi style change kar sakte ho
-          ),
-        ],
-      ),
-      home: const ExampleDashboard(),
     );
   }
 }
 
-class ExampleDashboard extends StatefulWidget {
-  const ExampleDashboard({super.key});
+class ShowcasePage extends StatefulWidget {
+  const ShowcasePage({
+    super.key,
+    required this.isDark,
+    required this.onToggleBrightness,
+  });
+
+  final bool isDark;
+  final VoidCallback onToggleBrightness;
 
   @override
-  State<ExampleDashboard> createState() => _ExampleDashboardState();
+  State<ShowcasePage> createState() => _ShowcasePageState();
 }
 
-class _ExampleDashboardState extends State<ExampleDashboard> {
-  int _currentNavIndex = 0; // Navigation state
+class _ShowcasePageState extends State<ShowcasePage> {
+  bool _notify = true;
+  bool _agree = true;
+  double _volume = 0.6;
+  int _segment = 0;
+  int _tab = 0;
+  String? _framework = 'Flutter';
 
-  // Dummy pages for navigation test
-  // example/lib/main.dart ke andar _ExampleDashboardState me:
-
-  // example/lib/main.dart me _pages list ko isse replace karo:
-
-  late final List<Widget> _pages = [
-    // PAGE 1: Home (Showing 3D Carousel & Toast)
-    Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          'Featured Collections',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+  @override
+  Widget build(BuildContext context) {
+    final st = StunningTheme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Stunning UI'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            tooltip: widget.isDark ? 'Light mode' : 'Dark mode',
+            icon: Icon(
+              widget.isDark
+                  ? Icons.light_mode_rounded
+                  : Icons.dark_mode_rounded,
+            ),
+            onPressed: widget.onToggleBrightness,
           ),
-        ),
-        const SizedBox(height: 30),
-
-        // 3D Carousel Implementation
-        StunningCarousel(
-          height: 320,
-          items: [
-            _buildCarouselCard(
-              title: 'Neon Pack',
-              icon: Icons.graphic_eq,
-              color: Colors.purpleAccent,
-            ),
-            _buildCarouselCard(
-              title: 'Glass Kit',
-              icon: Icons.layers,
-              color: Colors.blueAccent,
-            ),
-            _buildCarouselCard(
-              title: 'Cyber UI',
-              icon: Icons.memory,
-              color: Colors.cyanAccent,
-            ),
-          ],
-        ),
-      ],
-    ),
-
-    // PAGE 2, 3, 4 (Placeholder)
-    const SearchTabDemo(),
-
-    const Center(
-      child: Text(
-        'Map Content',
-        style: TextStyle(color: Colors.white, fontSize: 24),
+          const SizedBox(width: 8),
+        ],
       ),
-    ),
-    const Center(
-      child: Text(
-        'Profile Content',
-        style: TextStyle(color: Colors.white, fontSize: 24),
-      ),
-    ),
-  ];
-
-  // Helper method for generating Carousel Cards
-  Widget _buildCarouselCard({
-    required String title,
-    required IconData icon,
-    required Color color,
-  }) {
-    return Builder(
-      // Builder zaroori hai OverlayContext ke liye
-      builder: (context) {
-        return GestureDetector(
-          onTap: () {
-            // Triggering the custom toast on tap
-            StunningToast.show(
-              context: context,
-              message: '$title selected successfully!',
-              icon: Icons.check_circle_outline,
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: color.withValues(alpha: 0.2),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 48),
+        children: <Widget>[
+          _section(st, 'Buttons', <Widget>[
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: <Widget>[
+                StunningButton(text: 'Primary', onPressed: () {}),
+                StunningButton(
+                  text: 'Outline',
+                  variant: StunningButtonVariant.outline,
+                  onPressed: () {},
+                ),
+                StunningButton(
+                  text: 'Ghost',
+                  variant: StunningButtonVariant.ghost,
+                  onPressed: () {},
+                ),
+                StunningButton(
+                  text: 'Tonal',
+                  variant: StunningButtonVariant.tonal,
+                  onPressed: () {},
+                ),
+                StunningButton(
+                  text: 'Delete',
+                  icon: Icons.delete_outline,
+                  variant: StunningButtonVariant.danger,
+                  onPressed: () => _showDialog(context),
                 ),
               ],
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(32),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: 60, color: color),
-                    const SizedBox(height: 20),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+          ]),
+          _section(st, 'Inputs', <Widget>[
+            const StunningTextField(
+              hintText: 'Search…',
+              prefixIcon: Icons.search,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                StunningSwitch(
+                  value: _notify,
+                  onChanged: (v) => setState(() => _notify = v),
                 ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // CRITICAL: Ye property background ko nav bar ke niche render hone deti hai
-      // jisse glass blur sahi se dikhta hai
-      extendBody: true,
-      // NAYI LINE: Transparent App Bar with Drawer Icon
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-
-      // NAYI LINE: Hamara Glassmorphic Sidebar
-      drawer: StunningSidebar(
-        header: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.purpleAccent,
-              child: Icon(Icons.person, size: 30, color: Colors.white),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Siddhesh Lad',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Premium User',
-              style: TextStyle(color: Colors.white54, fontSize: 14),
-            ),
-          ],
-        ),
-        items: [
-          StunningSidebarItem(
-            icon: Icons.dashboard,
-            title: 'Dashboard',
-            isActive: true,
-            onTap: () {},
-          ),
-          StunningSidebarItem(
-            icon: Icons.analytics,
-            title: 'Analytics',
-            onTap: () {},
-          ),
-          StunningSidebarItem(
-            icon: Icons.settings,
-            title: 'Settings',
-            onTap: () {},
-          ),
-        ],
-      ),
-
-      body: Stack(
-        children: [
-          // Global Background
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
+                const SizedBox(width: 12),
+                Text(
+                  'Notifications',
+                  style: TextStyle(color: st.textSecondary),
                 ),
-                fit: BoxFit.cover,
-              ),
+                const Spacer(),
+                StunningCheckbox(
+                  value: _agree,
+                  semanticLabel: 'Agree',
+                  onChanged: (v) => setState(() => _agree = v),
+                ),
+                const SizedBox(width: 8),
+                Text('Agree', style: TextStyle(color: st.textSecondary)),
+              ],
             ),
-          ),
-
-          // Current Page Content (Animated for smooth transition)
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _pages[_currentNavIndex],
-          ),
-        ],
-      ),
-
-      // Hamara Naya Stunning Nav Bar
-      bottomNavigationBar: StunningBottomNav(
-        currentIndex: _currentNavIndex,
-        onTap: (index) {
-          setState(() {
-            _currentNavIndex = index;
-          });
-        },
-        items: const [
-          StunningNavItem(icon: Icons.grid_view_rounded), // Home
-          StunningNavItem(icon: Icons.search_rounded), // Search
-          StunningNavItem(icon: Icons.map_rounded), // Map/Discover
-          StunningNavItem(icon: Icons.person_rounded), // Profile
-        ],
-      ),
-    );
-  }
-}
-
-// Add this at the bottom of example/lib/main.dart
-class SearchTabDemo extends StatefulWidget {
-  const SearchTabDemo({super.key});
-
-  @override
-  State<SearchTabDemo> createState() => _SearchTabDemoState();
-}
-
-class _SearchTabDemoState extends State<SearchTabDemo> {
-  int _selectedFilter = 0;
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    // Simulate loading for 3 seconds then show data
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) setState(() => _isLoading = false);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-      child: Column(
-        children: [
-          const Text(
-            'Search & Filter',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+            const SizedBox(height: 16),
+            StunningSlider(
+              value: _volume,
+              onChanged: (v) => setState(() => _volume = v),
             ),
-          ),
-          const SizedBox(height: 30),
-
-          // 1. Testing Segmented Control
-          StunningSegmentedControl(
-            options: const ['Trending', 'Recent', 'Favorites'],
-            selectedIndex: _selectedFilter,
-            onValueChanged: (index) {
-              setState(() {
-                _selectedFilter = index;
-                _isLoading = true; // Re-trigger loading on filter change
-              });
-              Future.delayed(const Duration(seconds: 2), () {
-                if (mounted) setState(() => _isLoading = false);
-              });
-            },
-          ),
-
-          const SizedBox(height: 40),
-
-          // 2. Testing Shimmer Skeleton
-          Expanded(
-            child: ListView.builder(
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return StunningShimmer(
-                  isLoading: _isLoading,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.1),
+            const SizedBox(height: 16),
+            StunningSegmentedControl(
+              options: const <String>['Day', 'Week', 'Month'],
+              selectedIndex: _segment,
+              onValueChanged: (i) => setState(() => _segment = i),
+            ),
+            const SizedBox(height: 16),
+            StunningTabs(
+              tabs: const <String>['Overview', 'Activity', 'Settings'],
+              selectedIndex: _tab,
+              onChanged: (i) => setState(() => _tab = i),
+            ),
+            const SizedBox(height: 16),
+            StunningSelect<String>(
+              items: const <String>['Flutter', 'React Native', 'SwiftUI'],
+              value: _framework,
+              hint: 'Pick a framework',
+              onChanged: (v) => setState(() => _framework = v),
+            ),
+          ]),
+          _section(st, 'Glass', <Widget>[
+            SizedBox(
+              height: 150,
+              child: GlassSurface(
+                borderRadius: 24,
+                tintAmount: 0.10,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(
+                        Icons.diamond_rounded,
+                        color: st.primaryBrand,
+                        size: 30,
                       ),
-                    ),
-                    child: _isLoading
-                        ? const SizedBox() // Blank container for shimmer to mask over
-                        : const Center(
-                            child: Text(
-                              'Loaded Data Item',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'GlassSurface',
+                        style: TextStyle(
+                          color: st.textPrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
+                ),
+              ),
             ),
-          ),
+          ]),
+          _section(st, 'Data', <Widget>[
+            const StunningBarChart(
+              data: <double>[12, 28, 18, 42],
+              labels: <String>['Jan', 'Feb', 'Mar', 'Apr'],
+              maxValue: 50,
+              height: 200,
+            ),
+            const SizedBox(height: 16),
+            const StunningDataTable(
+              columns: <String>['Order', 'Status'],
+              data: <List<String>>[
+                <String>['Invoice #1021', 'Success'],
+                <String>['Invoice #1022', 'Pending'],
+                <String>['Invoice #1023', 'Failed'],
+              ],
+            ),
+          ]),
+          _section(st, 'Feedback', <Widget>[
+            Row(
+              children: <Widget>[
+                const StunningProgressRing(value: 0.7),
+                const SizedBox(width: 20),
+                Expanded(child: const StunningProgressBar(value: 0.45)),
+                const SizedBox(width: 20),
+                const StunningBadge(
+                  label: '3',
+                  child: Icon(Icons.notifications_rounded, size: 30),
+                ),
+                const SizedBox(width: 16),
+                const StunningTooltip(
+                  message: 'Profile',
+                  child: StunningAvatar(initials: 'SU'),
+                ),
+              ],
+            ),
+          ]),
         ],
       ),
+    );
+  }
+
+  void _showDialog(BuildContext context) {
+    showStunningDialog<void>(
+      context: context,
+      title: 'Delete invoice?',
+      message: 'This action cannot be undone.',
+      icon: Icons.warning_amber_rounded,
+      primaryAction: StunningButton(
+        text: 'Delete',
+        variant: StunningButtonVariant.danger,
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+      secondaryAction: StunningButton(
+        text: 'Cancel',
+        variant: StunningButtonVariant.ghost,
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+    );
+  }
+
+  Widget _section(StunningTheme st, String title, List<Widget> children) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const SizedBox(height: 24),
+        Text(
+          title.toUpperCase(),
+          style: TextStyle(
+            color: st.textSecondary,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
+          ),
+        ),
+        const SizedBox(height: 14),
+        ...children,
+      ],
     );
   }
 }
