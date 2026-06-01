@@ -1,6 +1,17 @@
 import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
+import 'stunning_palette.dart';
+
+export 'stunning_palette.dart'
+    show
+        StunningPalette,
+        StunningHarmony,
+        StunningRole,
+        StunningSemantic,
+        StunningSemantics,
+        StunningGradients;
+
 /// Defines the core DNA of how the UI behaves and looks.
 enum StunningUIStyle {
   /// Flat, fast, high-contrast, zero distractions. Best for ERP, CRM, B2B.
@@ -79,11 +90,25 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
   /// Brightness this theme targets.
   final Brightness brightness;
 
-  /// Dynamically generates the shadow based on glowIntensity.
+  /// 5. The auto-derived colour system (added in 2.0.0). One seed (or two)
+  /// becomes a full WCAG-AA, brand-harmonised palette: secondary/tertiary,
+  /// Tailwind 50→950 ramps, brand-tuned semantics, gradients, glass tint and
+  /// glow. Nullable so hand-constructed themes still work; populated by
+  /// [StunningTheme.generate] and every preset factory.
+  final StunningPalette? palette;
+
+  /// Brand-tuned success / warning / error / info — null only on a
+  /// hand-constructed theme with no [palette].
+  StunningSemantics? get semantics => palette?.semantics;
+
+  /// Dynamically generates the shadow based on glowIntensity. Uses the
+  /// palette's luminous [StunningPalette.glowColor] when available so neon
+  /// glows actually read as emitted light; falls back to [primaryBrand].
   BoxShadow get glowingShadow {
     if (glowIntensity <= 0) return const BoxShadow(color: Colors.transparent);
     return BoxShadow(
-      color: primaryBrand.withValues(alpha: 0.5 * glowIntensity),
+      color: (palette?.glowColor ?? primaryBrand)
+          .withValues(alpha: 0.5 * glowIntensity),
       blurRadius: 30 * glowIntensity,
       spreadRadius: 2 * glowIntensity,
     );
@@ -151,6 +176,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
     this.spring = const StunningSpring(),
     this.style = StunningUIStyle.minimal,
     this.brightness = Brightness.dark,
+    this.palette,
   });
 
   /// Resolve the active [StunningTheme] for [context], falling back to a
@@ -177,6 +203,8 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
     required Color seedColor,
     required Brightness brightness,
     StunningUIStyle style = StunningUIStyle.minimal,
+    Color? secondaryColor,
+    StunningHarmony harmony = StunningHarmony.auto,
   }) {
     final isDark = brightness == Brightness.dark;
 
@@ -232,16 +260,22 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
         break;
     }
 
-    // Full M3 colour scheme from the same seed — the "replace Material" unlock.
-    final scheme = ColorScheme.fromSeed(
-      seedColor: seedColor,
+    final variant = switch (style) {
+      StunningUIStyle.enterprise => DynamicSchemeVariant.neutral,
+      StunningUIStyle.minimal => DynamicSchemeVariant.tonalSpot,
+      StunningUIStyle.gaming => DynamicSchemeVariant.vibrant,
+    };
+
+    // The auto-palette engine: one (or two) brand colours → a full system.
+    // Its harmonised secondary/tertiary + brand-tuned error are injected into
+    // the M3 scheme, so the kit is brand-designed, not stock Material.
+    final palette = StunningPalette.fromSeed(
+      seedColor,
+      secondary: secondaryColor,
+      harmony: harmony,
       brightness: brightness,
-      dynamicSchemeVariant: switch (style) {
-        StunningUIStyle.enterprise => DynamicSchemeVariant.neutral,
-        StunningUIStyle.minimal => DynamicSchemeVariant.tonalSpot,
-        StunningUIStyle.gaming => DynamicSchemeVariant.vibrant,
-      },
     );
+    final scheme = palette.toColorScheme(variant: variant);
 
     return StunningTheme(
       primaryBrand: seedColor,
@@ -256,6 +290,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
       spring: spring,
       style: style,
       brightness: brightness,
+      palette: palette,
     );
   }
 
@@ -340,6 +375,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
     StunningSpring? spring,
     StunningUIStyle? style,
     Brightness? brightness,
+    StunningPalette? palette,
   }) {
     return StunningTheme(
       primaryBrand: primaryBrand ?? this.primaryBrand,
@@ -354,6 +390,7 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
       spring: spring ?? this.spring,
       style: style ?? this.style,
       brightness: brightness ?? this.brightness,
+      palette: palette ?? this.palette,
     );
   }
 
@@ -390,6 +427,66 @@ class StunningTheme extends ThemeExtension<StunningTheme> {
       spring: StunningSpring.lerp(spring, other.spring, t),
       style: t < 0.5 ? style : other.style,
       brightness: t < 0.5 ? brightness : other.brightness,
+      palette: (palette != null && other.palette != null)
+          ? StunningPalette.lerp(palette!, other.palette!, t)
+          : (t < 0.5 ? palette : other.palette),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Share codes — a whole theme in a compact, URL-safe string.
+  // ---------------------------------------------------------------------------
+
+  static const String _b62 =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+  /// Encodes this theme as a short, versioned, copy-pasteable code such as
+  /// `st1_2yQk7`. A theme is fully determined by its seed colour, brightness
+  /// and style, so the round-trip is exact. The `st1_` prefix lets the format
+  /// evolve without breaking old codes.
+  ///
+  /// ```dart
+  /// final code = StunningTheme.dark().toShareCode();      // 'st1_…'
+  /// final back = StunningTheme.fromShareCode(code);       // identical theme
+  /// ```
+  String toShareCode() {
+    final rgb = primaryBrand.toARGB32() & 0xFFFFFF;
+    final styleIdx = StunningUIStyle.values.indexOf(style);
+    final brightBit = brightness == Brightness.dark ? 1 : 0;
+    final payload = (rgb << 3) | (brightBit << 2) | styleIdx;
+    final sb = StringBuffer();
+    var n = payload;
+    if (n == 0) {
+      sb.write('0');
+    } else {
+      while (n > 0) {
+        sb.write(_b62[n % 62]);
+        n ~/= 62;
+      }
+    }
+    return 'st1_${sb.toString().split('').reversed.join()}';
+  }
+
+  /// Rebuilds a theme from a [toShareCode] string. Returns `null` if the code
+  /// is malformed or uses an unknown version prefix.
+  static StunningTheme? fromShareCode(String code) {
+    if (!code.startsWith('st1_')) return null;
+    final body = code.substring(4);
+    if (body.isEmpty) return null;
+    var n = 0;
+    for (final ch in body.split('')) {
+      final i = _b62.indexOf(ch);
+      if (i < 0) return null;
+      n = n * 62 + i;
+    }
+    final styleIdx = n & 0x3;
+    final brightBit = (n >> 2) & 0x1;
+    final rgb = (n >> 3) & 0xFFFFFF;
+    if (styleIdx >= StunningUIStyle.values.length) return null;
+    return StunningTheme.generate(
+      seedColor: Color(0xFF000000 | rgb),
+      brightness: brightBit == 1 ? Brightness.dark : Brightness.light,
+      style: StunningUIStyle.values[styleIdx],
     );
   }
 }

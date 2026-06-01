@@ -2,8 +2,14 @@
   "name": "stunning_ui",
   "description": "A glassmorphic, physics-driven Flutter UI toolkit. One seed colour + style derives a full theme; accessible by default; chainable .stunning() effects.",
   "generatedBy": "tool/build_registry.dart",
-  "componentCount": 44,
+  "componentCount": 52,
   "components": [
+    {
+      "name": "StunningAccent",
+      "category": "core",
+      "file": "src/core/stunning_accent.dart",
+      "description": "Recolours an entire subtree from a single colour, without rebuilding the whole app's theme."
+    },
     {
       "name": "StunningAccordion",
       "category": "layout",
@@ -15,6 +21,12 @@
       "category": "lists",
       "file": "src/components/lists/stunning_animated_list.dart",
       "description": ""
+    },
+    {
+      "name": "StunningAnimatedTheme",
+      "category": "core",
+      "file": "src/core/stunning_accent.dart",
+      "description": "Animates smoothly between [StunningTheme]s whenever [theme] changes — every token (colour scheme, glass blur, glow, border, motion, palette gradients) interpolates via [StunningTheme.lerp]."
     },
     {
       "name": "StunningAppBar",
@@ -113,6 +125,18 @@
       "description": "Coalesces every descendant [GlassSurface] into a single backdrop blur pass (via [BackdropGroup])."
     },
     {
+      "name": "StunningGradients",
+      "category": "theme",
+      "file": "src/theme/stunning_palette.dart",
+      "description": "Ready-to-use gradient stop lists derived from the harmony."
+    },
+    {
+      "name": "StunningHarmony",
+      "category": "theme",
+      "file": "src/theme/stunning_palette.dart",
+      "description": "How the secondary / tertiary colours are derived when the developer only supplies a primary seed (or wants a specific colour relationship)."
+    },
+    {
       "name": "StunningModal",
       "category": "modals",
       "file": "src/components/modals/stunning_modal.dart",
@@ -129,6 +153,12 @@
       "category": "navigation",
       "file": "src/components/navigation/stunning_pagination.dart",
       "description": "A compact, theme-aware page navigation control."
+    },
+    {
+      "name": "StunningPalette",
+      "category": "theme",
+      "file": "src/theme/stunning_palette.dart",
+      "description": "A complete, harmonious, WCAG-AA colour system derived from one (or two) brand colours — entirely in HCT space via `material_color_utilities`."
     },
     {
       "name": "StunningProgressBar",
@@ -155,6 +185,12 @@
       "description": ""
     },
     {
+      "name": "StunningRole",
+      "category": "theme",
+      "file": "src/theme/stunning_palette.dart",
+      "description": "A colour role that owns a full Tailwind-style 50→950 tonal ramp."
+    },
+    {
       "name": "StunningSegmentedControl",
       "category": "inputs",
       "file": "src/components/inputs/stunning_segmented_control.dart",
@@ -165,6 +201,18 @@
       "category": "inputs",
       "file": "src/components/inputs/stunning_select.dart",
       "description": "A generic, overlay-based dropdown/select that floats its menu in an [OverlayPortal] instead of expanding inline."
+    },
+    {
+      "name": "StunningSemantic",
+      "category": "theme",
+      "file": "src/theme/stunning_palette.dart",
+      "description": "One brand-tuned semantic colour (success / warning / error / info) with an AA-guaranteed foreground, a container fill, and its own 50→950 ramp."
+    },
+    {
+      "name": "StunningSemantics",
+      "category": "theme",
+      "file": "src/theme/stunning_palette.dart",
+      "description": "The four brand-tuned semantic colours."
     },
     {
       "name": "StunningShimmer",

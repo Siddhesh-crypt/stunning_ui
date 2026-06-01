@@ -14,10 +14,10 @@ widget.stunning().glow().tilt().springIn().glass()
 Column(children: cards.stunningStagger())
 ```
 
-## Components (44)
+## Components (52)
 - **buttons**: StunningButton, StunningButtonSize, StunningButtonVariant
 - **cards**: StunningTiltCard
-- **core**: StunningEffectTier, StunningGlassScope, StunningResponsiveCenter, StunningTappable, StunningUI
+- **core**: StunningAccent, StunningAnimatedTheme, StunningEffectTier, StunningGlassScope, StunningResponsiveCenter, StunningTappable, StunningUI
 - **data_display**: StunningAvatar, StunningBadge, StunningBarChart, StunningDataTable, StunningTableStyle
 - **feedback**: StunningDialog, StunningProgressBar, StunningProgressRing, StunningShimmer, StunningSkeleton, StunningToast, StunningTooltip
 - **inputs**: StunningCheckbox, StunningDropdown, StunningRadio, StunningSegmentedControl, StunningSelect, StunningSlider, StunningSwitch, StunningTabs, StunningTextField
@@ -25,7 +25,7 @@ Column(children: cards.stunningStagger())
 - **lists**: StunningAnimatedListItem
 - **modals**: StunningModal
 - **navigation**: StunningAppBar, StunningBottomNav, StunningNavItem, StunningPagination, StunningSidebar, StunningSidebarItem
-- **theme**: StunningSpring, StunningTheme, StunningUIStyle
+- **theme**: StunningGradients, StunningHarmony, StunningPalette, StunningRole, StunningSemantic, StunningSemantics, StunningSpring, StunningTheme, StunningUIStyle
 
 ## Conventions for correct code
 - Colours come from the theme (StunningTheme.of(context): textPrimary, textSecondary, hintColor, iconColor, borderColor, primaryBrand, onColor(bg)). Do not hardcode Colors.white/black — the kit must work in light AND dark.

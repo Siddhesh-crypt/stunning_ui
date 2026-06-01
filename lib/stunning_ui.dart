@@ -1,11 +1,13 @@
 // Theme Engine
 export 'src/theme/stunning_theme.dart';
+export 'src/theme/stunning_palette.dart';
 
 // Layout & Core
 export 'src/core/responsive_layout.dart';
 export 'src/core/stunning_tappable.dart';
 export 'src/core/stunning_effects.dart';
 export 'src/core/glass_surface.dart';
+export 'src/core/stunning_accent.dart';
 export 'src/components/layout/stunning_accordion.dart';
 export 'src/components/layout/stunning_carousel.dart';
 export 'src/components/layout/stunning_divider.dart';

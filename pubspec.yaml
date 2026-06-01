@@ -1,6 +1,6 @@
 name: stunning_ui
 description: "A production-ready, highly interactive, and glassmorphic UI toolkit for Flutter."
-version: 1.8.0
+version: 2.0.0
 homepage: https://github.com/Siddhesh-crypt/stunning_ui
 repository: https://github.com/Siddhesh-crypt/stunning_ui
 issue_tracker: https://github.com/Siddhesh-crypt/stunning_ui/issues
@@ -37,6 +37,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Pure-Dart HCT colour science powering the auto-palette engine. Already
+  # ships transitively with Flutter, so promoting it to a direct dep adds no
+  # new package to users' lockfiles.
+  material_color_utilities: ^0.13.0
 
 dev_dependencies:
   flutter_test:

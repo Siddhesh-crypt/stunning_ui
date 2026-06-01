@@ -1,3 +1,40 @@
+## 2.0.0
+* **The auto-palette engine — one colour in, a full design system out.** New
+  `StunningPalette.fromSeed(primary, {secondary, harmony, brightness})` derives
+  a complete, harmonious, WCAG-AA colour system entirely in HCT space:
+  * **Harmony auto-pick** — pass only a primary and the engine chooses the right
+    relationship from the seed's chroma (vibrant → complementary, calm →
+    analogous, near-grey → monochromatic). Or pick one explicitly via
+    `StunningHarmony` (triadic / splitComplementary / …). A supplied
+    `secondaryColor` is auto-harmonised onto the primary so it never clashes.
+  * **Tailwind 50→950 tonal ramps** per role via `palette.ramp(StunningRole.x)`
+    — perceptually even by construction (tone == luminance).
+  * **Brand-tuned semantics** — `palette.semantics.success/warning/error/info`,
+    each hue-shifted a bounded amount toward the brand (error stays
+    unmistakably red, success green), each with an AA-guaranteed `on` colour,
+    a container, and its own ramp.
+  * **Mathematical contrast guarantee** — `palette.on(anyBackground, {ratio})`
+    returns a brand-tinted foreground that always meets WCAG AA (or AAA), and
+    `palette.contrastReport()` proves it (printed by `:doctor`).
+  * Auto-derived **gradients** (`palette.gradients.primary/brand/mesh`),
+    **glass tint** and a luminous **glow colour** (now powering
+    `StunningTheme.glowingShadow`).
+* **`StunningTheme.generate` gains optional `secondaryColor` + `harmony`** and
+  exposes the system via `StunningTheme.palette` / `.semantics`. The harmonised
+  secondary/tertiary and brand error are injected into the Material 3 scheme.
+* **Theme share-codes** — `theme.toShareCode()` / `StunningTheme.fromShareCode()`
+  pack a whole theme into a short versioned string (e.g. `st1_3qNkk`).
+* **`StunningAnimatedTheme`** morphs the whole app between themes/styles (every
+  token interpolates), and **`StunningAccent(seedColor:)`** recolours a subtree
+  from one colour for multi-brand UIs.
+* **Backward compatible:** existing single-seed `generate()` calls are
+  unchanged — the palette is additive. `material_color_utilities` is promoted to
+  a direct dependency (already ships transitively with Flutter, so no new
+  package in users' lockfiles).
+* **Breaking (semver 2.0):** the Material `ColorScheme` is now palette-driven, so
+  apps may see a small, intentional shift toward brand-tuned neutrals and
+  harmonised accents.
+
 ## 1.8.0
 * **Developer tooling (DX):**
   * CLI — `dart run stunning_ui:doctor` (verifies your setup: Flutter version, theme wiring, hardcoded colours) and `dart run stunning_ui:init` (scaffolds a starter theme).
