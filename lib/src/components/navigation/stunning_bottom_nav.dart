@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../core/stunning_tappable.dart';
+import '../../theme/stunning_theme.dart';
 
 /// Represents an individual item inside the [StunningBottomNav].
 class StunningNavItem {
@@ -43,14 +44,18 @@ class StunningBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final accentColor = theme?.primaryBrand ?? Colors.purpleAccent;
+    final st = StunningTheme.of(context);
+    final accentColor = st.primaryBrand;
 
-    /// Custom color lega, nahi toh theme ka color, nahi toh default
-    final surfaceColor =
-        backgroundColor ??
-        theme?.surfaceGlass ??
-        const Color(0xFF1A1A2E).withValues(alpha: 0.6);
+    /// Reduce-motion aware: collapses to zero when the OS setting is on.
+    final reduceMotion = StunningTheme.reduceMotion(context);
+    final indicatorDuration =
+        reduceMotion ? Duration.zero : const Duration(milliseconds: 300);
+    final iconDuration =
+        reduceMotion ? Duration.zero : const Duration(milliseconds: 200);
+
+    /// Custom color lega, nahi toh theme ka color
+    final surfaceColor = backgroundColor ?? st.surfaceGlass;
 
     return SafeArea(
       child: Padding(
@@ -58,14 +63,17 @@ class StunningBottomNav extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            filter: ImageFilter.blur(
+              sigmaX: st.glassBlurSigma,
+              sigmaY: st.glassBlurSigma,
+            ),
             child: Container(
               height: 70,
               decoration: BoxDecoration(
                 color: surfaceColor,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: st.borderColor,
                   width: 1,
                 ),
               ),
@@ -73,7 +81,7 @@ class StunningBottomNav extends StatelessWidget {
                 children: [
                   // Animated Indicator
                   AnimatedPositioned(
-                    duration: const Duration(milliseconds: 300),
+                    duration: indicatorDuration,
                     curve: Curves.easeOutBack, // Spring animation
                     top: 0,
                     bottom: 0,
@@ -113,18 +121,20 @@ class StunningBottomNav extends StatelessWidget {
                     children: List.generate(items.length, (index) {
                       final isSelected = currentIndex == index;
                       return Expanded(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () => onTap(index),
+                        child: StunningTappable(
+                          onPressed: () => onTap(index),
+                          selected: isSelected,
+                          semanticLabel: 'Tab ${index + 1} of ${items.length}',
+                          borderRadius: BorderRadius.circular(30),
                           child: Center(
                             child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
+                              duration: iconDuration,
                               padding: const EdgeInsets.all(8.0),
                               child: Icon(
                                 items[index].icon,
                                 color: isSelected
                                     ? accentColor
-                                    : Colors.white.withValues(alpha: 0.5),
+                                    : st.iconColor,
                                 size: isSelected ? 28 : 24,
                               ),
                             ),

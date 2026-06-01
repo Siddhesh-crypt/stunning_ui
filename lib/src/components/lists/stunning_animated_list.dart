@@ -1,6 +1,8 @@
 // lib/src/components/lists/stunning_animated_list.dart
 import 'package:flutter/material.dart';
 
+import '../../theme/stunning_theme.dart';
+
 class StunningAnimatedListItem extends StatefulWidget {
   final Widget child;
   final int index;
@@ -50,6 +52,18 @@ class _StunningAnimatedListItemState extends State<StunningAnimatedListItem>
 
   @override
   Widget build(BuildContext context) {
+    final st = StunningTheme.of(context);
+
+    // Reduce-motion: skip the staggered slide/fade entrance and render the
+    // final, static state immediately so no motion plays.
+    if (StunningTheme.reduceMotion(context)) {
+      return widget.child;
+    }
+
+    // Keep the entrance animation in sync with the themed (reduce-motion
+    // aware) motion duration.
+    _controller.duration = st.motion(context);
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {

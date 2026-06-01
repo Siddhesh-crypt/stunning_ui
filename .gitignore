@@ -29,3 +29,11 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 /build/
 /coverage/
+
+# Claude Code session + tooling artifacts
+.claude/
+.playwright-mcp/
+
+# Loose demo screenshots (root only — keeps example app icons tracked)
+/*.png
+/*.jpeg

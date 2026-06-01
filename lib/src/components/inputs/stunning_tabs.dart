@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../core/stunning_tappable.dart';
+import '../../theme/stunning_theme.dart';
 
 /// A segmented control where a glowing pill slides behind the active tab.
 class StunningTabs extends StatelessWidget {
@@ -17,14 +18,13 @@ class StunningTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final duration = theme?.motionDuration ?? const Duration(milliseconds: 250);
-    final curve = theme?.motionCurve ?? Curves.easeInOutCubic;
+    final st = StunningTheme.of(context);
+    final duration = st.motion(context);
+    final curve = st.motionCurve;
 
-    final blur = theme?.glassBlurSigma ?? 10.0;
-    final brandColor = theme?.primaryBrand ?? Colors.blueAccent;
-    final surfaceColor =
-        theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.05);
+    final blur = st.glassBlurSigma;
+    final brandColor = st.primaryBrand;
+    final surfaceColor = st.surfaceGlass;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -35,7 +35,7 @@ class StunningTabs extends StatelessWidget {
           decoration: BoxDecoration(
             color: surfaceColor,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            border: Border.all(color: st.borderColor),
           ),
           child: LayoutBuilder(
             builder: (context, constraints) {
@@ -68,9 +68,11 @@ class StunningTabs extends StatelessWidget {
                       final isActive = index == selectedIndex;
                       return SizedBox(
                         width: tabWidth,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () => onChanged(index),
+                        child: StunningTappable(
+                          onPressed: () => onChanged(index),
+                          selected: isActive,
+                          minTargetSize: 0,
+                          borderRadius: BorderRadius.circular(14),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             child: Center(
@@ -78,8 +80,8 @@ class StunningTabs extends StatelessWidget {
                                 duration: duration,
                                 style: TextStyle(
                                   color: isActive
-                                      ? Colors.white
-                                      : Colors.white.withValues(alpha: 0.5),
+                                      ? st.textPrimary
+                                      : st.textSecondary,
                                   fontWeight: isActive
                                       ? FontWeight.bold
                                       : FontWeight.w500,

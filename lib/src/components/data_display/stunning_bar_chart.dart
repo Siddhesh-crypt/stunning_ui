@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../theme/stunning_theme.dart';
 
 /// A premium, animated bar chart designed for Enterprise and SaaS dashboards.
 class StunningBarChart extends StatelessWidget {
@@ -31,13 +31,13 @@ class StunningBarChart extends StatelessWidget {
       'Data and labels must have the same length',
     );
 
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final brandColor = theme?.primaryBrand ?? const Color(0xFF3B82F6);
+    final st = StunningTheme.of(context);
+    final brandColor = st.primaryBrand;
 
-    // Enterprise Dark SaaS Colors fallback
-    final cardColor = theme?.surfaceGlass ?? const Color(0xFF1E293B);
-    final borderColor = const Color(0xFF334155);
-    final textMuted = const Color(0xFF94A3B8);
+    // Theme-aware surface and chrome colours
+    final cardColor = st.surfaceGlass;
+    final borderColor = st.borderColor;
+    final textMuted = st.textSecondary;
 
     return Container(
       height: height,
@@ -60,8 +60,8 @@ class StunningBarChart extends StatelessWidget {
               // The Value Popup (Optional: visible on top of bar)
               Text(
                 data[index].toInt().toString(),
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: st.textPrimary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -74,9 +74,9 @@ class StunningBarChart extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: TweenAnimationBuilder<double>(
                     tween: Tween(begin: 0.0, end: percentage),
-                    duration: const Duration(
-                      milliseconds: 1200,
-                    ), // Smooth 1.2s growth
+                    duration: st.motion(
+                      context,
+                    ), // Smooth growth; collapses to zero on reduce-motion
                     curve: Curves.easeOutCubic,
                     builder: (context, value, child) {
                       return FractionallySizedBox(

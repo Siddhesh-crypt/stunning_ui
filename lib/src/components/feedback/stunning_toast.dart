@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../theme/stunning_theme.dart';
 
 /// A premium, floating toast notification that slides up from the bottom.
 class StunningToast {
@@ -25,10 +25,10 @@ class StunningToast {
 
     entry = OverlayEntry(
       builder: (context) {
-        final theme = Theme.of(context).extension<StunningTheme>();
-        final brandColor = overrideColor ?? theme?.primaryBrand ?? Colors.blueAccent;
-        final blur = theme?.glassBlurSigma ?? 10.0;
-        final glow = theme?.glowIntensity ?? 0.5;
+        final st = StunningTheme.of(context);
+        final brandColor = overrideColor ?? st.primaryBrand;
+        final blur = st.glassBlurSigma;
+        final glow = st.glowIntensity;
 
         return Positioned(
           bottom: bottomOffset,
@@ -40,7 +40,7 @@ class StunningToast {
               child: TweenAnimationBuilder<double>(
                 // Slides UP from the bottom
                 tween: Tween(begin: 100.0, end: 0.0),
-                duration: const Duration(milliseconds: 400),
+                duration: st.motion(context),
                 curve: Curves.easeOutBack, // Bouncy pop-up effect
                 builder: (context, value, child) {
                   return Transform.translate(
@@ -49,55 +49,60 @@ class StunningToast {
                   );
                 },
                 child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 14,
-                        ),
-                        decoration: BoxDecoration(
-                          // THE FIX: Deep solid slate background instead of transparent white
-                          color: const Color(0xFF0F172A).withValues(alpha: 0.95),
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            color: brandColor.withValues(alpha: 0.5),
-                            width: 1,
+                  child: Semantics(
+                    liveRegion: true,
+                    container: true,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 14,
                           ),
-                          boxShadow: glow > 0
-                              ? [
-                            BoxShadow(
-                              color: brandColor.withValues(
-                                alpha: 0.3 * glow,
-                              ),
-                              blurRadius: 20 * glow,
-                              spreadRadius: 2 * glow,
+                          decoration: BoxDecoration(
+                            // THE FIX: Deep solid slate background instead of transparent white
+                            color: st.surfaceGlass.withValues(alpha: 0.95),
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(
+                              color: brandColor.withValues(alpha: 0.5),
+                              width: 1,
                             ),
-                          ]
-                              : [],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (icon != null) ...[
-                              Icon(icon, color: brandColor, size: 20),
-                              const SizedBox(width: 12),
-                            ],
-                            // Flexible wrapper to prevent RenderFlex overflow on long texts
-                            Flexible(
-                              child: Text(
-                                message,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                            boxShadow:
+                                glow > 0
+                                    ? [
+                                      BoxShadow(
+                                        color: brandColor.withValues(
+                                          alpha: 0.3 * glow,
+                                        ),
+                                        blurRadius: 20 * glow,
+                                        spreadRadius: 2 * glow,
+                                      ),
+                                    ]
+                                    : [],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (icon != null) ...[
+                                Icon(icon, color: brandColor, size: 20),
+                                const SizedBox(width: 12),
+                              ],
+                              // Flexible wrapper to prevent RenderFlex overflow on long texts
+                              Flexible(
+                                child: Text(
+                                  message,
+                                  style: TextStyle(
+                                    color: st.textPrimary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

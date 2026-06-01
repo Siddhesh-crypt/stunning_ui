@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../theme/stunning_theme.dart';
 
 /// A premium skeleton loader with a continuous glass shimmer effect.
 class StunningSkeleton extends StatefulWidget {
@@ -39,9 +39,29 @@ class _StunningSkeletonState extends State<StunningSkeleton>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final surfaceColor =
-        theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.05);
+    final st = StunningTheme.of(context);
+    final surfaceColor = st.surfaceGlass;
+
+    // Honor the OS "reduce motion" setting: stop the looping shimmer and render
+    // a static placeholder instead of the continuous animation.
+    if (StunningTheme.reduceMotion(context)) {
+      if (_controller.isAnimating) _controller.stop();
+      return Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          color: surfaceColor,
+          border: Border.all(
+            color: st.borderColor,
+            width: 1,
+          ),
+        ),
+      );
+    }
+
+    // Resume the loop if it was previously stopped (e.g. reduce-motion toggled).
+    if (!_controller.isAnimating) _controller.repeat();
 
     return AnimatedBuilder(
       animation: _controller,
@@ -57,13 +77,13 @@ class _StunningSkeletonState extends State<StunningSkeleton>
               stops: const [0.0, 0.5, 1.0],
               colors: [
                 surfaceColor,
-                Colors.white.withValues(alpha: 0.15), // The shimmering light
+                st.textPrimary.withValues(alpha: 0.15), // The shimmering light
                 surfaceColor,
               ],
               transform: _SlidingGradientTransform(_controller.value),
             ),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: st.borderColor,
               width: 1,
             ),
           ),

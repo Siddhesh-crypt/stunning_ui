@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../theme/stunning_theme.dart';
 
 /// A glassmorphic top app bar that integrates perfectly with the Stunning UI ecosystem.
 class StunningAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -30,21 +30,21 @@ class StunningAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final surfaceColor =
-        backgroundColor ??
-        theme?.surfaceGlass ??
-        const Color(0xFF1A1A2E).withValues(alpha: 0.6);
+    final st = StunningTheme.of(context);
+    final surfaceColor = backgroundColor ?? st.surfaceGlass;
 
     return ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        filter: ImageFilter.blur(
+          sigmaX: st.glassBlurSigma,
+          sigmaY: st.glassBlurSigma,
+        ),
         child: Container(
           decoration: BoxDecoration(
             color: surfaceColor,
             border: Border(
               bottom: BorderSide(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: st.borderColor,
                 width: 1.5,
               ),
             ),

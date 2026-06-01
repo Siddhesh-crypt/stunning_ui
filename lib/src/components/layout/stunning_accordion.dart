@@ -1,7 +1,8 @@
 // lib/src/components/layout/stunning_accordion.dart
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../core/stunning_tappable.dart';
+import '../../theme/stunning_theme.dart';
 
 /// A glassmorphic accordion widget that smoothly expands and collapses.
 class StunningAccordion extends StatefulWidget {
@@ -26,27 +27,33 @@ class _StunningAccordionState extends State<StunningAccordion> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
+    final st = StunningTheme.of(context);
+    final animDuration = st.motion(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: theme?.surfaceGlass ?? Colors.black.withValues(alpha: 0.5),
+        color: st.surfaceGlass,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: st.borderColor,
           width: 1,
         ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(
+            sigmaX: st.glassBlurSigma,
+            sigmaY: st.glassBlurSigma,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                onTap: () => setState(() => _isExpanded = !_isExpanded),
+              StunningTappable(
+                onPressed: () => setState(() => _isExpanded = !_isExpanded),
+                toggled: _isExpanded,
+                borderRadius: BorderRadius.circular(20),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -57,18 +64,18 @@ class _StunningAccordionState extends State<StunningAccordion> {
                     children: [
                       Text(
                         widget.title,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: st.textPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       AnimatedRotation(
                         turns: _isExpanded ? 0.5 : 0.0,
-                        duration: const Duration(milliseconds: 300),
-                        child: const Icon(
+                        duration: animDuration,
+                        child: Icon(
                           Icons.keyboard_arrow_down,
-                          color: Colors.white70,
+                          color: st.iconColor,
                         ),
                       ),
                     ],
@@ -76,7 +83,7 @@ class _StunningAccordionState extends State<StunningAccordion> {
                 ),
               ),
               AnimatedSize(
-                duration: const Duration(milliseconds: 300),
+                duration: animDuration,
                 curve: Curves.easeOutCubic,
                 alignment: Alignment.topCenter,
                 child: _isExpanded

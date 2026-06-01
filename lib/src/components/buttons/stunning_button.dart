@@ -1,137 +1,201 @@
 import 'package:flutter/material.dart';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../core/stunning_tappable.dart';
+import '../../theme/stunning_theme.dart';
 
 /// Defines the visual style of the [StunningButton].
-enum StunningButtonVariant { primary, outline, ghost }
+enum StunningButtonVariant {
+  /// Solid filled button.
+  primary,
 
-/// A highly interactive, physics-based button with multiple variants and dynamic colors.
-class StunningButton extends StatefulWidget {
-  /// The text to display inside the button.
-  final String text;
+  /// Transparent with a coloured border.
+  outline,
 
-  /// The callback when the button is tapped. If null, the button is disabled.
+  /// Transparent, colour-on-hover.
+  ghost,
+
+  /// Soft tinted fill (Material "tonal").
+  tonal,
+
+  /// Solid filled using the theme error colour — for destructive actions.
+  danger,
+}
+
+/// Size scale for [StunningButton].
+enum StunningButtonSize { small, medium, large }
+
+/// A highly interactive, physics-based button. Accessible by default: button
+/// role for screen readers, keyboard focus + Enter/Space activation, a focus
+/// ring, a 48dp tap target, and reduce-motion support.
+///
+/// Provide [text], an [icon], or a fully custom [child]. `text` + `icon`
+/// renders an icon-label row.
+class StunningButton extends StatelessWidget {
+  /// The label text. Optional when [icon] or [child] is provided.
+  final String? text;
+
+  /// Leading icon. Combine with [text] for an icon button.
+  final IconData? icon;
+
+  /// Fully custom content (takes precedence over [text]/[icon]).
+  final Widget? child;
+
+  /// Tapped callback. If null, the button is disabled.
   final VoidCallback? onPressed;
 
-  /// Controls the loading state. Displays a spinner and disables taps if true.
+  /// Loading state — shows a spinner and disables taps.
   final bool isLoading;
 
-  /// The visual style variant of the button. Defaults to primary.
+  /// Visual style variant. Defaults to [StunningButtonVariant.primary].
   final StunningButtonVariant variant;
 
-  /// Custom color for the button. If null, it falls back to the theme's primaryBrand.
+  /// Size scale. Defaults to [StunningButtonSize.medium].
+  final StunningButtonSize size;
+
+  /// Custom base colour. Falls back to the theme brand (or error for danger).
   final Color? color;
+
+  /// Screen-reader label for icon-only buttons (no visible text).
+  final String? semanticLabel;
 
   const StunningButton({
     super.key,
-    required this.text,
+    this.text,
+    this.icon,
+    this.child,
     this.onPressed,
     this.isLoading = false,
     this.variant = StunningButtonVariant.primary,
+    this.size = StunningButtonSize.medium,
     this.color,
-  });
+    this.semanticLabel,
+  }) : assert(text != null || icon != null || child != null,
+            'Provide text, icon, or child');
 
-  @override
-  State<StunningButton> createState() => _StunningButtonState();
-}
+  EdgeInsets get _padding => switch (size) {
+        StunningButtonSize.small =>
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        StunningButtonSize.medium =>
+          const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        StunningButtonSize.large =>
+          const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+      };
 
-class _StunningButtonState extends State<StunningButton> {
-  // Naye state variables jo hover aur press track karenge
-  bool _isHovered = false;
-  bool _isPressed = false;
+  double get _fontSize => switch (size) {
+        StunningButtonSize.small => 14,
+        StunningButtonSize.medium => 16,
+        StunningButtonSize.large => 18,
+      };
 
-  // Helper method: Background color calculate karne ke liye
-  Color _getBackgroundColor(Color baseColor) {
-    switch (widget.variant) {
+  double get _iconSize => switch (size) {
+        StunningButtonSize.small => 16,
+        StunningButtonSize.medium => 18,
+        StunningButtonSize.large => 22,
+      };
+
+  bool get _isFilled =>
+      variant == StunningButtonVariant.primary ||
+      variant == StunningButtonVariant.danger;
+
+  Color _baseColor(StunningTheme st) {
+    if (color != null) return color!;
+    if (variant == StunningButtonVariant.danger) {
+      return st.colorScheme?.error ?? const Color(0xFFEF4444);
+    }
+    return st.primaryBrand;
+  }
+
+  Color _backgroundColor(Color base, bool hovered) {
+    switch (variant) {
       case StunningButtonVariant.primary:
-        return baseColor.withValues(alpha: _isHovered ? 0.8 : 1.0);
+      case StunningButtonVariant.danger:
+        return base.withValues(alpha: hovered ? 0.85 : 1.0);
+      case StunningButtonVariant.tonal:
+        return base.withValues(alpha: hovered ? 0.26 : 0.16);
       case StunningButtonVariant.outline:
       case StunningButtonVariant.ghost:
-        return _isHovered
-            ? baseColor.withValues(alpha: 0.1)
-            : Colors.transparent;
+        return hovered ? base.withValues(alpha: 0.1) : Colors.transparent;
     }
   }
 
-  // Helper method: Border calculate karne ke liye
-  BoxBorder? _getBorder(Color baseColor) {
-    if (widget.variant == StunningButtonVariant.outline) {
-      return Border.all(color: baseColor, width: 2);
-    }
-    return null; // Primary aur Ghost me border nahi hota
-  }
+  BoxBorder? _border(Color base) => variant == StunningButtonVariant.outline
+      ? Border.all(color: base, width: 2)
+      : null;
 
-  // Helper method: Text color calculate karne ke liye
-  Color _getTextColor(Color baseColor) {
-    if (widget.variant == StunningButtonVariant.primary) {
-      // Agar primary color light hai toh dark text, nahi toh white text
-      return baseColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
-    }
-    return baseColor; // Outline aur Ghost me text color base color jaisa hota hai
-  }
+  Color _foreground(StunningTheme st, Color base) =>
+      _isFilled ? st.onColor(base) : base;
 
   @override
   Widget build(BuildContext context) {
-    // 1. Theme engine se current style read karo
-    final theme = Theme.of(context).extension<StunningTheme>();
+    final st = StunningTheme.of(context);
+    final base = _baseColor(st);
+    final fg = _foreground(st, base);
+    final enabled = onPressed != null && !isLoading;
+    final duration = st.motion(context);
+    final curve = st.motionCurve;
 
-    // 2. Physics tokens extract karo
-    final duration = theme?.motionDuration ?? const Duration(milliseconds: 200);
-    final curve = theme?.motionCurve ?? Curves.easeInOut;
-
-    // 3. Base color set karo (widget.color fix yahan hai)
-    final baseColor = widget.color ?? theme?.primaryBrand ?? Colors.blueAccent;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: widget.isLoading ? null : widget.onPressed,
-
-        // AnimatedScale naye physics engine (curve/duration) ke sath
-        child: AnimatedScale(
-          scale: _isPressed ? 0.95 : 1.0,
+    return StunningTappable(
+      onPressed: enabled ? onPressed : null,
+      // Visible text supplies the label; only set an explicit label for
+      // icon-only buttons to avoid double announcements.
+      semanticLabel: text == null && child == null ? semanticLabel : null,
+      borderRadius: BorderRadius.circular(12),
+      builder: (context, states) {
+        final hovered = states.contains(WidgetState.hovered);
+        final pressed = states.contains(WidgetState.pressed);
+        return AnimatedScale(
+          scale: pressed ? 0.95 : 1.0,
           duration: duration,
           curve: curve,
-          child: AnimatedContainer(
-            duration: duration,
-            curve: curve,
-            decoration: BoxDecoration(
-              color: _getBackgroundColor(baseColor),
-              borderRadius: BorderRadius.circular(12),
-              border: _getBorder(baseColor),
-              boxShadow: _isHovered && !_isPressed
-                  ? [
-                      theme?.glowingShadow ??
-                          const BoxShadow(color: Colors.transparent),
-                    ]
-                  : [],
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Center(
-              child: widget.isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : Text(
-                      widget.text,
-                      style: TextStyle(
-                        color: _getTextColor(baseColor),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+          child: Opacity(
+            opacity: enabled ? 1.0 : 0.5,
+            child: AnimatedContainer(
+              duration: duration,
+              curve: curve,
+              decoration: BoxDecoration(
+                color: _backgroundColor(base, hovered),
+                borderRadius: BorderRadius.circular(12),
+                border: _border(base),
+                boxShadow: hovered && !pressed && enabled && _isFilled
+                    ? <BoxShadow>[st.glowingShadow]
+                    : const <BoxShadow>[],
+              ),
+              padding: _padding,
+              child: Center(child: _content(fg)),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Widget _content(Color fg) {
+    if (isLoading) {
+      return SizedBox(
+        height: _fontSize + 4,
+        width: _fontSize + 4,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(fg),
         ),
-      ),
+      );
+    }
+    if (child != null) return child!;
+    final label = text != null
+        ? Text(
+            text!,
+            style: TextStyle(
+                color: fg, fontSize: _fontSize, fontWeight: FontWeight.bold),
+          )
+        : null;
+    final leading = icon != null ? Icon(icon, size: _iconSize, color: fg) : null;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        if (leading != null) leading,
+        if (leading != null && label != null) const SizedBox(width: 8),
+        if (label != null) label,
+      ],
     );
   }
 }

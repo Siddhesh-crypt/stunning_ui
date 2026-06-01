@@ -1,13 +1,22 @@
 name: stunning_ui
 description: "A production-ready, highly interactive, and glassmorphic UI toolkit for Flutter."
-version: 1.1.1
+version: 1.7.0
 homepage: https://github.com/Siddhesh-crypt/stunning_ui
 repository: https://github.com/Siddhesh-crypt/stunning_ui
 issue_tracker: https://github.com/Siddhesh-crypt/stunning_ui/issues
 
+topics:
+  - ui
+  - widgets
+  - design-system
+  - glassmorphism
+  - theme
+
 environment:
-  sdk: ^3.10.8
-  flutter: ">=1.17.0"
+  sdk: ^3.7.0
+  # 3.41 required for ImageFilter.shader glass refraction + BackdropGroup blur
+  # coalescing used by GlassSurface.
+  flutter: ">=3.41.0"
 
 dependencies:
   flutter:
@@ -23,6 +32,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+
+  # Glass refraction shader shipped with the package (used by GlassSurface).
+  shaders:
+    - shaders/glass_refraction.frag
 
   # To add assets to your package, add an assets section, like this:
   # assets:

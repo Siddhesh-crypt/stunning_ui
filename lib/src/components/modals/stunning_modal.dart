@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../theme/stunning_theme.dart';
 
 class StunningModal extends StatelessWidget {
   final String title;
@@ -23,6 +23,7 @@ class StunningModal extends StatelessWidget {
     Widget? actionButton,
     Widget? secondaryButton,
   }) {
+    final st = StunningTheme.of(context);
     return showGeneralDialog<T>(
       context: context,
       barrierDismissible: true,
@@ -30,7 +31,7 @@ class StunningModal extends StatelessWidget {
       barrierColor: Colors.black.withValues(
         alpha: 0.7,
       ), // Deep focus background
-      transitionDuration: const Duration(milliseconds: 400),
+      transitionDuration: st.motion(context),
       pageBuilder: (context, _, _) => StunningModal(
         title: title,
         message: message,
@@ -38,8 +39,8 @@ class StunningModal extends StatelessWidget {
         secondaryButton: secondaryButton,
       ),
       transitionBuilder: (context, anim, secAnim, child) {
-        final theme = Theme.of(context).extension<StunningTheme>();
-        final curve = theme?.motionCurve ?? Curves.easeOutBack;
+        final st = StunningTheme.of(context);
+        final curve = st.motionCurve;
         return ScaleTransition(
           scale: CurvedAnimation(parent: anim, curve: curve),
           child: FadeTransition(opacity: anim, child: child),
@@ -50,11 +51,10 @@ class StunningModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final blur = theme?.glassBlurSigma ?? 15.0;
-    final brandColor = theme?.primaryBrand ?? Colors.blueAccent;
-    final activeShadow =
-        theme?.glowingShadow ?? const BoxShadow(color: Colors.transparent);
+    final st = StunningTheme.of(context);
+    final blur = st.glassBlurSigma;
+    final brandColor = st.primaryBrand;
+    final activeShadow = st.glowingShadow;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -73,12 +73,10 @@ class StunningModal extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(24, 50, 24, 24),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(
-                      alpha: 0.03,
-                    ), // TRUE ultra-clear glass
+                    color: st.surfaceGlass, // TRUE ultra-clear glass
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: st.borderColor,
                       width: 1,
                     ),
                     boxShadow: activeShadow.blurRadius > 0
@@ -91,8 +89,8 @@ class StunningModal extends StatelessWidget {
                       Text(
                         title,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: st.textPrimary,
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.5,
@@ -103,7 +101,7 @@ class StunningModal extends StatelessWidget {
                         message,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: st.textSecondary,
                           fontSize: 15,
                           height: 1.5,
                         ),

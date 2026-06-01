@@ -1,6 +1,7 @@
 // lib/src/components/inputs/stunning_segmented_control.dart
 import 'package:flutter/material.dart';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../core/stunning_tappable.dart';
+import '../../theme/stunning_theme.dart';
 import 'dart:ui';
 
 /// A modern, glassmorphic segmented control with a sliding background highlight.
@@ -23,23 +24,27 @@ class StunningSegmentedControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final primaryColor = theme?.primaryBrand ?? Colors.purpleAccent;
+    final st = StunningTheme.of(context);
+    final primaryColor = st.primaryBrand;
+    final duration = st.motion(context);
 
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: theme?.surfaceGlass ?? Colors.black.withValues(alpha: 0.5),
+        color: st.surfaceGlass,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: st.borderColor,
           width: 1,
         ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(
+            sigmaX: st.glassBlurSigma,
+            sigmaY: st.glassBlurSigma,
+          ),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final itemWidth = constraints.maxWidth / options.length;
@@ -48,7 +53,7 @@ class StunningSegmentedControl extends StatelessWidget {
                 children: [
                   // Sliding Highlight Background
                   AnimatedPositioned(
-                    duration: const Duration(milliseconds: 300),
+                    duration: duration,
                     curve: Curves.easeOutCubic,
                     left: selectedIndex * itemWidth,
                     top: 0,
@@ -76,18 +81,19 @@ class StunningSegmentedControl extends StatelessWidget {
                     children: List.generate(options.length, (index) {
                       final isSelected = selectedIndex == index;
 
-                      return GestureDetector(
-                        onTap: () => onValueChanged(index),
-                        behavior: HitTestBehavior.opaque,
+                      return StunningTappable(
+                        onPressed: () => onValueChanged(index),
+                        selected: isSelected,
+                        borderRadius: BorderRadius.circular(20),
                         child: SizedBox(
                           width: itemWidth,
                           child: Center(
                             child: AnimatedDefaultTextStyle(
-                              duration: const Duration(milliseconds: 300),
+                              duration: duration,
                               style: TextStyle(
                                 color: isSelected
-                                    ? Colors.white
-                                    : Colors.white54,
+                                    ? st.onColor(primaryColor)
+                                    : st.textSecondary,
                                 fontWeight: isSelected
                                     ? FontWeight.bold
                                     : FontWeight.normal,

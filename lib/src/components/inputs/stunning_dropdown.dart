@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../core/stunning_tappable.dart';
+import '../../theme/stunning_theme.dart';
 
 class StunningDropdown extends StatefulWidget {
   final String hintText;
@@ -34,14 +35,13 @@ class _StunningDropdownState extends State<StunningDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final duration = theme?.motionDuration ?? const Duration(milliseconds: 200);
-    final curve = theme?.motionCurve ?? Curves.easeInOut;
+    final st = StunningTheme.of(context);
+    final duration = st.motion(context);
+    final curve = st.motionCurve;
 
-    final blur = theme?.glassBlurSigma ?? 10.0;
-    final brandColor = theme?.primaryBrand ?? Colors.blueAccent;
-    final activeShadow =
-        theme?.glowingShadow ?? const BoxShadow(color: Colors.transparent);
+    final blur = st.glassBlurSigma;
+    final brandColor = st.primaryBrand;
+    final activeShadow = st.glowingShadow;
 
     final inactiveShadow = BoxShadow(
       color: Colors.transparent,
@@ -53,14 +53,10 @@ class _StunningDropdownState extends State<StunningDropdown> {
       duration: duration,
       curve: curve,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(
-          alpha: 0.03,
-        ), // No muddy colors, just clean glass
+        color: st.surfaceGlass, // No muddy colors, just clean glass
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _isOpen
-              ? brandColor.withValues(alpha: 0.5)
-              : Colors.white.withValues(alpha: 0.1),
+          color: _isOpen ? brandColor.withValues(alpha: 0.5) : st.borderColor,
           width: 1.0,
         ),
         boxShadow: [_isOpen ? activeShadow : inactiveShadow],
@@ -74,9 +70,9 @@ class _StunningDropdownState extends State<StunningDropdown> {
             mainAxisSize: MainAxisSize.min,
             children: [
               // --- Clean Header ---
-              InkWell(
-                onTap: _toggleDropdown,
-                splashColor: brandColor.withValues(alpha: 0.1),
+              StunningTappable(
+                onPressed: _toggleDropdown,
+                borderRadius: BorderRadius.circular(16),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -89,7 +85,7 @@ class _StunningDropdownState extends State<StunningDropdown> {
                           widget.prefixIcon,
                           color: widget.value != null
                               ? brandColor
-                              : Colors.white.withValues(alpha: 0.5),
+                              : st.iconColor,
                         ),
                         const SizedBox(width: 12),
                       ],
@@ -98,8 +94,8 @@ class _StunningDropdownState extends State<StunningDropdown> {
                           widget.value ?? widget.hintText,
                           style: TextStyle(
                             color: widget.value != null
-                                ? Colors.white
-                                : Colors.white.withValues(alpha: 0.4),
+                                ? st.textPrimary
+                                : st.hintColor,
                             fontSize: 16,
                             fontWeight: widget.value != null
                                 ? FontWeight.w600
@@ -112,7 +108,7 @@ class _StunningDropdownState extends State<StunningDropdown> {
                         duration: duration,
                         child: Icon(
                           Icons.keyboard_arrow_down_rounded,
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: st.iconColor,
                         ),
                       ),
                     ],
@@ -129,7 +125,7 @@ class _StunningDropdownState extends State<StunningDropdown> {
                     ? Column(
                         children: [
                           Divider(
-                            color: Colors.white.withValues(alpha: 0.1),
+                            color: st.borderColor,
                             height: 1,
                           ),
                           Container(
@@ -139,8 +135,11 @@ class _StunningDropdownState extends State<StunningDropdown> {
                               child: Column(
                                 children: widget.items.map((item) {
                                   final isSelected = widget.value == item;
-                                  return InkWell(
-                                    onTap: () => _selectItem(item),
+                                  return StunningTappable(
+                                    onPressed: () => _selectItem(item),
+                                    selected: isSelected,
+                                    minTargetSize: 0,
+                                    borderRadius: BorderRadius.zero,
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 20,
@@ -172,10 +171,8 @@ class _StunningDropdownState extends State<StunningDropdown> {
                                               item,
                                               style: TextStyle(
                                                 color: isSelected
-                                                    ? Colors.white
-                                                    : Colors.white.withValues(
-                                                        alpha: 0.6,
-                                                      ),
+                                                    ? st.textPrimary
+                                                    : st.textSecondary,
                                                 fontSize: 15,
                                                 fontWeight: isSelected
                                                     ? FontWeight.bold

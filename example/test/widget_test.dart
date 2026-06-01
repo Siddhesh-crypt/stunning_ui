@@ -1,30 +1,47 @@
-// This is a basic Flutter widget test.
+// Smoke test for the Stunning UI toolkit.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Exercises the theme engine wiring and a core interactive component
+// (StunningButton) end to end, without relying on the example app's
+// network-backed background image.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:example/main.dart';
+import 'package:stunning_ui/stunning_ui.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('StunningButton renders under StunningTheme and fires onPressed',
+      (WidgetTester tester) async {
+    var tapped = false;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          extensions: <ThemeExtension<dynamic>>[
+            StunningTheme.generate(
+              seedColor: Colors.cyanAccent,
+              brightness: Brightness.dark,
+              style: StunningUIStyle.gaming,
+            ),
+          ],
+        ),
+        home: Scaffold(
+          body: Center(
+            child: StunningButton(
+              text: 'Tap me',
+              onPressed: () => tapped = true,
+            ),
+          ),
+        ),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Label renders.
+    expect(find.text('Tap me'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Interaction wires through to the callback.
+    await tester.tap(find.text('Tap me'));
+    await tester.pumpAndSettle();
+    expect(tapped, isTrue);
   });
 }

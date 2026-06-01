@@ -1,5 +1,6 @@
 // lib/src/components/layout/stunning_carousel.dart
 import 'package:flutter/material.dart';
+import '../../theme/stunning_theme.dart';
 
 /// A 3D depth-scaling carousel slider that highlights the center widget and shrinks side elements.
 class StunningCarousel extends StatefulWidget {
@@ -48,6 +49,9 @@ class _StunningCarouselState extends State<StunningCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    // When the user requests reduced motion, drop the depth-scaling / fade
+    // parallax (it tracks scroll position) and render every card statically.
+    final reduceMotion = StunningTheme.reduceMotion(context);
     return SizedBox(
       height: widget.height,
       child: PageView.builder(
@@ -59,8 +63,10 @@ class _StunningCarouselState extends State<StunningCarousel> {
           double difference = index - _currentPage;
 
           // Cards side me jate hi shrink honge (0.8 scale) aur fade honge (0.5 opacity)
-          double scale = 1.0 - (difference.abs() * 0.2).clamp(0.0, 0.2);
-          double opacity = 1.0 - (difference.abs() * 0.5).clamp(0.0, 0.5);
+          double scale =
+              reduceMotion ? 1.0 : 1.0 - (difference.abs() * 0.2).clamp(0.0, 0.2);
+          double opacity =
+              reduceMotion ? 1.0 : 1.0 - (difference.abs() * 0.5).clamp(0.0, 0.5);
 
           return Transform.scale(
             scale: scale,

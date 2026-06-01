@@ -1,3 +1,44 @@
+## 1.7.0
+* **Slot-based `StunningButton`:** now accepts an `icon`, a custom `child`, a `size` (small/medium/large), and adds `tonal` + `danger` variants — fully backward compatible (`text` still works).
+* **12 new components**, all accessible (semantics + keyboard + 48dp), theme-driven (light + dark) and reduce-motion aware:
+  * Inputs: `StunningCheckbox`, `StunningRadio<T>`, `StunningSlider`, and a generic overlay `StunningSelect<T>`.
+  * Feedback/overlays: `StunningDialog` (+ `.confirm` / `.success` / `.error` presets and a `showStunningDialog` helper), `StunningProgressBar`, `StunningProgressRing`, `StunningTooltip`.
+  * Display: `StunningBadge`, `StunningAvatar`, `StunningDivider`.
+  * Navigation: `StunningPagination`.
+* **`StunningTiltCard`** rebuilt on `GlassSurface` and now tilts on touch (pan) as well as hover — springing back on release and collapsing to flat under reduce-motion (previously it only responded to mouse hover).
+* Test suite expanded to 31 tests (accessibility, motion, glass, button, forms, overlays, select/nav, card).
+
+## 1.6.0
+* **Production glass — `GlassSurface` + `.glass()`:** the single glass recipe for the kit. Real index-of-refraction lensing on Impeller (via `ImageFilter.shader`), automatic blur fallback on Skia/web, and a solid opaque surface under reduce-transparency — all tinted and sized from the theme. Use the widget directly or via the chain: `widget.stunning().glass()`.
+* **`StunningGlassScope`:** coalesces every descendant glass surface into a single backdrop blur pass (`BackdropGroup`) for performance.
+* **`StunningUI.warmUp()`:** precompiles the refraction shader so the first glass surface never pops.
+* **`StunningEffectTier`** (full / reduced / off) to gate effect cost.
+* **BREAKING (toolchain):** the minimum Flutter version is now **3.41** (was 3.29) — required for `ImageFilter.shader` glass refraction and `BackdropGroup` blur coalescing.
+* Added `test/glass_test.dart`.
+
+## 1.5.0
+* **Motion engine + chainable `.stunning()` API** — apply spring-physics effects to any widget: `widget.stunning().glow().tilt().springIn()`.
+  * `springIn()` — spring-physics entrance (fade + scale + optional slide) that settles exactly via `SpringSimulation(snapToEnd: true)`.
+  * `glow()` — themed brand glow with an optional breathing `pulse`.
+  * `tilt()` — interactive 3D tilt that follows the pointer and springs back on exit.
+  * `List<Widget>.stunningStagger()` — staggered spring entrance for columns/lists.
+* **Theme spring token:** `StunningSpring.toSpring()` converts the style's duration + bounce into a physics `SpringDescription` (enterprise = snappy, gaming = bouncy).
+* All motion honors reduce-motion (collapses to instant). Added `test/motion_test.dart`.
+
+## 1.4.0
+* **Accessibility by default:** a new `StunningTappable` primitive powers every interactive component — screen-reader roles (button / toggle / selected), full keyboard support (Tab to focus, Enter/Space to activate), a focus-visible ring, and a 48dp minimum tap target. Buttons, switches, tabs, segmented controls, accordions, bottom-nav, sidebar and dropdown items are now keyboard- and screen-reader-operable (previously the kit had zero `Semantics`).
+* **Reduce-motion:** all animated components honor the OS "reduce motion" setting via `StunningTheme.of(context).motion(context)` (durations collapse to zero); looping effects like shimmer fall back to a static state.
+* **New accessibility helpers on `StunningTheme`:** `motion(context)`, `blurFor(context)`, and static `reduceMotion(context)` / `reduceTransparency(context)`.
+* Added a package `test/` suite with accessibility guideline tests (tap-target size, labeling, and semantics).
+
+## 1.3.0
+* **Theme Engine v2:** `StunningTheme.generate()` now derives a full Material 3 `ColorScheme` from the seed colour (style-aware `DynamicSchemeVariant`), alongside the existing glass/glow/border/motion tokens.
+* **One-line setup:** new `StunningTheme.light()`, `.dark()`, `.gaming()`, `.enterprise()`, and `.minimal()` presets plus a `toThemeData()` helper.
+* **Light mode fixed:** every component now resolves text/icon/border/hint colours from the theme (via the new non-null `StunningTheme.of(context)` and brightness-aware getters like `textPrimary`/`hintColor`/`borderColor`) instead of hardcoded `Colors.white` — the kit now renders correctly in both light and dark.
+* **Theme-driven glass:** components that hardcoded a blur sigma now read `glassBlurSigma`, so the `enterprise` style is truly flat (no blur, no wasted GPU).
+* **Motion tokens:** added `StunningSpring` (duration + bounce) derived from the active style; smoothed `ThemeExtension.lerp` duration interpolation.
+* **Fix:** removed the public top-level `lerpDouble` that shadowed `dart:ui`'s and could cause an ambiguous-import error in consumers; `dart:ui`'s is now used internally.
+
 ## 1.2.0
 * **New Components:** Added `StunningModal`, `StunningDropdown`, `StunningToast`, `StunningSkeleton`, `StunningSwitch`, `StunningTabs`, and `StunningBarChart`.
 * **Enterprise Ready:** Optimized the framework for Dark SaaS and dense data dashboards.

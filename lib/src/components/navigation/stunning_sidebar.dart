@@ -1,7 +1,8 @@
 // lib/src/components/navigation/stunning_sidebar.dart
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../core/stunning_tappable.dart';
+import '../../theme/stunning_theme.dart';
 
 /// An individual menu item for the [StunningSidebar].
 class StunningSidebarItem extends StatelessWidget {
@@ -23,16 +24,17 @@ class StunningSidebarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final primary = theme?.primaryBrand ?? Colors.purpleAccent;
+    final st = StunningTheme.of(context);
+    final primary = st.primaryBrand;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: InkWell(
-        onTap: onTap,
+      child: StunningTappable(
+        onPressed: onTap,
+        selected: isActive,
         borderRadius: BorderRadius.circular(16),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+          duration: st.motion(context),
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
@@ -49,12 +51,12 @@ class StunningSidebarItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(icon, color: isActive ? primary : Colors.white70, size: 24),
+              Icon(icon, color: isActive ? primary : st.iconColor, size: 24),
               const SizedBox(width: 16),
               Text(
                 title,
                 style: TextStyle(
-                  color: isActive ? Colors.white : Colors.white70,
+                  color: isActive ? st.textPrimary : st.textSecondary,
                   fontSize: 16,
                   fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                 ),
@@ -79,7 +81,7 @@ class StunningSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
+    final st = StunningTheme.of(context);
 
     return Drawer(
       backgroundColor:
@@ -88,17 +90,20 @@ class StunningSidebar extends StatelessWidget {
       width: 280, // Premium compact width
       child: Container(
         decoration: BoxDecoration(
-          color: theme?.surfaceGlass ?? Colors.black.withValues(alpha: 0.5),
+          color: st.surfaceGlass,
           border: Border(
             right: BorderSide(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: st.borderColor,
               width: 1,
             ),
           ),
         ),
         child: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+            filter: ImageFilter.blur(
+              sigmaX: st.glassBlurSigma,
+              sigmaY: st.glassBlurSigma,
+            ),
             child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +111,7 @@ class StunningSidebar extends StatelessWidget {
                   // User Profile or Logo Area
                   Padding(padding: const EdgeInsets.all(24.0), child: header),
                   Divider(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: st.borderColor,
                     thickness: 1,
                     height: 1,
                   ),
@@ -125,7 +130,7 @@ class StunningSidebar extends StatelessWidget {
 
                   // Footer Area (Optional Settings/Logout)
                   Divider(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: st.borderColor,
                     thickness: 1,
                     height: 1,
                   ),

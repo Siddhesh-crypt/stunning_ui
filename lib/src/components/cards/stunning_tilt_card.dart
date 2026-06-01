@@ -1,24 +1,34 @@
-// lib/src/components/cards/stunning_tilt_card.dart
 import 'package:flutter/material.dart';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
-import 'dart:ui';
+import '../../core/glass_surface.dart';
+import '../../theme/stunning_theme.dart';
 
-/// A 3D interactive tilt card that responds to mouse hover on web/desktop and pan gestures on mobile.
+/// A 3D interactive glass card that tilts toward the pointer on web/desktop
+/// (hover) AND toward the finger on mobile (pan), springing back to flat on
+/// release. The glass body uses [GlassSurface] (refraction on Impeller, blur
+/// elsewhere) and the whole effect collapses to flat under reduce-motion.
 class StunningTiltCard extends StatefulWidget {
-  /// The child widget to be displayed inside the card.
+  /// The exact width of the tilt card.
   final double width;
 
-  /// The exact width of the tilt card.
+  /// The exact height of the tilt card.
   final double height;
 
-  /// The exact height of the tilt card.
+  /// The content displayed inside the card.
   final Widget child;
+
+  /// Maximum tilt in radians at the card edges.
+  final double maxTilt;
+
+  /// Corner radius of the glass body.
+  final double borderRadius;
 
   const StunningTiltCard({
     super.key,
     required this.width,
     required this.height,
     required this.child,
+    this.maxTilt = 0.2,
+    this.borderRadius = 24,
   });
 
   @override
@@ -26,72 +36,78 @@ class StunningTiltCard extends StatefulWidget {
 }
 
 class _StunningTiltCardState extends State<StunningTiltCard> {
+  // Relative pointer position, -1..1 on each axis.
   double _x = 0.0;
   double _y = 0.0;
 
+  void _updateFrom(Offset local) {
+    setState(() {
+      _x = ((local.dx / widget.width) * 2 - 1).clamp(-1.0, 1.0);
+      _y = ((local.dy / widget.height) * 2 - 1).clamp(-1.0, 1.0);
+    });
+  }
+
+  void _reset() => setState(() {
+        _x = 0;
+        _y = 0;
+      });
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
+    final st = StunningTheme.of(context);
+    final reduceMotion = StunningTheme.reduceMotion(context);
+    final rotateX = reduceMotion ? 0.0 : -_y * widget.maxTilt;
+    final rotateY = reduceMotion ? 0.0 : _x * widget.maxTilt;
+    final radius = BorderRadius.circular(widget.borderRadius);
 
     return MouseRegion(
-      onHover: (details) {
-        setState(() {
-          // Calculate relative mouse position (-1 to 1)
-          _x = (details.localPosition.dx / widget.width) * 2 - 1;
-          _y = (details.localPosition.dy / widget.height) * 2 - 1;
-        });
-      },
-      onExit: (details) {
-        setState(() {
-          // Reset when mouse leaves
-          _x = 0;
-          _y = 0;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-        // 3D Transform Logic
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, 0.001) // Perspective
-          ..rotateX(-_y * 0.2) // Tilt X
-          ..rotateY(_x * 0.2), // Tilt Y
-        transformAlignment: FractionalOffset.center,
-        child: SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: Container(
+      onHover: (d) => _updateFrom(d.localPosition),
+      onExit: (_) => _reset(),
+      child: GestureDetector(
+        onPanStart: (d) => _updateFrom(d.localPosition),
+        onPanUpdate: (d) => _updateFrom(d.localPosition),
+        onPanEnd: (_) => _reset(),
+        onPanCancel: _reset,
+        child: AnimatedContainer(
+          duration: st.motion(context),
+          curve: Curves.easeOut,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001) // perspective
+            ..rotateX(rotateX)
+            ..rotateY(rotateY),
+          transformAlignment: FractionalOffset.center,
+          child: SizedBox(
             width: widget.width,
             height: widget.height,
-            decoration: BoxDecoration(
-              color: theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(24.0),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-              boxShadow: [if (theme != null) theme.glowingShadow],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24.0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            // Outer brand glow (static geometry — not animated, so no overshoot
+            // can drive the blur radius negative).
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                boxShadow: <BoxShadow>[st.glowingShadow],
+              ),
+              child: GlassSurface(
+                borderRadius: widget.borderRadius,
+                tintAmount: 0.06,
                 child: Stack(
-                  children: [
-                    // Actual Content
+                  children: <Widget>[
                     Center(child: widget.child),
-
-                    // Glare Effect
+                    // Specular glare that follows the tilt.
                     Positioned.fill(
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment(-_x, -_y),
-                            end: Alignment(_x, _y),
-                            colors: [
-                              Colors.white.withValues(alpha: 0.3),
-                              Colors.transparent,
-                              Colors.transparent,
-                            ],
-                            stops: const [0.0, 0.3, 1.0],
+                      child: IgnorePointer(
+                        child: AnimatedContainer(
+                          duration: st.motion(context),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment(-_x, -_y),
+                              end: Alignment(_x, _y),
+                              colors: <Color>[
+                                Colors.white.withValues(alpha: 0.25),
+                                Colors.transparent,
+                                Colors.transparent,
+                              ],
+                              stops: const <double>[0.0, 0.3, 1.0],
+                            ),
                           ),
                         ),
                       ),

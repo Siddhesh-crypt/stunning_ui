@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:stunning_ui/src/theme/stunning_theme.dart';
+import '../../theme/stunning_theme.dart';
 
 /// Defines the visual layout of the data table.
 enum StunningTableStyle {
@@ -32,7 +32,7 @@ class StunningDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
+    final st = StunningTheme.of(context);
     final isFloating = style == StunningTableStyle.floating;
 
     // --- Header Builder ---
@@ -40,7 +40,7 @@ class StunningDataTable extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         decoration: BoxDecoration(
-          color: theme?.primaryBrand.withValues(alpha: isFloating ? 0.1 : 0.05),
+          color: st.primaryBrand.withValues(alpha: isFloating ? 0.1 : 0.05),
           borderRadius: isFloating
               ? BorderRadius.circular(30)
               : BorderRadius.zero,
@@ -48,7 +48,7 @@ class StunningDataTable extends StatelessWidget {
               ? null
               : Border(
                   bottom: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: st.borderColor,
                   ),
                 ),
         ),
@@ -59,9 +59,7 @@ class StunningDataTable extends StatelessWidget {
                   child: Text(
                     col.toUpperCase(),
                     style: TextStyle(
-                      color:
-                          theme?.primaryBrand.withValues(alpha: 0.8) ??
-                          Colors.grey,
+                      color: st.primaryBrand.withValues(alpha: 0.8),
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.5,
@@ -106,9 +104,8 @@ class StunningDataTable extends StatelessWidget {
       );
     } else {
       // Solid Layout: Everything is wrapped in one glass container (ERP style)
-      final blur = theme?.glassBlurSigma ?? 10.0;
-      final surfaceColor =
-          theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.05);
+      final blur = st.glassBlurSigma;
+      final surfaceColor = st.surfaceGlass;
 
       return ClipRRect(
         borderRadius: BorderRadius.circular(16),
@@ -119,7 +116,7 @@ class StunningDataTable extends StatelessWidget {
               color: surfaceColor,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: st.borderColor,
                 width: 1,
               ),
             ),
@@ -157,30 +154,30 @@ class _StunningDataRowState extends State<_StunningDataRow> {
   bool _isHovered = false;
   bool _isPressed = false;
 
-  Widget _buildCell(String text, StunningTheme? theme) {
+  Widget _buildCell(String text, StunningTheme st) {
     if (widget.enableSmartBadges) {
       final lower = text.toLowerCase();
       if (lower == 'success' || lower == 'completed') {
         return _StatusBadge(
           text: text,
           color: Colors.greenAccent,
-          theme: theme,
+          theme: st,
         );
       } else if (lower == 'pending' || lower == 'processing') {
         return _StatusBadge(
           text: text,
           color: Colors.orangeAccent,
-          theme: theme,
+          theme: st,
         );
       } else if (lower == 'failed' || lower == 'error') {
-        return _StatusBadge(text: text, color: Colors.redAccent, theme: theme);
+        return _StatusBadge(text: text, color: Colors.redAccent, theme: st);
       }
     }
 
     return Text(
       text,
       style: TextStyle(
-        color: _isHovered ? Colors.white : Colors.white70,
+        color: _isHovered ? st.textPrimary : st.textSecondary,
         fontSize: 15,
         fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w400,
       ),
@@ -189,13 +186,12 @@ class _StunningDataRowState extends State<_StunningDataRow> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<StunningTheme>();
-    final duration = theme?.motionDuration ?? const Duration(milliseconds: 200);
-    final curve = theme?.motionCurve ?? Curves.easeOutBack;
+    final st = StunningTheme.of(context);
+    final duration = st.motion(context);
+    final curve = st.motionCurve;
 
-    final blur = theme?.glassBlurSigma ?? 10.0;
-    final surfaceColor =
-        theme?.surfaceGlass ?? Colors.white.withValues(alpha: 0.05);
+    final blur = st.glassBlurSigma;
+    final surfaceColor = st.surfaceGlass;
 
     final rowContent = AnimatedContainer(
       duration: duration,
@@ -203,7 +199,7 @@ class _StunningDataRowState extends State<_StunningDataRow> {
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
       decoration: BoxDecoration(
         color: _isHovered
-            ? theme?.primaryBrand.withValues(
+            ? st.primaryBrand.withValues(
                 alpha: widget.isFloating ? 0.15 : 0.05,
               )
             : (widget.isFloating ? surfaceColor : Colors.transparent),
@@ -211,27 +207,26 @@ class _StunningDataRowState extends State<_StunningDataRow> {
         border: widget.isFloating
             ? Border.all(
                 color: _isHovered
-                    ? (theme?.primaryBrand ?? Colors.white).withValues(
+                    ? st.primaryBrand.withValues(
                         alpha: 0.5,
                       )
-                    : Colors.white.withValues(alpha: 0.05),
+                    : st.borderColor,
                 width: 1.5,
               )
             : Border(
                 bottom: widget.isLast
                     ? BorderSide.none
-                    : BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                    : BorderSide(color: st.borderColor),
               ),
         boxShadow: widget.isFloating && _isHovered && !_isPressed
             ? [
-                theme?.glowingShadow ??
-                    const BoxShadow(color: Colors.transparent),
+                st.glowingShadow,
               ]
             : [],
       ),
       child: Row(
         children: widget.rowData
-            .map((cell) => Expanded(child: _buildCell(cell, theme)))
+            .map((cell) => Expanded(child: _buildCell(cell, st)))
             .toList(),
       ),
     );
